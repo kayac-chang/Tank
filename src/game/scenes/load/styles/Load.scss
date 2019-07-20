@@ -1,0 +1,12 @@
+
+@import "../../../../general/styles/default";
+
+//  Variables ======================================
+$loadingImg: "../assets/loading.jpg";
+
+#load {
+  @include full-size;
+
+  background: no-repeat url($loadingImg) center/contain;
+  transition: opacity .5s ease;
+}

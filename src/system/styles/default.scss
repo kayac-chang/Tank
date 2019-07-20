@@ -1,0 +1,61 @@
+//  Import
+@import "./reset";
+
+//  Variables ======================================
+$full: 100%;
+
+$black: #010101;
+
+//  Prototype =====================================
+@mixin full-size {
+  width: $full;
+  height: $full;
+}
+
+//  Function =====================================
+.hidden {
+  opacity: 0;
+  visibility: hidden;
+  //display: none;
+  pointer-events: none;
+}
+
+.v-center {
+  @include full-size;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.text-center {
+  position: relative;
+  text-align: center;
+
+  @media screen and (max-width: 1000px) {
+    img {
+      width: 10em;
+    }
+  }
+
+  div {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -47.5%);
+  }
+}
+
+.number-font {
+  font-family: Candal, serif;
+  font-size: 1.4rem;
+}
+
+
+//  Default =====================================
+html, body {
+  @include full-size;
+
+  overflow: hidden;
+  background: $black;
+}

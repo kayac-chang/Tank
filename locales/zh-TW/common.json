@@ -1,0 +1,69 @@
+{
+  "button": {
+    "back": "返回",
+    "cancel": "取消",
+    "confirm": "確定",
+    "refresh": "刷新",
+    "delete": "刪除",
+    "exit": "離開"
+  },
+  "status": {
+    "cash": "點數",
+    "win": "得分",
+    "bet": "下注"
+  },
+  "currency": {
+    "gold": "金幣",
+    "gift": "禮卷",
+    "etc": "娛樂幣",
+    "bonus": "紅利"
+  },
+  "message": {
+    "checkout": "確定要進行結算嗎?",
+    "checkoutTitle": "結算",
+    "receive": "兌得點數: {{cash}}",
+
+    "exit": "確定要離開遊戲嗎?",
+
+    "audio": "啟用遊戲音效?",
+
+    "wait": "請稍候...",
+
+    "insufficientBalance": "餘額不足"
+  },
+  "exchange": {
+    "title": "兌換",
+
+    "currency": "幣別",
+    "amount": "數量",
+    "cash": "點數"
+  },
+  "helper": {
+    "amountIsOdd": "兌換 {{currency}} 數量不可為奇數.",
+    "insufficientBalance": "帳戶餘額不足."
+  },
+  "information": {
+    "title": "說明"
+  },
+  "setting": {
+    "title": "設定",
+
+    "audio": "音訊",
+    "volume": "音量",
+    "effects": "音效",
+    "ambience": "背景音樂",
+
+    "spin": "轉輪",
+    "auto": "自動",
+    "speed": "速度",
+
+    "bet": "下注",
+    "betLevel": "下注階級"
+  },
+  "error": {
+    "unspecific": "有問題發生了, 詳情請洽客服人員.",
+    "connection": "網路發生異常, 請確認後再重新連線.",
+    "warning": "遊戲在五分鐘後將進入維護.",
+    "maintain": "遊戲目前正在維護中, 煩請您耐心等候."
+  }
+}

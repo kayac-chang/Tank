@@ -1,0 +1,107 @@
+@import "./default";
+
+//  Application =====================================
+#app {
+  margin: auto;
+
+  canvas {
+    width: auto;
+    height: 100%;
+  }
+
+  #mask {
+    @include full-size;
+    height: 400%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 999;
+
+    opacity: .5;
+    overflow-y: scroll;
+  }
+
+  #icon {
+    @include full-size;
+    background: $black;
+    pointer-events: none;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 998;
+
+    #screen-rotation {
+      @include full-size;
+      display: none;
+      background: url('./screen-rotation.png') no-repeat center;
+      animation: rotation 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    }
+
+    #screen-scroll {
+      @include full-size;
+      display: none;
+      background: url('./screen-scroll.png') no-repeat center;
+      animation: move 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
+    }
+  }
+
+}
+
+//  When Mobile ======================================
+@media only screen and (max-device-width: 700px) {
+  #app {
+    margin: 0;
+
+    canvas {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}
+
+//  When Portrait ======================================
+@media all and (orientation: portrait) {
+  #app {
+    #icon {
+      #screen-rotation {
+        display: block;
+      }
+    }
+  }
+}
+
+//  When Landscape ======================================
+@media all and (orientation: landscape) {
+  #app {
+    #icon {
+      #screen-scroll {
+        display: block;
+      }
+    }
+  }
+}
+
+//  Animation =====================================
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-45deg);
+  }
+}
+
+@keyframes move {
+  from {
+    background-position-y: 50%;
+  }
+
+  to {
+    background-position-y: 25%;
+  }
+}
