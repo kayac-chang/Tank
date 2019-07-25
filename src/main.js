@@ -1,6 +1,6 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import {select, remove} from './general';
+import {select} from '@kayac/utils';
 
 import {App} from './system/application';
 import {enableFullScreenMask} from './system/modules/screen';
@@ -16,7 +16,7 @@ async function main() {
 
         const comp = select('#app');
         const svg = select('#preload');
-        remove(svg);
+        svg.remove();
 
         comp.prepend(app.view);
 
@@ -34,7 +34,7 @@ async function main() {
 
         app.stage.addChildAt(scene, 0);
 
-        select('script').forEach(remove);
+        select('script').forEach((el) => el.remove());
 
         app.resize();
 
