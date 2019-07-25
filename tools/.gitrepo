@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = https://github.com/egg734631/BuildUtils.git
+	branch = master
+	commit = dff46b0d162f9da91c14cd954212e17bd080bcc3
+	parent = 9520dbd60276bc9a045de57aa497a3e45225b5ed
+	method = merge
+	cmdver = 0.4.0
