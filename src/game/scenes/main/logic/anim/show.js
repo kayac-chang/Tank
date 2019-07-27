@@ -1,6 +1,6 @@
 import {symbolConfig} from '../../data';
 
-import {randomInt, wait} from '../../../../../general';
+import {randomInt, wait} from '@kayac/utils';
 
 export async function show(effects, result) {
     app.emit('ShowResult', result);

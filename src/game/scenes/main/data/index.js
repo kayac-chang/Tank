@@ -1,17 +1,15 @@
 import {sprites} from './sprites';
 import {symbols, symbolConfig} from './symbols';
-import {sounds} from './sound';
 
 export function reserve() {
     return [
         ...(sprites),
         ...(symbols),
-        ...(sounds),
     ];
 }
 
 
-const stopPerSymbol = 2;
+const stopPerSymbol = 1;
 
 const MAYBE_BONUS_DURATION = 1000;
 const SPIN_DURATION = [2500, 2000, 1500];

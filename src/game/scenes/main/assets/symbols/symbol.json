@@ -1,0 +1,92 @@
+{"frames": {
+
+"A.png":
+{
+	"frame": {"x":674,"y":210,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":65,"y":51,"w":198,"h":200},
+	"sourceSize": {"w":326,"h":300}
+},
+"Audio.png":
+{
+	"frame": {"x":1,"y":284,"w":236,"h":220},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":45,"y":41,"w":236,"h":220},
+	"sourceSize": {"w":326,"h":300}
+},
+"Headphone.png":
+{
+	"frame": {"x":239,"y":284,"w":197,"h":216},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":66,"y":43,"w":197,"h":216},
+	"sourceSize": {"w":326,"h":300}
+},
+"J.png":
+{
+	"frame": {"x":677,"y":1,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":65,"y":51,"w":198,"h":200},
+	"sourceSize": {"w":326,"h":300}
+},
+"K.png":
+{
+	"frame": {"x":874,"y":203,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":65,"y":51,"w":198,"h":200},
+	"sourceSize": {"w":326,"h":300}
+},
+"Keyboard.png":
+{
+	"frame": {"x":438,"y":268,"w":242,"h":234},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":43,"y":34,"w":242,"h":234},
+	"sourceSize": {"w":326,"h":300}
+},
+"Mic.png":
+{
+	"frame": {"x":526,"y":1,"w":149,"h":207},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":90,"y":47,"w":149,"h":207},
+	"sourceSize": {"w":326,"h":300}
+},
+"Q.png":
+{
+	"frame": {"x":877,"y":1,"w":198,"h":200},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":65,"y":51,"w":198,"h":200},
+	"sourceSize": {"w":326,"h":300}
+},
+"Scatter.png":
+{
+	"frame": {"x":264,"y":1,"w":265,"h":260},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":34,"y":20,"w":265,"h":260},
+	"sourceSize": {"w":326,"h":300}
+},
+"Wild.png":
+{
+	"frame": {"x":1,"y":1,"w":281,"h":261},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":24,"y":19,"w":281,"h":261},
+	"sourceSize": {"w":326,"h":300}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "symbol.png",
+	"format": "RGBA8888",
+	"size": {"w":1076,"h":511},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3abaeda849dc58fadc12217be22ed9dd:5d3e41a2a331224f7e57f4ef3a618698:5ee7ebb770d711620ca4a6a699e5612f$"
+}
+}

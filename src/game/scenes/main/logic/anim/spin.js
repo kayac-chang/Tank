@@ -1,25 +1,20 @@
 import anime from 'animejs';
-import {wait} from '../../../../../general';
+import {wait} from '@kayac/utils';
 import {
     MAYBE_BONUS_DURATION,
     SPIN_STOP_INTERVAL,
     SPIN_DURATION,
-    symbolConfig,
 } from '../../data';
 
-const empty =
-    symbolConfig
-        .find(({name}) => name === 'empty')
-        .id;
 
 export async function spin({reels, symbols, func}) {
     if (!reels.length) reels = [reels];
 
     await start(reels);
 
-    await duration();
+    // await duration();
 
-    return stop(reels, symbols, func);
+    // return stop(reels, symbols, func);
 }
 
 async function duration() {
