@@ -12,16 +12,19 @@ export function reserve() {
 const stopPerSymbol = 1;
 
 const MAYBE_BONUS_DURATION = 1000;
-const SPIN_DURATION = [2500, 2000, 1500];
-const SPIN_STOP_INTERVAL = 250;
+
+const getSpinDuration = () => 1800;
+const getSpinStopInterval = () => 360;
+
 
 export {
     stopPerSymbol,
 
     symbolConfig,
 
-    SPIN_STOP_INTERVAL,
+    getSpinDuration,
+    getSpinStopInterval,
+
     MAYBE_BONUS_DURATION,
-    SPIN_DURATION,
 };
 

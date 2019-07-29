@@ -1,4 +1,4 @@
-import {property} from './index';
+import {property} from './Slot';
 
 export function Symbol(view, index, symbols) {
     const offsetY = Number(symbols[0].y);

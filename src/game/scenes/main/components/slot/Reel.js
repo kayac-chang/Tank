@@ -1,7 +1,7 @@
 import {id, isSymbol} from './util';
 import {update} from './update';
 import {Symbol} from './Symbol';
-import {property} from './index';
+import {property} from './Slot';
 
 function* Strip(data) {
     while (true) {
