@@ -1,8 +1,18 @@
-export * from './slot';
-export * from './util';
+import {TextureManager} from './util';
 
-export const Status = {
-    Idle: 'Idle',
-    Start: 'Start',
-    Stop: 'Stop',
+export {Slot} from './Slot';
+
+let textures = undefined;
+
+export const property = {
+    stepPerSymbol: 1,
+    reelStrips: [],
+
+    get textures() {
+        return textures;
+    },
+    set textures(config) {
+        textures = TextureManager(config);
+    },
 };
+

@@ -1,3 +1,7 @@
+export function id({name}) {
+    return Number(name.split('@')[1]);
+}
+
 export function isReel({name}) {
     return name.includes('reel');
 }
@@ -13,7 +17,7 @@ export function isResult({name}) {
 export function TextureManager(symbolConfig) {
     let config = undefined;
 
-    return {getTexture};
+    return {get};
 
     function mapping() {
         const {textures} = app.resource.get('symbols');
@@ -27,7 +31,7 @@ export function TextureManager(symbolConfig) {
         return config;
     }
 
-    function getTexture(iconId) {
+    function get(iconId) {
         return mapping()
             .find(({id}) => id === iconId)
             .texture;
