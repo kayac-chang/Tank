@@ -1,5 +1,5 @@
 import {getSearchParam} from '../utils';
-import {clone, err} from '../../general';
+import {clone, err} from '@kayac/utils';
 import {User} from '../user';
 
 const {assign, entries, fromEntries} = Object;
@@ -196,20 +196,8 @@ export function Service(prodKey) {
 
                 assign(reelTables, {
                     normalTable: data['reel']['normalreel'],
-                    reSpinTable: [
-                        data['reel']['normalreel'][0],
-                        data['reel']['respinreel'][0],
-                        data['reel']['normalreel'][2],
-                    ],
+                    freeTable: data['reel']['freereel'],
                 });
-
-                app.user.payTable = data['betrate']['winratearray'];
-
-                app.user.jackPot = {
-                    '5x': data['attach']['JackPartBonusPoolx5'],
-                    '3x': data['attach']['JackPartBonusPoolx3'],
-                    '2x': data['attach']['JackPartBonusPoolx2'],
-                };
 
                 return {...reelTables};
             });
@@ -326,12 +314,6 @@ export function Service(prodKey) {
         const normalGame = Result(data['normalresult']);
 
         const reSpinGame = hasReSpin && data['respin'].map(Result);
-
-        const jackPot = {
-            '5x': data['attach']['JackPartBonusPoolx5'],
-            '3x': data['attach']['JackPartBonusPoolx3'],
-            '2x': data['attach']['JackPartBonusPoolx2'],
-        };
 
         return {
             cash,

@@ -1,9 +1,14 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
-import {select} from '@kayac/utils';
+
+import {select, fetchJSON, isDevMode} from '@kayac/utils';
 
 import {App} from './system/application';
+import {Service} from './service/01';
+
 import {enableFullScreenMask} from './system/modules/screen';
+
+import ENV_URL from './env.json';
 
 const key = process.env.KEY;
 
@@ -12,7 +17,25 @@ async function main() {
     try {
         document.title = 'For Every Gamer | 61 Studio';
 
+        const res = await fetchJSON(ENV_URL);
+
+        global.ENV = {
+            SERVICE_URL:
+                isDevMode() ?
+                    res['devServerURL'] : res['prodServerURL'],
+
+            LOGIN_TYPE: res['loginType'],
+            GAME_ID: res['gameID'],
+            I18N_URL: res['i18nURL'],
+        };
+
         global.app = App();
+
+        app.service = new Service(key);
+
+        // Import Load Scene
+        const LoadScene = await import('./game/scenes/load/scene');
+        await app.resource.load(LoadScene);
 
         const comp = select('#app');
         const svg = select('#preload');
@@ -20,19 +43,27 @@ async function main() {
 
         comp.prepend(app.view);
 
+        const loadScene = LoadScene.create();
+        app.stage.addChild(loadScene);
+        app.resize();
+
         enableFullScreenMask();
+
+        await app.service.login({key});
 
         //  Import Main Scene
         const [MainScene] =
             await Promise.all([
                 import('./game/scenes/main'),
+
+                app.service.init({key}),
             ]);
 
         await app.resource.load(MainScene);
 
-        const scene = MainScene.create();
+        // const scene = MainScene.create(initData);
 
-        app.stage.addChildAt(scene, 0);
+        // app.stage.addChildAt(scene, 0);
 
         select('script').forEach((el) => el.remove());
 

@@ -43,15 +43,14 @@ async function duration() {
     let duration = getSpinDuration();
     app.on('QuickStop', () => duration = 0);
 
-    let last = performance.now();
     while (duration > 0) {
-        const timestamp = await nextFrame();
+        const t0 = performance.now();
 
-        const delta = (timestamp - last);
+        await nextFrame();
 
-        duration -= delta;
+        const t1 = performance.now();
 
-        last = timestamp;
+        duration -= (t1 - t0);
     }
 }
 

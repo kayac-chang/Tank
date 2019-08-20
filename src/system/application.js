@@ -3,7 +3,7 @@ import './styles/App.scss';
 import {Application} from 'pixi.js';
 import EventEmitter from 'eventemitter3';
 import {Sound} from './modules/sound';
-// import {Network} from './modules/network';
+import {Network} from './modules/network';
 import {Resource} from './modules/resource';
 import {resize} from './modules/screen';
 
@@ -27,7 +27,7 @@ export function App() {
     //  Sound
     const sound = Sound(app);
     //  Network
-    // const network = Network();
+    const network = Network();
     //  Alert
     // const alert = Swal(app);
 

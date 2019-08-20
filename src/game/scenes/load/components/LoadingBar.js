@@ -1,4 +1,4 @@
-import {divide} from '../../../../general';
+import {divide} from '@kayac/utils';
 
 export function LoadingBar(view) {
     const mask = view.getChildByName('mask');
