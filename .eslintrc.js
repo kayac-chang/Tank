@@ -8,6 +8,7 @@ module.exports = {
         "require-jsdoc": "off",
         "indent": ["error", 4],
         "new-cap": "off",
-        "no-invalid-this": "off"
+        "no-invalid-this": "off",
+        "max-len": ["error", {"code": 120}]
     }
 };

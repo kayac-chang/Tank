@@ -52,18 +52,24 @@ async function main() {
         await app.service.login({key});
 
         //  Import Main Scene
-        const [MainScene] =
+        const [Interface, MainScene, initData] =
             await Promise.all([
+                import('./game/interface'),
                 import('./game/scenes/main'),
 
                 app.service.init({key}),
             ]);
 
-        await app.resource.load(MainScene);
+        await app.resource.load(Interface, MainScene);
 
-        // const scene = MainScene.create(initData);
+        const scene = MainScene.create(initData);
+        const ui = Interface.create();
 
-        // app.stage.addChildAt(scene, 0);
+        scene.addChild(ui);
+
+        app.stage.addChildAt(scene, 0);
+
+        app.stage.removeChild(loadScene);
 
         select('script').forEach((el) => el.remove());
 

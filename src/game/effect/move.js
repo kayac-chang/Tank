@@ -5,17 +5,7 @@ const config = {
     easing: 'easeOutExpo',
 };
 
-export function moveIn({targets, ...options}) {
-    const param = {
-        targets,
-
-        ...(config),
-        ...(options),
-    };
-    return anime(param);
-}
-
-export function moveOut({targets, ...options}) {
+export function move({targets, ...options}) {
     const param = {
         targets,
 

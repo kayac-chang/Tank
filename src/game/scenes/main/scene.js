@@ -16,6 +16,8 @@ export function create({normalTable, freeTable}) {
         textures: symbolConfig,
     });
 
+
+
     return scene;
 }
 

@@ -1,6 +1,6 @@
 import {randomInt} from '../../../../../general';
 import anime from 'animejs';
-import {shake} from '../../effect';
+import {shake} from '../../../../effect';
 import {NormalGame} from './normal';
 
 export async function ReSpinGame({results, reels, effects, background}) {

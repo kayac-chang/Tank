@@ -1,4 +1,4 @@
-import {randomInt, nextFrame} from '../../../../general';
+import {randomInt, nextFrame} from '@kayac/utils';
 
 const {assign} = Object;
 

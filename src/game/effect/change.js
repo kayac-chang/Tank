@@ -1,5 +1,5 @@
 import anime from 'animejs';
-import {currencyFormat} from '../../../../general';
+import {currencyFormat} from '@kayac/utils';
 
 const config = {
     duration: 3000,
