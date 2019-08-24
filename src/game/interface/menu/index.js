@@ -18,6 +18,8 @@ export function Menu(it) {
         .forEach((page) => {
             page.visible = false;
             page.alpha = 0;
+
+            page.on('close', close);
         });
 
     let currentPage = undefined;
