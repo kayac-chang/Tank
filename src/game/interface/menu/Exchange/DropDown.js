@@ -1,0 +1,72 @@
+import EventEmitter from 'eventemitter3';
+import {Button} from '../../components';
+import {fadeIn, popIn} from '../../../effect';
+
+export function DropDown({label, btn, list, items}) {
+    const it = new EventEmitter();
+
+    btn = Button(btn);
+
+    list = List(list);
+
+    btn.on('click', onTrigger);
+
+    return Object.assign(it, {close});
+
+    function List(it) {
+        it.children
+            .forEach((it) => {
+                const {name} = it;
+
+                if (name.includes('item')) Item(it);
+
+                else if (name.includes('btn')) {
+                    it = Button(it);
+
+                    it.on('click', onSelect);
+                }
+            });
+
+        return it;
+
+        function Item(it) {
+            const index = it.name.split('@')[1];
+            it.text = items[index];
+        }
+    }
+
+    function onSelect() {
+        const index = this.name.split('@')[1];
+
+        label.text = items[index];
+
+        it.emit('select', index);
+
+        close();
+    }
+
+    function hasOpened() {
+        return list.visible;
+    }
+
+    function open() {
+        list.visible = true;
+
+        btn.alpha = 0.5;
+        list.alpha = 0;
+
+        const config = {targets: list, duration: 360};
+        popIn(config);
+        fadeIn(config);
+    }
+
+    function close() {
+        list.visible = false;
+
+        btn.alpha = 1;
+    }
+
+    function onTrigger() {
+        return hasOpened() ? close() : open();
+    }
+}

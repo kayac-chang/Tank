@@ -1,12 +1,13 @@
-import {Page} from './Page';
-import {Button} from '../components';
+import {Page} from '../Page';
+import {Button} from '../../components';
 
 import {currencyFormat} from '@kayac/utils';
 
-import {fadeIn, popIn} from '../../effect';
-import {observe} from './observe';
+import {observe} from '../observe';
 
-import EventEmitter from 'eventemitter3';
+import {FormButton} from './FormButton';
+import {DropDown} from './DropDown';
+import {NumberPad} from './NumberPad';
 
 const {trunc} = Math;
 
@@ -148,102 +149,6 @@ export function Exchange(it) {
     }
 }
 
-function FormButton({btn, label}) {
-    let it = new EventEmitter();
-
-    it = observe({
-        key: 'enable', value: true, onChange,
-    }, it);
-
-    btn = Button(btn);
-
-    btn.on('click', onClick);
-
-    return it;
-
-    function onClick() {
-        if (!it.enable) return;
-
-        it.emit('click');
-    }
-
-    function onChange(enable) {
-        const alpha = enable ? 1 : 0.5;
-
-        btn.alpha = alpha;
-        label.alpha = alpha;
-    }
-}
-
-function DropDown({label, btn, list, items}) {
-    const it = new EventEmitter();
-
-    btn = Button(btn);
-
-    list = List(list);
-
-    btn.on('click', onTrigger);
-
-    return Object.assign(it, {close});
-
-    function List(it) {
-        it.children
-            .forEach((it) => {
-                const {name} = it;
-
-                if (name.includes('item')) Item(it);
-
-                else if (name.includes('btn')) {
-                    it = Button(it);
-
-                    it.on('click', onSelect);
-                }
-            });
-
-        return it;
-
-        function Item(it) {
-            const index = it.name.split('@')[1];
-            it.text = items[index];
-        }
-    }
-
-    function onSelect() {
-        const index = this.name.split('@')[1];
-
-        label.text = items[index];
-
-        it.emit('select', index);
-
-        close();
-    }
-
-    function hasOpened() {
-        return list.visible;
-    }
-
-    function open() {
-        list.visible = true;
-
-        btn.alpha = 0.5;
-        list.alpha = 0;
-
-        const config = {targets: list, duration: 360};
-        popIn(config);
-        fadeIn(config);
-    }
-
-    function close() {
-        list.visible = false;
-
-        btn.alpha = 1;
-    }
-
-    function onTrigger() {
-        return hasOpened() ? close() : open();
-    }
-}
-
 function Amount(it) {
     it = observe({
         key: 'value', value: 0, onChange,
@@ -267,23 +172,5 @@ function Amount(it) {
 
     function push(value) {
         it.value = (it.value * 10) + Number(value);
-    }
-}
-
-function NumberPad(it) {
-    const buttons =
-        it.children
-            .filter(({name}) => name.includes('button'))
-            .map(Button);
-
-    buttons
-        .forEach((btn) => btn.on('pointerdown', click));
-
-    return it;
-
-    function click() {
-        const key = this.name.split('@')[1];
-
-        it.emit('click', key);
     }
 }

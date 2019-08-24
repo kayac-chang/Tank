@@ -1,7 +1,8 @@
 import {fadeIn, fadeOut, twink} from '../../effect';
 
-import {NavBar} from './NavBar';
+import {Nav} from './Nav';
 import {Exchange} from './Exchange';
+import {Setting} from './Setting';
 
 export function Menu(it) {
     const background = Background(it.getChildByName('background'));
@@ -9,9 +10,11 @@ export function Menu(it) {
     background.alpha = 0;
 
     const exchange = Exchange(it.getChildByName('exchange'));
+    const setting = Setting(it.getChildByName('setting'));
 
     const pages = {
         exchange,
+        setting,
     };
 
     Object.values(pages)
@@ -24,7 +27,15 @@ export function Menu(it) {
 
     let currentPage = undefined;
 
-    const nav = NavBar(it);
+    const nav = Nav(it.getChildByName('nav'));
+    nav.on('close', close);
+    nav.on('open', open);
+
+    return Object.assign(it, {
+        open, close,
+
+        ...(pages),
+    });
 
     function Background(it) {
         const fade = {
@@ -61,27 +72,25 @@ export function Menu(it) {
 
         await background.open();
 
+        if (currentPage) await currentPage.close();
+
         await it[page].open();
 
         currentPage = it[page];
     }
 
     async function close() {
-        await Promise.all([
-            currentPage.close(),
-            background.close(),
-        ]);
+        if (currentPage) {
+            await Promise.all([
+                currentPage.close(),
+                background.close(),
+            ]);
 
-        currentPage = undefined;
+            currentPage = undefined;
+        }
 
         await nav.close();
 
         it.visible = false;
     }
-
-    return Object.assign(it, {
-        open, close,
-
-        ...(pages),
-    });
 }

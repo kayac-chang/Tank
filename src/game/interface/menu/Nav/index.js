@@ -1,9 +1,7 @@
-import {move} from '../../effect';
+import {move} from '../../../effect';
 import {NavButton} from './NavButton';
 
-export function NavBar(menu) {
-    const it = menu.getChildByName('nav');
-
+export function Nav(it) {
     const background = Background(it.getChildByName('background'));
 
     const buttons =
@@ -24,9 +22,10 @@ export function NavBar(menu) {
         homeButton,
     ] = buttons;
 
-    backButton.on('click', () => menu.close());
+    backButton.on('click', () => it.emit('close'));
 
-    exchangeButton.on('click', () => menu.open('exchange'));
+    exchangeButton.on('click', () => it.emit('open', 'exchange'));
+    settingButton.on('click', () => it.emit('open', 'setting'));
 
     async function open() {
         await background.open();

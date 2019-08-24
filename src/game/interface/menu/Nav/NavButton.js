@@ -1,6 +1,6 @@
-import {fadeIn, fadeOut} from '../../effect';
+import {fadeIn, fadeOut} from '../../../effect';
 
-import {Button} from '../components';
+import {Button} from '../../components';
 
 export function NavButton(view) {
     const it = Button(view);
