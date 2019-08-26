@@ -1,5 +1,5 @@
 import EventEmitter from 'eventemitter3';
-import {observe} from '../observe';
+import {observe} from '../../observe';
 import {Button} from '../../components';
 
 export function FormButton({btn, label}) {

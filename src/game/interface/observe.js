@@ -8,9 +8,11 @@ export function observe({key, value, onChange}, it) {
         set(num) {
             value = num;
 
-            onChange(value);
+            onChange.call(it, value);
         },
     };
+
+    proxy.set(value);
 
     return defineProperty(it, key, proxy);
 }

@@ -3,7 +3,7 @@ import {Button} from '../../components';
 
 import {currencyFormat} from '@kayac/utils';
 
-import {observe} from '../observe';
+import {observe} from '../../observe';
 
 import {FormButton} from './FormButton';
 import {DropDown} from './DropDown';

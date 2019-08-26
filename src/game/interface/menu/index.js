@@ -11,10 +11,12 @@ export function Menu(it) {
 
     const exchange = Exchange(it.getChildByName('exchange'));
     const setting = Setting(it.getChildByName('setting'));
+    const information = Setting(it.getChildByName('information'));
 
     const pages = {
         exchange,
         setting,
+        information,
     };
 
     Object.values(pages)

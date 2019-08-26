@@ -26,6 +26,7 @@ export function Nav(it) {
 
     exchangeButton.on('click', () => it.emit('open', 'exchange'));
     settingButton.on('click', () => it.emit('open', 'setting'));
+    infoButton.on('click', () => it.emit('open', 'information'));
 
     async function open() {
         await background.open();
