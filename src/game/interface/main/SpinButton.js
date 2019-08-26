@@ -10,8 +10,8 @@ export function SpinButton(it) {
     }
 
     async function play() {
-        // app.user.cash -= app.user.currentBet;
-        // app.user.lastWin = 0;
+        app.user.cash -= app.user.currentBet;
+        app.user.lastWin = 0;
 
         const result = await app.service.sendOneRound({
             key: process.env.KEY,

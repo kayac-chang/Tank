@@ -309,11 +309,11 @@ export function Service(prodKey) {
         const totalWin = data['totalwinscore'];
         const cash = data['playermoney'];
 
-        const hasReSpin = Boolean(data['isrespin']);
+        const normalGame = Round(data['normalresult']);
 
-        const normalGame = Result(data['normalresult']);
+        const hasFreeGame = Boolean(data['isfreegame']);
 
-        const reSpinGame = hasReSpin && data['respin'].map(Result);
+        const freeGame = hasFreeGame && data['freeresult'].map(Round);
 
         return {
             cash,
@@ -321,19 +321,44 @@ export function Service(prodKey) {
 
             normalGame,
 
-            hasReSpin,
-            reSpinGame,
-
-            jackPot,
+            hasFreeGame,
+            freeGame,
         };
+    }
+
+    function Round(data) {
+        const symbols = data['plate'];
+
+        const results = data['gameresult'].map(Result);
+
+        const randomWild = RandomWild(data['randwild']);
+
+        const scores = results.reduce((a, b) => a.scores + b.scores, 0);
+
+        return {
+            symbols, results, randomWild, scores,
+        };
+
+        function RandomWild(data) {
+            if (!data || data.length === 0) return;
+
+            const wild = 0;
+
+            return (
+                data.map((row, rowIndex) =>
+                    row &&
+                    row.filter((colIndex) =>
+                        symbols[rowIndex][colIndex] !== wild))
+            );
+        }
     }
 
     function Result(data) {
         return {
-            hasLink: Boolean(data['islink']),
-            scores: data['scores'],
-            positions: data['plateindex'],
-            symbols: data['plate'],
+            symbols: data['LineSymbolNum'],
+            positions: data['LineSymbolPoint'],
+            rate: data['LineWinRate'],
+            scores: data['Score'],
         };
     }
 }

@@ -16,7 +16,13 @@ export function create({normalTable, freeTable}) {
         textures: symbolConfig,
     });
 
+    const title = scene.getChildByName('title');
 
+    title.transition['hide'].pause();
+
+    app.on('GameResult', (result) => {
+        console.log(result);
+    });
 
     return scene;
 }
