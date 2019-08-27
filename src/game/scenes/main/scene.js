@@ -5,7 +5,6 @@ import {spin} from './logic/anim';
 
 import {symbolConfig} from './data';
 
-
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
     const scene = create('MainScene');
@@ -20,8 +19,13 @@ export function create({normalTable, freeTable}) {
 
     title.transition['hide'].pause();
 
-    app.on('GameResult', (result) => {
-        console.log(result);
+    app.on('GameResult', async (result) => {
+        console.log(result.normalGame.symbols);
+
+        await spin({
+            reels: slot.reels,
+            symbols: result.normalGame.symbols,
+        });
     });
 
     return scene;

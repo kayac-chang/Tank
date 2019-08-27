@@ -1,3 +1,5 @@
+import {State} from './Slot';
+
 export function update(reel) {
     reel.symbols
         .forEach((symbol) => {
@@ -14,6 +16,8 @@ function getPos(reel, symbol) {
 }
 
 function isSwapped(reel, symbol, pos) {
+    if (reel.state === State.Stop) return;
+
     const test = Math.round(symbol.pos - pos);
 
     const control = reel.symbols.length - 1;

@@ -1,7 +1,7 @@
 import {id, isSymbol} from './util';
 import {update} from './update';
 import {Symbol} from './Symbol';
-import {property} from './Slot';
+import {property, State} from './Slot';
 
 function* Strip(data) {
     while (true) {
@@ -24,6 +24,8 @@ export function Reel(view) {
 
     let pos = 0;
 
+    let state = State.Idle;
+
     const reel = {
         get index() {
             return index;
@@ -35,6 +37,13 @@ export function Reel(view) {
 
         get strip() {
             return strip;
+        },
+
+        get state() {
+            return state;
+        },
+        set state(newState) {
+            state = newState;
         },
 
         get pos() {

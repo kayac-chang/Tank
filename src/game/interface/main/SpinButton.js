@@ -5,6 +5,8 @@ export function SpinButton(it) {
 
     it.on('click', onClick);
 
+    return it;
+
     function onClick() {
         return play();
     }

@@ -41,5 +41,12 @@ export function Symbol(view, index, symbols) {
         set texture(newTexture) {
             view.texture = newTexture;
         },
+
+        get icon() {
+            return property.textures.find(view.texture);
+        },
+        set icon(newIcon) {
+            view.texture = property.textures.get(newIcon);
+        },
     };
 }

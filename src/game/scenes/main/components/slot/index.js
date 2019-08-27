@@ -1,2 +1,2 @@
-export {Slot} from './Slot';
+export {Slot, State} from './Slot';
 

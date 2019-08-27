@@ -17,7 +17,7 @@ export function isResult({name}) {
 export function TextureManager(symbolConfig) {
     let config = undefined;
 
-    return {get};
+    return {get, find};
 
     function mapping() {
         const {textures} = app.resource.get('symbols');
@@ -35,6 +35,12 @@ export function TextureManager(symbolConfig) {
         return mapping()
             .find(({id}) => id === iconId)
             .texture;
+    }
+
+    function find(_texture) {
+        return mapping()
+            .find(({texture}) => texture === _texture)
+            .id;
     }
 }
 

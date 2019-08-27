@@ -1,6 +1,8 @@
 import anime from 'animejs';
 import {wait, nextFrame} from '@kayac/utils';
 
+import {State} from '../../components';
+
 import {
     getSpinDuration,
 } from '../../data';
@@ -12,13 +14,15 @@ export async function spin({reels, symbols, func}) {
 
     await duration();
 
-    await stop(reels);
+    await stop(reels, symbols);
 }
 
 async function start(reels) {
     app.emit('SpinStart');
 
     for (const reel of reels) {
+        reel.state = State.Spin;
+
         anime
             .timeline({
                 targets: reel,
@@ -54,22 +58,26 @@ async function duration() {
     }
 }
 
-async function stop(reels) {
+async function stop(reels, symbols) {
     app.emit('SpinStop');
 
     for (const reel of reels) {
+        reel.state = State.Stop;
+
         anime.remove(reel);
 
-        const diff =
+        const [offSet, ...display] =
             reel.symbols
-                .reduce((a, b) => a.pos < b.pos ? a : b)
-                .pos;
+                .concat()
+                .sort(byPos);
 
-        reel.pos -= diff;
+        setDisplay(display, symbols[reel.index]);
+
+        reel.pos -= offSet.pos;
 
         await anime({
             targets: reel,
-            pos: '+=' + 2,
+            pos: '+=' + symbols.length,
             easing: 'easeOutBack',
             duration: 360,
 
@@ -78,7 +86,17 @@ async function stop(reels) {
             },
         })
             .finished;
+
+        reel.state = State.Idle;
     }
 
     app.emit('SpinEnd');
+
+    function byPos(a, b) {
+        return a.pos - b.pos;
+    }
+
+    function setDisplay(display, result) {
+        result.forEach((icon, index) => display[index].icon = icon);
+    }
 }

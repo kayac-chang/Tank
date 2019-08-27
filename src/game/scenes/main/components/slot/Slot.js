@@ -1,6 +1,8 @@
 import {isReel, TextureManager} from './util';
 import {Reel} from './Reel';
 
+const {freeze, assign} = Object;
+
 let textures = undefined;
 
 export const property = {
@@ -15,8 +17,14 @@ export const property = {
     },
 };
 
+export const State = freeze({
+    Idle: 'idle',
+    Spin: 'spin',
+    Stop: 'stop',
+});
+
 export function Slot({view, ...options}) {
-    Object.assign(property, options);
+    assign(property, options);
 
     const reels =
         view.children
