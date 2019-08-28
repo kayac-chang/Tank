@@ -1,6 +1,7 @@
 import {getSearchParam} from '../utils';
-import {clone, err} from '@kayac/utils';
+import {clone, equals, err} from '@kayac/utils';
 import {User} from '../user';
+import payTable from './payTable';
 
 const {assign, entries, fromEntries} = Object;
 
@@ -321,7 +322,6 @@ export function Service(prodKey) {
 
             normalGame,
 
-            hasFreeGame,
             freeGame,
         };
     }
@@ -331,12 +331,20 @@ export function Service(prodKey) {
 
         const results = data['gameresult'].map(Result);
 
+        const hasLink = results.length > 0;
+
+        const scores = results
+            .map(({scores}) => scores)
+            .reduce((a, b) => a + b, 0);
+
         const randomWild = RandomWild(data['randwild']);
 
-        const scores = results.reduce((a, b) => a.scores + b.scores, 0);
-
         return {
-            symbols, results, randomWild, scores,
+            symbols,
+            results,
+            hasLink,
+            scores,
+            randomWild,
         };
 
         function RandomWild(data) {
@@ -354,12 +362,30 @@ export function Service(prodKey) {
     }
 
     function Result(data) {
+        const symbols = data['LineSymbolNum'].flat();
+        const positions = data['LineSymbolPoint'].flat();
+        const rate = data['LineWinRate'];
+        const scores = data['Score'];
+
+        const line = matchLine(positions);
+
         return {
-            symbols: data['LineSymbolNum'],
-            positions: data['LineSymbolPoint'],
-            rate: data['LineWinRate'],
-            scores: data['Score'],
+            symbols,
+
+            line,
+            positions,
+
+            rate,
+            scores,
         };
     }
+}
+
+function matchLine(positions) {
+    return (
+        payTable
+            .map((line) => line.slice(0, positions.length))
+            .findIndex((line) => equals(line, positions))
+    );
 }
 

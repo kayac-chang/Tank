@@ -67,6 +67,7 @@
     "pixi-particles": "^4.1.2",
     "pixi.js": "^4.8.7",
     "pixi_fairygui": "^0.4.16",
+    "ramda": "^0.26.1",
     "regenerator-runtime": "^0.13.2",
     "screenfull": "^4.2.0",
     "sweetalert2": "^8.11.5",

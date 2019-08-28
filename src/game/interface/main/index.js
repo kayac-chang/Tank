@@ -37,6 +37,9 @@ export function Main(it) {
 }
 
 function Option(it) {
+    Object.values(it.transition)
+        .forEach((anim) => anim.pause());
+
     const backBtn = Button(it.getChildByName('icon@back'));
 
     backBtn.on('click', () => it.emit('close'));

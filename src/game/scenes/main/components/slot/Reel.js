@@ -56,5 +56,8 @@ export function Reel(view) {
         },
     };
 
+    symbols
+        .forEach((symbol) => symbol.texture = strip.next().value);
+
     return reel;
 }

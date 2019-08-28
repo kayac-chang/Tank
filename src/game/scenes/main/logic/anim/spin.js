@@ -7,7 +7,7 @@ import {
     getSpinDuration,
 } from '../../data';
 
-export async function spin({reels, symbols, func}) {
+export async function spin({reels, symbols}) {
     if (!reels.length) reels = [reels];
 
     await start(reels);

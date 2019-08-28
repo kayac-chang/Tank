@@ -1,5 +1,5 @@
-import SYMBOLS from '../assets/symbols/symbol.json';
-import '../assets/symbols/symbol.png';
+import SYMBOLS from '../assets/symbols/symbols.json';
+import '../assets/symbols/symbols.png';
 
 export const symbolConfig = [
     {id: 0, name: 'Wild', texture: 'Wild.png'},

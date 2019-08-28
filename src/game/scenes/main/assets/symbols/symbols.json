@@ -1,0 +1,92 @@
+{"frames": {
+
+"A.png":
+{
+	"frame": {"x":1,"y":379,"w":150,"h":151},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":48,"y":38,"w":150,"h":151},
+	"sourceSize": {"w":245,"h":225}
+},
+"Audio.png":
+{
+	"frame": {"x":186,"y":200,"w":179,"h":166},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":33,"y":30,"w":179,"h":166},
+	"sourceSize": {"w":245,"h":225}
+},
+"Headphone.png":
+{
+	"frame": {"x":186,"y":368,"w":149,"h":163},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":49,"y":32,"w":149,"h":163},
+	"sourceSize": {"w":245,"h":225}
+},
+"J.png":
+{
+	"frame": {"x":154,"y":519,"w":150,"h":151},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":48,"y":38,"w":150,"h":151},
+	"sourceSize": {"w":245,"h":225}
+},
+"K.png":
+{
+	"frame": {"x":1,"y":531,"w":150,"h":151},
+	"rotated": true,
+	"trimmed": true,
+	"spriteSourceSize": {"x":48,"y":38,"w":150,"h":151},
+	"sourceSize": {"w":245,"h":225}
+},
+"Keyboard.png":
+{
+	"frame": {"x":1,"y":200,"w":183,"h":177},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":32,"y":25,"w":183,"h":177},
+	"sourceSize": {"w":245,"h":225}
+},
+"Mic.png":
+{
+	"frame": {"x":351,"y":368,"w":113,"h":156},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":67,"y":35,"w":113,"h":156},
+	"sourceSize": {"w":245,"h":225}
+},
+"Q.png":
+{
+	"frame": {"x":306,"y":526,"w":150,"h":151},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":48,"y":38,"w":150,"h":151},
+	"sourceSize": {"w":245,"h":225}
+},
+"Scatter.png":
+{
+	"frame": {"x":217,"y":1,"w":198,"h":197},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":25,"y":14,"w":198,"h":197},
+	"sourceSize": {"w":245,"h":225}
+},
+"Wild.png":
+{
+	"frame": {"x":1,"y":1,"w":214,"h":197},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":17,"y":14,"w":214,"h":197},
+	"sourceSize": {"w":245,"h":225}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "symbols.png",
+	"format": "RGBA8888",
+	"size": {"w":465,"h":682},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c7df032f543beb2701a5a181eaaaa1f1:04904cc48a74b31784213b429d21555b:d295ed7153fe372207e34d26d380974a$"
+}
+}
