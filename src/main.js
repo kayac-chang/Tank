@@ -71,11 +71,9 @@ async function main() {
 
         app.stage.removeChild(loadScene);
 
-        select('script').forEach((el) => el.remove());
-
         app.resize();
 
-        app.emit('Idle');
+        select('script').forEach((el) => el.remove());
         //
     } catch (error) {
         console.error(error);

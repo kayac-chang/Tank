@@ -31,8 +31,8 @@ export function logic({slot, freeGame}) {
             });
 
         log('Round Complete...');
-        app.emit('Idle');
-    }
 
+        app.emit('Idle', {symbols: slot.current});
+    }
 }
 

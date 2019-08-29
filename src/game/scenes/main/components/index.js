@@ -5,6 +5,7 @@ export * from './FreeGame';
 export * from './Title';
 export * from './Collect';
 export * from './Grid';
+export * from './Digit';
 
 export function pauseAll(it) {
     Object

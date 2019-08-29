@@ -6,8 +6,7 @@ import {symbolConfig} from './data';
 
 import {logic} from './logic';
 import {fadeIn, fadeOut} from '../../effect';
-import {wait} from "@kayac/utils";
-
+import {wait} from '@kayac/utils';
 
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
@@ -37,10 +36,27 @@ export function create({normalTable, freeTable}) {
     window.showFreeGame = showFreeGame;
     window.showMultiple = showMultiple;
 
+    app.emit('Idle', {symbols: slot.current});
+
+    app.on('ShowResult', showResult);
+    app.on('SpinStart', closeMask);
+
     return scene;
 
-    async function showFreeGame() {
+    async function showResult({scores}) {
+        openMask();
+    }
+
+    async function openMask() {
         await fadeIn({targets: mask, alpha: 0.5}).finished;
+    }
+
+    async function closeMask() {
+        await fadeOut({targets: mask}).finished;
+    }
+
+    async function showFreeGame() {
+        await openMask();
 
         await freeGame.show();
 
@@ -55,7 +71,7 @@ export function create({normalTable, freeTable}) {
             collect.next().show(),
         ]);
 
-        await fadeOut({targets: mask}).finished;
+        await closeMask();
     }
 
     async function showMultiple(anim) {

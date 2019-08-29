@@ -362,8 +362,21 @@ export function Service(prodKey) {
     }
 
     function Result(data) {
-        const symbols = data['LineSymbolNum'].flat();
-        const positions = data['LineSymbolPoint'].flat();
+        const symbols =
+            data['LineSymbolNum']
+                .reduce((arr, row) => {
+                    arr.push(row[0]);
+
+                    return arr;
+                }, []);
+
+        const positions = data['LineSymbolPoint']
+            .reduce((arr, row) => {
+                arr.push(row[0]);
+
+                return arr;
+            }, []);
+
         const rate = data['LineWinRate'];
         const scores = data['Score'];
 

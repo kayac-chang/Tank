@@ -1,7 +1,6 @@
 import {wait} from '@kayac/utils';
-import {pauseAll} from './index';
+import {Digit, pauseAll} from './index';
 
-import {Container, Sprite} from 'pixi.js';
 import {fadeIn} from '../../../effect';
 
 export function Collect(it) {
@@ -28,7 +27,11 @@ export function Collect(it) {
             .filter(({name}) => name.includes('level'))
             .map(Level);
 
-    const count = Count(it.getChildByName('count'));
+    const count = Digit(it.getChildByName('count'));
+
+    count.fontScale = 0.4;
+
+    it.addChild(count);
 
     return {
         show,
@@ -89,56 +92,5 @@ export function Collect(it) {
         count.value = 0;
 
         await fadeIn({targets: count}).finished;
-    }
-
-    function Count({x, y}) {
-        const {textures} = app.resource.get('number');
-
-        const comp = new Container();
-
-        comp.position.set(x, y);
-
-        it.addChild(comp);
-
-        let current = 0;
-
-        return Object.defineProperty(comp, 'value', {
-            get() {
-                return current;
-            },
-            set(newValue) {
-                current = newValue;
-
-                update();
-            },
-        });
-
-        function update() {
-            comp.removeChildren();
-
-            const words =
-                [...String(current)]
-                    .map((char) => {
-                        const sprite = new Sprite(textures[`${char}.png`]);
-
-                        sprite.name = char;
-
-                        sprite.scale.set(.4);
-
-                        return sprite;
-                    });
-
-            words.reduce((a, b) => {
-                b.x = a.width;
-                return b;
-            });
-
-            comp.addChild(...words);
-
-            comp.pivot.set(
-                comp.width / 2,
-                comp.height / 2
-            );
-        }
     }
 }
