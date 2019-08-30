@@ -47,14 +47,11 @@ export function PayLines(it) {
 
     app.on('ShowResult', showResult);
 
-    let skipIdle = false;
     app.on('SpinStart', () => {
         setAll('visible', false, lines);
         setAll('visible', false, digits);
 
         it.visible = false;
-
-        skipIdle = true;
     });
 
     return it;
@@ -69,44 +66,66 @@ export function PayLines(it) {
 
         setAll('visible', true, matchLines);
 
-        skipIdle = false;
+        if (matchLines.length <= 0) return;
+
         app.once('Idle', onceIdle);
 
-        async function onceIdle() {
-            if (skipIdle) return;
+        app.once('SpinStart', () => app.off('Idle', onceIdle));
 
+        async function onceIdle() {
             setAll('visible', false, matchLines);
 
-            let loop = true;
+            let skip = false;
 
-            app.once('SpinStart', () => loop = false);
+            app.once('SpinStart', () => skip = true);
 
-            while (loop) {
-                for (const {line, scores} of results) {
-                    if (line !== -1) {
-                        lines[line].visible = true;
+            const result = ResultGen();
 
-                        showScores(line, scores);
+            showLine();
 
-                        await wait(850);
-
-                        lines[line].visible = false;
-                        setAll('visible', false, digits);
-
-                        await wait(1000);
+            function* ResultGen() {
+                while (true) {
+                    for (const result of results) {
+                        yield result;
                     }
                 }
             }
+
+            async function showLine() {
+                const {line, scores} = result.next().value;
+
+                if (line === -1) return;
+
+                const payLine = lines[line];
+                payLine.visible = true;
+
+                const digit = showScores(line, scores);
+
+                await wait(1000);
+
+                payLine.visible = false;
+                digit.visible = false;
+
+                await wait(1000);
+
+                if (skip) return;
+
+                showLine();
+            }
         }
+    }
 
-        function showScores(line, scores) {
-            const index =
-                condition.findIndex((row) => row.includes(line));
+    function showScores(line, scores) {
+        const index =
+            condition.findIndex((row) => row.includes(line));
 
-            digits[index].value = scores;
+        const digit = digits[index];
 
-            digits[index].visible = true;
-        }
+        digit.value = scores;
+
+        digit.visible = true;
+
+        return digit;
     }
 }
 

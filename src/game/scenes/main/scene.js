@@ -27,19 +27,19 @@ export function create({normalTable, freeTable}) {
 
     const freeGame = FreeGame(scene.getChildByName('freegame'));
 
-    const grid = Grid(scene.getChildByName('grid'));
+    Grid(scene.getChildByName('grid'));
 
     const multiple = Multiple(scene.getChildByName('multiple'));
 
-    logic({slot, freeGame});
-
-    window.showFreeGame = showFreeGame;
-    window.showMultiple = showMultiple;
+    logic({slot, showFreeGame, closeFreeGame});
 
     app.emit('Idle', {symbols: slot.current});
 
     app.on('ShowResult', showResult);
     app.on('SpinStart', closeMask);
+
+    window.showFreeGame = showFreeGame;
+    window.closeFreeGame = closeFreeGame;
 
     return scene;
 
@@ -56,22 +56,19 @@ export function create({normalTable, freeTable}) {
     }
 
     async function showFreeGame() {
-        await openMask();
-
         await freeGame.show();
 
         await title.hide();
 
         await collect.show();
+    }
 
-        await grid.show('energy', [0, 1]);
+    async function closeFreeGame() {
+        await freeGame.close();
 
-        await Promise.all([
-            collect.show('light'),
-            collect.next().show(),
-        ]);
+        await collect.hide();
 
-        await closeMask();
+        await title.show();
     }
 
     async function showMultiple(anim) {

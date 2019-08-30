@@ -1,5 +1,5 @@
 import {Sprite} from 'pixi.js';
-import {nextFrame, wait} from '@kayac/utils';
+import {wait} from '@kayac/utils';
 
 import {fadeOut, move, popIn} from '../../../effect';
 
@@ -19,7 +19,13 @@ export function Grid(it) {
 
                 if (type === 'effect') {
                     child.children
-                        .forEach((child) => child.transition['anim'].pause());
+                        .forEach((child) => {
+                            child.transition['anim'].pause();
+
+                            const animSprite = child.getChildByName('anim');
+                            animSprite.anim.gotoAndStop(0);
+                            animSprite.alpha = 0;
+                        });
                 }
 
                 return list;
@@ -31,139 +37,113 @@ export function Grid(it) {
 
     app.on('ShowResult', showResult);
 
-    app.on('Idle', showIdle);
+    app.on('Stick', showStick);
 
-    return {show};
-
-    function showIdle({symbols}) {
-        const list = [];
-
-        grid.forEach((row, rowIdx) => {
-            row.forEach(async (col, colIdx) => {
-                const symbol = String(symbols[rowIdx][colIdx]);
-
-                const comp = col['effect'];
-
-                comp.children
-                    .forEach((child) => child.visible = false);
-
-                const it = comp.getChildByName(symbol);
-
-                const anim = it.transition['idle'];
-
-                anim.loop = true;
-
-                anim.restart();
-
-                list.push(it);
-
-                await nextFrame();
-
-                it.visible = true;
-            });
-        });
-
-        app.once('SpinStart', () => {
-            list.forEach((it) => {
-                const anim = it.transition['idle'];
-
-                anim.pause();
-
-                it.visible = false;
-            });
-        });
-    }
+    return it;
 
     function showResult({results}) {
-        it.visible = true;
-
         const list = [];
 
-        results.forEach(({positions, symbols}) => {
+        results.forEach(show);
+
+        app.once('Idle', onceIdle);
+
+        app.once('SpinStart', () => {
+            app.off('Idle', onceIdle);
+
+            list.forEach(close);
+        });
+
+        async function onceIdle() {
+            list.forEach(close);
+
+            let skip = false;
+
+            app.once('SpinStart', () => skip = true);
+
+            const result = ResultGen();
+
+            showEffect();
+
+            function* ResultGen() {
+                while (true) {
+                    for (const result of results) {
+                        yield result;
+                    }
+                }
+            }
+
+            async function showEffect() {
+                show(result.next().value);
+
+                await wait(1000);
+
+                list.forEach(close);
+
+                await wait(1000);
+
+                if (skip) return;
+
+                showEffect();
+            }
+        }
+
+        function close(it) {
+            const anim = it.transition['anim'];
+
+            anim.pause();
+
+            it.visible = false;
+        }
+
+        function show({positions, symbols}) {
             positions.forEach((colIdx, rowIdx) => {
                 if (colIdx === undefined) return;
 
                 const symbol = String(symbols[rowIdx]);
 
+                const effect =
+                    grid[rowIdx][colIdx]['effect'];
+
                 const it =
-                    grid[rowIdx][colIdx]['effect']
-                        .getChildByName(symbol);
+                    effect.getChildByName(symbol);
 
-                const anim = it.transition['anim'];
-
-                anim.restart();
+                it.transition['anim'].restart();
 
                 it.visible = true;
 
                 list.push(it);
             });
-        });
-
-        app.once('Idle', onceIdle);
-
-        app.once('SpinStart', () => {
-            list.forEach((el) => {
-                const anim = el.transition['anim'];
-
-                anim.pause();
-
-                el.visible = false;
-
-                it.visible = false;
-            });
-        });
-
-        async function onceIdle() {
-            let loop = true;
-
-            app.once('SpinStart', () => loop = false);
-
-            while (loop) {
-                for (const {positions, symbols} of results) {
-                    const list =
-                        positions.map((colIdx, rowIdx) => {
-                            const symbol = String(symbols[rowIdx]);
-
-                            const it =
-                                grid[rowIdx][colIdx]['effect']
-                                    .getChildByName(symbol);
-
-                            const anim = it.transition['anim'];
-
-                            anim.restart();
-
-                            it.visible = true;
-
-                            return it;
-                        });
-
-                    await wait(850);
-
-                    list.forEach((it) => it.visible = false);
-
-                    await wait(1000);
-                }
-            }
         }
     }
 
-    async function show(type, [row, col]) {
-        const child = grid[row][col][type];
+    function showStick({newMatch}) {
+        const list =
+            newMatch.map(({row, col}) => {
+                const {stick, energy} = grid[row][col];
 
-        child.visible = true;
+                stick.visible = true;
 
-        const anim = child.transition['anim'];
+                stick.transition['anim'].restart();
 
-        anim.restart();
+                energy.visible = true;
 
-        await wait(500);
+                energy.transition['anim'].restart();
 
-        if (type === 'energy') energy(child);
+                showEnergy(energy);
 
-        await fadeOut({targets: child});
+                return {stick, energy};
+            });
+
+        app.once('Idle', () => {
+            for (const {stick, energy} of list) {
+                stick.visible = false;
+                energy.visible = false;
+            }
+        });
     }
 
-    async function energy(child) {
+    async function showEnergy(child) {
         const energy = Energy(texture);
 
         energy.position.set(
@@ -179,6 +159,8 @@ export function Grid(it) {
             move({targets: energy, x: target.x, y: target.y}).finished,
             fadeOut({targets: energy}).finished,
         ]);
+
+        it.removeChild(energy);
     }
 }
 

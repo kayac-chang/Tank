@@ -1,4 +1,4 @@
-import {log, table} from '@kayac/utils';
+import {log, table, wait} from '@kayac/utils';
 
 import {NormalGame} from './flow';
 
@@ -8,7 +8,7 @@ import {NormalGame} from './flow';
 //     return divide(scores, app.user.currentBet) > BET_TO_BIGWIN;
 // }
 
-export function logic({slot, freeGame}) {
+export function logic({slot, showFreeGame, closeFreeGame}) {
     app.on('GameResult', onGameResult);
 
     async function onGameResult(result) {
@@ -17,6 +17,7 @@ export function logic({slot, freeGame}) {
 
         const {
             normalGame,
+            freeGame,
         } = result;
 
         if (normalGame.hasLink) {
@@ -30,9 +31,72 @@ export function logic({slot, freeGame}) {
                 reels: slot.reels,
             });
 
+        if (freeGame) {
+            await showFreeGame();
+
+            let hasMatch = [];
+
+            for (const result of freeGame) {
+                const scores = await NormalGame({
+                    result: result,
+                    reels: slot.reels,
+                });
+
+                const {symbols} = result;
+
+                const match = matchWild(symbols);
+
+                if (match) {
+                    const newMatch = [];
+
+                    for (const {row, col} of match) {
+                        const saved =
+                            hasMatch.some((contain) =>
+                                contain.row === row && contain.col === col);
+
+                        if (!saved) newMatch.push({row, col});
+                    }
+
+                    if (newMatch.length > 0) {
+                        app.emit('Stick', {hasMatch, newMatch});
+
+                        await wait(750);
+
+                        app.emit('Energy', {hasMatch, newMatch});
+
+                        await wait(1000);
+
+                        app.emit('Count', {hasMatch, newMatch});
+
+                        hasMatch = [...hasMatch, ...newMatch];
+                    }
+                }
+            }
+
+            await closeFreeGame();
+        }
+
         log('Round Complete...');
 
         app.emit('Idle', {symbols: slot.current});
     }
+}
+
+function matchWild(symbols) {
+    const wild = 0;
+
+    let list = undefined;
+
+    symbols.forEach((row, rowIndex) => {
+        row.forEach((col, colIndex) => {
+            if (col === wild) {
+                if (!list) list = [];
+
+                list.push({row: rowIndex, col: colIndex});
+            }
+        });
+    });
+
+    return list;
 }
 

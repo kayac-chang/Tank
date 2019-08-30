@@ -1,11 +1,9 @@
 import {wait} from '@kayac/utils';
 import {Digit, pauseAll} from './index';
 
-import {fadeIn} from '../../../effect';
+import {fadeIn, fadeOut} from '../../../effect';
 
 export function Collect(it) {
-    pauseAll(it);
-
     const colors = [
         {main: 0x5A00FF, sub: 0x2679E5},
         {main: 0xFF0066, sub: 0xF171F1},
@@ -31,19 +29,31 @@ export function Collect(it) {
 
     count.fontScale = 0.4;
 
+    count.alpha = 0;
+
     it.addChild(count);
 
-    return {
-        show,
+    pauseAll(it);
 
-        next,
-    };
+    app.on('Energy', showEnergy);
 
-    function next() {
-        return levels.slice(
-            count.value,
-            count.value + 1
-        )[0];
+    app.on('Count', updateCount);
+
+    return Object.assign(it, {show, hide});
+
+    async function showEnergy({hasMatch, newMatch}) {
+        const start = hasMatch.length;
+        const end = start + newMatch.length;
+
+        for (let level = start; level < end; level++) {
+            levels[level].show();
+
+            await wait(120);
+        }
+    }
+
+    function updateCount({hasMatch, newMatch}) {
+        count.value = hasMatch.length + newMatch.length;
     }
 
     function Level(it) {
@@ -67,30 +77,33 @@ export function Collect(it) {
             anim.restart();
 
             await wait(750);
-
-            count.value = level;
         }
     }
 
     async function show(anim) {
+        it.visible = true;
+
         if (['x2', 'x3', 'x5', 'x8', 'light'].includes(anim)) {
             const animation = it.transition[anim];
-
             return animation.restart();
         }
-
-        levels.forEach((it) => it.alpha = 0);
-
-        it.visible = true;
 
         const show = it.transition['show'];
 
         show.restart();
 
-        await wait(1500);
-
         count.value = 0;
 
+        await wait(1500);
+
         await fadeIn({targets: count}).finished;
+    }
+
+    async function hide() {
+        await fadeOut({targets: it}).finished;
+
+        it.visible = false;
+
+        it.alpha = 1;
     }
 }

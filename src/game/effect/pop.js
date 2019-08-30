@@ -20,3 +20,18 @@ export function popIn({targets, ...options}) {
 
     return anime(param);
 }
+
+export function scale({targets, ...options}) {
+    targets =
+        (!targets.length) ?
+            targets.scale : targets.map(({scale}) => scale);
+
+    const param = {
+        targets,
+
+        ...(config),
+        ...(options),
+    };
+
+    return anime(param);
+}

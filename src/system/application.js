@@ -18,8 +18,8 @@ export function App() {
         new Application({
             resolution: devicePixelRatio,
             antialias: true,
-            forceCanvas: true,
-            powerPreference: isMobile.phone && 'high-performance',
+            // forceCanvas: true,
+            // powerPreference: isMobile.phone && 'high-performance',
         });
 
     //  Resource

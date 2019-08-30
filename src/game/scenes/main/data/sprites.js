@@ -68,15 +68,6 @@ import MAIN_ATLAS_59_URL from '../assets/sprite_sheets/main@atlas0_59.png';
 
 import MAIN_ATLAS_60_URL from '../assets/sprite_sheets/main@atlas0_60.png';
 import MAIN_ATLAS_61_URL from '../assets/sprite_sheets/main@atlas0_61.png';
-import MAIN_ATLAS_62_URL from '../assets/sprite_sheets/main@atlas0_62.png';
-import MAIN_ATLAS_63_URL from '../assets/sprite_sheets/main@atlas0_63.png';
-import MAIN_ATLAS_64_URL from '../assets/sprite_sheets/main@atlas0_64.png';
-import MAIN_ATLAS_65_URL from '../assets/sprite_sheets/main@atlas0_65.png';
-import MAIN_ATLAS_66_URL from '../assets/sprite_sheets/main@atlas0_66.png';
-import MAIN_ATLAS_67_URL from '../assets/sprite_sheets/main@atlas0_67.png';
-import MAIN_ATLAS_68_URL from '../assets/sprite_sheets/main@atlas0_68.png';
-import MAIN_ATLAS_69_URL from '../assets/sprite_sheets/main@atlas0_69.png';
-
 
 export const sprites = [
     {name: 'main.fui', url: MAIN_URL, xhrType: 'arraybuffer'},
@@ -149,13 +140,4 @@ export const sprites = [
 
     {name: 'main@atlas0_60.png', url: MAIN_ATLAS_60_URL},
     {name: 'main@atlas0_61.png', url: MAIN_ATLAS_61_URL},
-    {name: 'main@atlas0_62.png', url: MAIN_ATLAS_62_URL},
-    {name: 'main@atlas0_63.png', url: MAIN_ATLAS_63_URL},
-    {name: 'main@atlas0_64.png', url: MAIN_ATLAS_64_URL},
-    {name: 'main@atlas0_65.png', url: MAIN_ATLAS_65_URL},
-    {name: 'main@atlas0_66.png', url: MAIN_ATLAS_66_URL},
-    {name: 'main@atlas0_67.png', url: MAIN_ATLAS_67_URL},
-    {name: 'main@atlas0_68.png', url: MAIN_ATLAS_68_URL},
-    {name: 'main@atlas0_69.png', url: MAIN_ATLAS_69_URL},
-
 ];
