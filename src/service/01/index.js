@@ -350,14 +350,15 @@ export function Service(prodKey) {
         function RandomWild(data) {
             if (!data || data.length === 0) return;
 
-            const wild = 0;
-
-            return (
-                data.map((row, rowIndex) =>
-                    row &&
-                    row.filter((colIndex) =>
-                        symbols[rowIndex][colIndex] !== wild))
-            );
+            return data;
+            // const wild = 0;
+            //
+            // return (
+            //     data.map((row, rowIndex) =>
+            //         row &&
+            //         row.filter((colIndex) =>
+            //             symbols[rowIndex][colIndex] !== wild))
+            // );
         }
     }
 

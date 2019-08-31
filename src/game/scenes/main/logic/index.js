@@ -1,14 +1,14 @@
-import {log, table, wait} from '@kayac/utils';
+import {log, table, wait, divide} from '@kayac/utils';
 
 import {NormalGame} from './flow';
 
-// const BET_TO_BIGWIN = 10;
-//
-// function isBigWin(scores) {
-//     return divide(scores, app.user.currentBet) > BET_TO_BIGWIN;
-// }
+const BET_TO_BIGWIN = 10;
 
-export function logic({slot, showFreeGame, closeFreeGame}) {
+function isBigWin(scores) {
+    return divide(scores, app.user.currentBet) > BET_TO_BIGWIN;
+}
+
+export function logic({slot, showFreeGame, closeFreeGame, showRandomWild, showBigWin}) {
     app.on('GameResult', onGameResult);
 
     async function onGameResult(result) {
@@ -29,18 +29,27 @@ export function logic({slot, showFreeGame, closeFreeGame}) {
             await NormalGame({
                 result: normalGame,
                 reels: slot.reels,
+                showRandomWild,
             });
+
+        if (isBigWin(scores)) {
+            await showBigWin(scores);
+        }
 
         if (freeGame) {
             await showFreeGame();
 
             let hasMatch = [];
 
+            let totalScores = 0;
+
             for (const result of freeGame) {
                 const scores = await NormalGame({
                     result: result,
                     reels: slot.reels,
                 });
+
+                totalScores += scores;
 
                 const {symbols} = result;
 
@@ -71,6 +80,10 @@ export function logic({slot, showFreeGame, closeFreeGame}) {
                         hasMatch = [...hasMatch, ...newMatch];
                     }
                 }
+            }
+
+            if (isBigWin(totalScores)) {
+                await showBigWin(totalScores);
             }
 
             await closeFreeGame();

@@ -1,5 +1,5 @@
 import {wait} from '@kayac/utils';
-import {Digit, pauseAll} from './index';
+import {pauseAll, Text} from './index';
 
 import {fadeIn, fadeOut} from '../../../effect';
 
@@ -25,9 +25,10 @@ export function Collect(it) {
             .filter(({name}) => name.includes('level'))
             .map(Level);
 
-    const count = Digit(it.getChildByName('count'));
-
-    count.fontScale = 0.4;
+    const count = Text(
+        it.getChildByName('count'),
+        {font: '36px number'}
+    );
 
     count.alpha = 0;
 
@@ -47,13 +48,32 @@ export function Collect(it) {
 
         for (let level = start; level < end; level++) {
             levels[level].show();
+            it.transition['light'].restart();
 
             await wait(120);
         }
+
+        const multiple = matchMultiple(end);
+
+        if (multiple) {
+            app.emit('Multiple', multiple);
+
+            it.transition[multiple].restart();
+        }
+    }
+
+    function matchMultiple(count) {
+        return (
+            (count === 8) ? 'x2' :
+                (count === 10) ? 'x3' :
+                    (count === 12) ? 'x5' :
+                        (count === 14) ? 'x8' :
+                            undefined
+        );
     }
 
     function updateCount({hasMatch, newMatch}) {
-        count.value = hasMatch.length + newMatch.length;
+        count.text = hasMatch.length + newMatch.length;
     }
 
     function Level(it) {
@@ -72,29 +92,22 @@ export function Collect(it) {
         async function show() {
             it.alpha = 1;
 
-            const anim = it.transition['anim'];
-
-            anim.restart();
+            it.transition['anim'].restart();
 
             await wait(750);
         }
     }
 
-    async function show(anim) {
+    async function show() {
         it.visible = true;
-
-        if (['x2', 'x3', 'x5', 'x8', 'light'].includes(anim)) {
-            const animation = it.transition[anim];
-            return animation.restart();
-        }
 
         const show = it.transition['show'];
 
         show.restart();
 
-        count.value = 0;
-
         await wait(1500);
+
+        count.text = 0;
 
         await fadeIn({targets: count}).finished;
     }

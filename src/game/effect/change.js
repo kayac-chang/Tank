@@ -34,6 +34,6 @@ export function currencyChange({range, targets, ...options}) {
     }
 
     function assign(target) {
-        target.text = currencyFormat(proxy.number);
+        target.text = String(proxy.number);
     }
 }

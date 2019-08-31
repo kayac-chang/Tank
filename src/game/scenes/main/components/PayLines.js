@@ -1,5 +1,6 @@
 import {wait} from '@kayac/utils';
-import {Digit} from './Digit';
+
+import {Text} from './Text';
 
 const condition = [
     [1, 3, 7, 9, 13, 17, 19],
@@ -8,23 +9,21 @@ const condition = [
 ];
 
 export function PayLines(it) {
-    let lines = [];
+    const lines = [];
 
     let digits = [];
 
     it.children.forEach((child) => {
         const [type, index] = child.name.split('@');
 
-        if (['line', 'inner'].includes(type)) {
-            if (!lines[index]) lines[index] = {};
-
-            return lines[index][type] = child;
+        if (type === 'line') {
+            return lines.push(child);
             //
         } else if (['score', 'frame'].includes(type)) {
             let el = child;
 
             if (type === 'score') {
-                el = Digit(child);
+                el = Text(child, {font: '36px number'});
 
                 el.name = `text@${index}`;
 
@@ -34,12 +33,9 @@ export function PayLines(it) {
             if (!digits[index]) digits[index] = {};
 
             return digits[index][type] = el;
-            //
         }
         //
     });
-
-    lines = lines.map(PayLine);
 
     digits = digits.map(Field);
 
@@ -144,29 +140,13 @@ function Field({frame, score}) {
         },
 
         get value() {
-            return score.value;
+            return score.text;
         },
         set value(newValue) {
-            score.value = newValue;
+            score.text = newValue;
         },
 
         frame, score,
-    };
-
-    it.visible = false;
-
-    return it;
-}
-
-function PayLine({inner, line}) {
-    const it = {
-        get visible() {
-            return line.visible;
-        },
-        set visible(bool) {
-            inner.visible = bool;
-            line.visible = bool;
-        },
     };
 
     it.visible = false;

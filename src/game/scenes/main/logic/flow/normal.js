@@ -1,10 +1,14 @@
 import {spin} from '../anim/spin';
 import {wait} from '@kayac/utils';
 
-export async function NormalGame({result, reels}) {
-    const {hasLink, symbols, scores} = result;
+export async function NormalGame({result, reels, showRandomWild}) {
+    const {hasLink, symbols, scores, randomWild} = result;
 
     await spin({reels, symbols});
+
+    if (randomWild) {
+        await showRandomWild(randomWild);
+    }
 
     if (hasLink) {
         app.emit('ShowResult', result);

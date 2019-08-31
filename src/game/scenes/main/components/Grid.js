@@ -39,6 +39,8 @@ export function Grid(it) {
 
     app.on('Stick', showStick);
 
+    app.on('RandomWild', showRandomWild);
+
     return it;
 
     function showResult({results}) {
@@ -120,25 +122,20 @@ export function Grid(it) {
     function showStick({newMatch}) {
         const list =
             newMatch.map(({row, col}) => {
-                const {stick, energy} = grid[row][col];
+                const {stick} = grid[row][col];
 
                 stick.visible = true;
 
                 stick.transition['anim'].restart();
 
-                energy.visible = true;
+                showEnergy(stick);
 
-                energy.transition['anim'].restart();
-
-                showEnergy(energy);
-
-                return {stick, energy};
+                return stick;
             });
 
         app.once('Idle', () => {
-            for (const {stick, energy} of list) {
+            for (const stick of list) {
                 stick.visible = false;
-                energy.visible = false;
             }
         });
     }
@@ -161,6 +158,24 @@ export function Grid(it) {
         ]);
 
         it.removeChild(energy);
+    }
+
+    function showRandomWild(positions) {
+        positions.forEach((row, rowIndex) => {
+            if (!row) return;
+
+            row.forEach(async (colIndex) => {
+                const {trans} = grid[rowIndex][colIndex];
+
+                trans.visible = true;
+
+                trans.transition['anim'].restart();
+
+                await wait(2000);
+
+                trans.false = true;
+            });
+        });
     }
 }
 

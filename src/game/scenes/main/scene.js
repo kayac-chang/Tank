@@ -1,12 +1,13 @@
 import {addPackage} from 'pixi_fairygui';
 
-import {Slot, PayLines, Title, Collect, FreeGame, Grid} from './components';
+import {Slot, PayLines, Title, Collect, FreeGame, Grid, BigWin} from './components';
 
 import {symbolConfig} from './data';
 
 import {logic} from './logic';
 import {fadeIn, fadeOut} from '../../effect';
 import {wait} from '@kayac/utils';
+import {extras} from 'pixi.js';
 
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
@@ -19,6 +20,7 @@ export function create({normalTable, freeTable}) {
     });
 
     const title = Title(scene.getChildByName('title'));
+
     const collect = Collect(scene.getChildByName('collect'));
 
     const mask = scene.getChildByName('black_mask');
@@ -29,23 +31,26 @@ export function create({normalTable, freeTable}) {
 
     Grid(scene.getChildByName('grid'));
 
-    const multiple = Multiple(scene.getChildByName('multiple'));
+    Multiple(scene.getChildByName('multiple'));
 
-    logic({slot, showFreeGame, closeFreeGame});
+    const wild = scene.getChildByName('wild');
+
+    const bigWin = BigWin(scene.getChildByName('bigwin'));
+
+    logic({
+        slot,
+        showFreeGame,
+        closeFreeGame,
+        showRandomWild,
+        showBigWin,
+    });
 
     app.emit('Idle', {symbols: slot.current});
 
-    app.on('ShowResult', showResult);
+    app.on('ShowResult', openMask);
     app.on('SpinStart', closeMask);
 
-    window.showFreeGame = showFreeGame;
-    window.closeFreeGame = closeFreeGame;
-
     return scene;
-
-    async function showResult({scores}) {
-        openMask();
-    }
 
     async function openMask() {
         await fadeIn({targets: mask, alpha: 0.5}).finished;
@@ -71,22 +76,32 @@ export function create({normalTable, freeTable}) {
         await title.show();
     }
 
-    async function showMultiple(anim) {
-        fadeIn({targets: mask, alpha: 0.5}).finished;
+    async function showRandomWild(positions) {
+        wild.visible = true;
 
-        await multiple.show(anim);
+        wild.transition['anim'].restart();
 
-        collect.show(anim);
+        await wait(2250);
 
-        await fadeOut({targets: mask}).finished;
+        wild.visible = false;
+
+        app.emit('RandomWild', positions);
+
+        await wait(2250);
+    }
+
+    async function showBigWin(score) {
+        await bigWin.show(score);
     }
 }
 
+
 function Multiple(it) {
-    return {show};
+    app.on('Multiple', show);
 
     async function show(anim) {
         it.visible = true;
+
         it.transition[anim].restart();
 
         await wait(1500);
