@@ -1,13 +1,17 @@
 import {addPackage} from 'pixi_fairygui';
 
-import {Slot, PayLines, Title, Collect, FreeGame, Grid, BigWin} from './components';
+import {
+    Slot, PayLines, Title, Collect,
+    FreeGame, Grid, BigWin, Multiple, Text,
+} from './components';
 
 import {symbolConfig} from './data';
 
 import {logic} from './logic';
 import {fadeIn, fadeOut} from '../../effect';
 import {wait} from '@kayac/utils';
-import {extras} from 'pixi.js';
+
+import anime from 'animejs';
 
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
@@ -37,6 +41,13 @@ export function create({normalTable, freeTable}) {
 
     const bigWin = BigWin(scene.getChildByName('bigwin'));
 
+    const halo = scene.getChildByName('halo');
+
+    const scores = Text(scene.getChildByName('scores'), {font: '80px number'});
+
+
+    scene.addChild(scores);
+
     logic({
         slot,
         showFreeGame,
@@ -45,19 +56,27 @@ export function create({normalTable, freeTable}) {
         showBigWin,
     });
 
-    app.emit('Idle', {symbols: slot.current});
-
-    app.on('ShowResult', openMask);
+    app.on('ShowResult', onShowResult);
     app.on('SpinStart', closeMask);
+    app.on('Idle', onIdle);
+
+    app.emit('Idle', {symbols: slot.current});
 
     return scene;
 
-    async function openMask() {
-        await fadeIn({targets: mask, alpha: 0.5}).finished;
+    async function onShowResult({scores}) {
+        fadeIn({targets: mask, alpha: 0.5});
+
+        showScores(scores);
     }
 
-    async function closeMask() {
-        await fadeOut({targets: mask}).finished;
+    function closeMask() {
+        fadeOut({targets: mask});
+        fadeIn({targets: halo});
+    }
+
+    function onIdle() {
+        fadeOut({targets: halo});
     }
 
     async function showFreeGame() {
@@ -93,21 +112,29 @@ export function create({normalTable, freeTable}) {
     async function showBigWin(score) {
         await bigWin.show(score);
     }
-}
 
+    async function showScores(score) {
+        let value = 0;
 
-function Multiple(it) {
-    app.on('Multiple', show);
+        const proxy = {
+            get value() {
+                return value;
+            },
+            set value(newValue) {
+                value = newValue;
+                scores.text = newValue;
+            },
+        };
 
-    async function show(anim) {
-        it.visible = true;
+        fadeIn({targets: scores});
 
-        it.transition[anim].restart();
+        await anime({
+            targets: proxy,
+            value: score,
+            easing: 'linear',
+            round: 1,
+        }).finished;
 
-        await wait(1500);
-
-        it.visible = false;
+        fadeOut({targets: scores});
     }
 }
-
-

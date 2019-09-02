@@ -44,4 +44,8 @@ export function TextureManager(symbolConfig) {
     }
 }
 
+export function byPos(a, b) {
+    return a.pos - b.pos;
+}
+
 

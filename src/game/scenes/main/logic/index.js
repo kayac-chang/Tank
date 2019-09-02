@@ -67,11 +67,20 @@ export function logic({slot, showFreeGame, closeFreeGame, showRandomWild, showBi
                     }
 
                     if (newMatch.length > 0) {
+                        const count = hasMatch.length + newMatch.length;
+
                         app.emit('Stick', {hasMatch, newMatch});
 
                         await wait(750);
 
                         app.emit('Energy', {hasMatch, newMatch});
+
+                        const multiple = matchMultiple(count);
+
+                        if (multiple) {
+                            app.emit('Multiple', multiple);
+                            await wait(1000);
+                        }
 
                         await wait(1000);
 
@@ -84,6 +93,8 @@ export function logic({slot, showFreeGame, closeFreeGame, showRandomWild, showBi
 
             if (isBigWin(totalScores)) {
                 await showBigWin(totalScores);
+
+                await wait(1000);
             }
 
             await closeFreeGame();
@@ -93,6 +104,16 @@ export function logic({slot, showFreeGame, closeFreeGame, showRandomWild, showBi
 
         app.emit('Idle', {symbols: slot.current});
     }
+}
+
+function matchMultiple(count) {
+    return (
+        (count === 8) ? 'x2' :
+            (count === 10) ? 'x3' :
+                (count === 12) ? 'x5' :
+                    (count === 14) ? 'x8' :
+                        undefined
+    );
 }
 
 function matchWild(symbols) {

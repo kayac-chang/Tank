@@ -7,6 +7,7 @@ export * from './Collect';
 export * from './Grid';
 export * from './BigWin';
 export * from './Text';
+export * from './Multiple';
 
 export function pauseAll(it) {
     Object

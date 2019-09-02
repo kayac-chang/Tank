@@ -1,4 +1,4 @@
-import {id, isSymbol} from './util';
+import {id, isSymbol, byPos} from './util';
 import {update} from './update';
 import {Symbol} from './Symbol';
 import {property, State} from './Slot';
@@ -32,7 +32,15 @@ export function Reel(view) {
         },
 
         get symbols() {
-            return symbols;
+            return [...symbols];
+        },
+
+        get displaySymbols() {
+            return (
+                reel.symbols
+                    .sort(byPos)
+                    .slice(1, property.displayLength)
+            );
         },
 
         get strip() {

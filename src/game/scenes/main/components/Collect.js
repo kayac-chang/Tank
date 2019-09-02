@@ -37,6 +37,7 @@ export function Collect(it) {
     pauseAll(it);
 
     app.on('Energy', showEnergy);
+    app.on('Multiple', showMultiple);
 
     app.on('Count', updateCount);
 
@@ -52,28 +53,14 @@ export function Collect(it) {
 
             await wait(120);
         }
-
-        const multiple = matchMultiple(end);
-
-        if (multiple) {
-            app.emit('Multiple', multiple);
-
-            it.transition[multiple].restart();
-        }
     }
 
-    function matchMultiple(count) {
-        return (
-            (count === 8) ? 'x2' :
-                (count === 10) ? 'x3' :
-                    (count === 12) ? 'x5' :
-                        (count === 14) ? 'x8' :
-                            undefined
-        );
+    function showMultiple(multiple) {
+        it.transition[multiple].restart();
     }
 
-    function updateCount({hasMatch, newMatch}) {
-        count.text = hasMatch.length + newMatch.length;
+    function updateCount(value) {
+        count.text = value;
     }
 
     function Level(it) {

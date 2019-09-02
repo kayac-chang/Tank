@@ -7,6 +7,7 @@ let textures = undefined;
 
 export const property = {
     stepPerSymbol: 1,
+    displayLength: 3,
     reelStrips: [],
 
     get textures() {

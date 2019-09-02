@@ -160,20 +160,28 @@ export function Grid(it) {
         it.removeChild(energy);
     }
 
-    function showRandomWild(positions) {
+    function showRandomWild({reels, positions}) {
+        const wild = 0;
+
         positions.forEach((row, rowIndex) => {
             if (!row) return;
 
             row.forEach(async (colIndex) => {
                 const {trans} = grid[rowIndex][colIndex];
+                const symbol = reels[rowIndex]
+                    .displaySymbols[colIndex];
 
                 trans.visible = true;
 
                 trans.transition['anim'].restart();
 
-                await wait(2000);
+                await wait(1000);
 
-                trans.false = true;
+                symbol.icon = wild;
+
+                await wait(1000);
+
+                trans.visible = false;
             });
         });
     }

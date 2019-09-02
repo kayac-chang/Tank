@@ -23,11 +23,9 @@ export function PayLines(it) {
             let el = child;
 
             if (type === 'score') {
-                el = Text(child, {font: '36px number'});
+                el = Text(child, {font: '24px number'});
 
                 el.name = `text@${index}`;
-
-                el.fontScale = 0.25;
             }
 
             if (!digits[index]) digits[index] = {};

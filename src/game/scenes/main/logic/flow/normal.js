@@ -7,7 +7,7 @@ export async function NormalGame({result, reels, showRandomWild}) {
     await spin({reels, symbols});
 
     if (randomWild) {
-        await showRandomWild(randomWild);
+        await showRandomWild({reels, positions: randomWild});
     }
 
     if (hasLink) {
