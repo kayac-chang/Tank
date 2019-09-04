@@ -74,6 +74,8 @@ async function main() {
         app.resize();
 
         select('script').forEach((el) => el.remove());
+
+        app.emit('Idle');
         //
     } catch (error) {
         console.error(error);

@@ -19,7 +19,6 @@ export const property = {
 };
 
 export const State = freeze({
-    Idle: 'idle',
     Spin: 'spin',
     Stop: 'stop',
 });
@@ -36,19 +35,5 @@ export function Slot({view, ...options}) {
         get reels() {
             return reels;
         },
-
-        get current() {
-            return reels.map((reel) =>
-                reel.symbols
-                    .concat()
-                    .sort(byPos)
-                    .map((symbol) => symbol.icon)
-                    .slice(1, reel.symbols.length - 1)
-            );
-        },
     };
-}
-
-function byPos(a, b) {
-    return a.pos - b.pos;
 }

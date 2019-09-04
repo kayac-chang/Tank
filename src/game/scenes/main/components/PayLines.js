@@ -1,15 +1,9 @@
-import {wait} from '@kayac/utils';
-
 import {Text} from './Text';
+import {fadeIn, fadeOut, twink} from "../../../effect";
 
-const condition = [
-    [1, 3, 7, 9, 13, 17, 19],
-    [0, 5, 6, 11, 12, 15, 16],
-    [2, 4, 8, 10, 14, 18],
-];
 
 export function PayLines(it) {
-    const lines = [];
+    const lines = {};
 
     let digits = [];
 
@@ -17,7 +11,7 @@ export function PayLines(it) {
         const [type, index] = child.name.split('@');
 
         if (type === 'line') {
-            return lines.push(child);
+            return lines[index] = child;
             //
         } else if (['score', 'frame'].includes(type)) {
             let el = child;
@@ -39,92 +33,36 @@ export function PayLines(it) {
 
     it.addChild(...digits.map(({score}) => score));
 
-    app.on('ShowResult', showResult);
+    return Object.assign(it, {show});
 
-    app.on('SpinStart', () => {
-        setAll('visible', false, lines);
-        setAll('visible', false, digits);
+    function show({line, scores}) {
+        const payLine = lines[line];
 
-        it.visible = false;
-    });
+        payLine.alpha = 1;
 
-    return it;
+        const field = digits[mapping(line)];
 
-    async function showResult({results}) {
-        it.visible = true;
+        field.value = scores;
 
-        const matchLines =
-            results
-                .filter(({line}) => line !== -1)
-                .map(({line}) => lines[line]);
+        return function close() {
+            payLine.alpha = 0;
 
-        setAll('visible', true, matchLines);
-
-        if (matchLines.length <= 0) return;
-
-        app.once('Idle', onceIdle);
-
-        app.once('SpinStart', () => app.off('Idle', onceIdle));
-
-        async function onceIdle() {
-            setAll('visible', false, matchLines);
-
-            let skip = false;
-
-            app.once('SpinStart', () => skip = true);
-
-            const result = ResultGen();
-
-            showLine();
-
-            function* ResultGen() {
-                while (true) {
-                    for (const result of results) {
-                        yield result;
-                    }
-                }
-            }
-
-            async function showLine() {
-                const {line, scores} = result.next().value;
-
-                if (line === -1) return;
-
-                const payLine = lines[line];
-                payLine.visible = true;
-
-                const digit = showScores(line, scores);
-
-                await wait(1000);
-
-                payLine.visible = false;
-                digit.visible = false;
-
-                await wait(1000);
-
-                if (skip) return;
-
-                showLine();
-            }
-        }
-    }
-
-    function showScores(line, scores) {
-        const index =
-            condition.findIndex((row) => row.includes(line));
-
-        const digit = digits[index];
-
-        digit.value = scores;
-
-        digit.visible = true;
-
-        return digit;
+            field.value = '';
+        };
     }
 }
 
-function setAll(prop, value, targets) {
-    targets.forEach((line) => line[prop] = value);
+function mapping(lineId) {
+    const conditions = [
+        [1, 3, 7, 9, 13, 17, 19],
+        [0, 5, 6, 11, 12, 15, 16],
+        [2, 4, 8, 10, 14, 18],
+    ];
+
+    return (
+        conditions
+            .findIndex((row) => row.includes(lineId))
+    );
 }
 
 function Field({frame, score}) {
@@ -141,6 +79,8 @@ function Field({frame, score}) {
             return score.text;
         },
         set value(newValue) {
+            it.visible = Boolean(newValue);
+
             score.text = newValue;
         },
 

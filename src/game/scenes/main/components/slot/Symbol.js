@@ -48,5 +48,12 @@ export function Symbol(view, index, symbols) {
         set icon(newIcon) {
             view.texture = property.textures.get(newIcon);
         },
+
+        get visible() {
+            return view.visible;
+        },
+        set visible(flag) {
+            view.visible = flag;
+        },
     };
 }

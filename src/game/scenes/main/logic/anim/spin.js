@@ -23,19 +23,20 @@ async function start(reels) {
     for (const reel of reels) {
         reel.state = State.Spin;
 
-        anime
-            .timeline({
-                targets: reel,
-                easing: 'easeOutQuad',
-            })
-            .add({
-                pos: '-=' + 0.25,
-                duration: 250,
-            })
-            .add({
-                pos: '+=' + 220,
-                duration: 15000,
-            });
+        reel.anim =
+            anime
+                .timeline({
+                    targets: reel,
+                    easing: 'easeOutQuad',
+                })
+                .add({
+                    pos: '-=' + 0.25,
+                    duration: 250,
+                })
+                .add({
+                    pos: '+=' + 230,
+                    duration: 15000,
+                });
 
         await wait(120);
     }
@@ -61,17 +62,22 @@ async function duration() {
 async function stop(reels, symbols) {
     app.emit('SpinStop');
 
-    for (const reel of reels) {
-        reel.state = State.Stop;
+    let isMaybeBonus = false;
 
-        anime.remove(reel);
+    for (const reel of reels) {
+        if (isMaybeBonus) await maybeBonus(reel.index);
+
+        reel.anim.pause();
 
         const [offSet, ...display] =
             reel.symbols
-                .concat()
                 .sort(byPos);
 
-        setDisplay(display, symbols[reel.index]);
+        const _symbols = symbols[reel.index];
+
+        setDisplay(display, _symbols);
+
+        isMaybeBonus = isMaybeBonus || matchScatter(_symbols);
 
         reel.pos -= offSet.pos;
 
@@ -81,22 +87,34 @@ async function stop(reels, symbols) {
             easing: 'easeOutBack',
             duration: 360,
 
-            begin() {
+            complete() {
                 app.emit('ReelStop', reel);
             },
         })
             .finished;
 
-        reel.state = State.Idle;
+        reel.state = State.Stop;
     }
 
     app.emit('SpinEnd');
 
-    function byPos(a, b) {
-        return a.pos - b.pos;
-    }
+    async function maybeBonus(reelIndex) {
+        app.emit('MaybeBonus', reelIndex);
 
-    function setDisplay(display, result) {
-        result.forEach((icon, index) => display[index].icon = icon);
+        await wait(500);
     }
+}
+
+function byPos(a, b) {
+    return a.pos - b.pos;
+}
+
+function setDisplay(display, result) {
+    result.forEach((icon, index) => display[index].icon = icon);
+}
+
+function matchScatter(symbols) {
+    const scatter = 1;
+
+    return symbols.includes(scatter);
 }

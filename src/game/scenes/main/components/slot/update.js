@@ -26,9 +26,7 @@ function isSwapped(reel, symbol, pos) {
 }
 
 function changeTexture(reel, symbol) {
-    const {value} = reel.strip.next();
-
-    symbol.texture = value;
+    symbol.texture = reel.next();
 }
 
 function updatePos(symbol, pos) {

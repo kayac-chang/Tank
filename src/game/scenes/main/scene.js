@@ -13,6 +13,8 @@ import {wait} from '@kayac/utils';
 
 import anime from 'animejs';
 
+import {spin} from './logic/anim';
+
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
     const scene = create('MainScene');
@@ -27,15 +29,13 @@ export function create({normalTable, freeTable}) {
 
     const collect = Collect(scene.getChildByName('collect'));
 
-    const mask = scene.getChildByName('black_mask');
-
-    PayLines(scene.getChildByName('line'));
+    const payLine = PayLines(scene.getChildByName('line'));
 
     const freeGame = FreeGame(scene.getChildByName('freegame'));
 
-    Grid(scene.getChildByName('grid'));
+    const grid = Grid(scene.getChildByName('grid'));
 
-    Multiple(scene.getChildByName('multiple'));
+    const multiple = Multiple(scene.getChildByName('multiple'));
 
     const wild = scene.getChildByName('wild');
 
@@ -43,39 +43,32 @@ export function create({normalTable, freeTable}) {
 
     const halo = scene.getChildByName('halo');
 
-    const scores = Text(scene.getChildByName('scores'), {font: '80px number'});
-
-
-    scene.addChild(scores);
-
     logic({
         slot,
+
+        grid,
+        payLine,
+        multiple,
+        levels: collect.levels,
+
         showFreeGame,
         closeFreeGame,
         showRandomWild,
         showBigWin,
     });
 
-    app.on('ShowResult', onShowResult);
-    app.on('SpinStart', closeMask);
-    app.on('Idle', onIdle);
+    app.on('SpinStart', onSpinStart);
+    app.on('SpinEnd', onSpinEnd);
 
-    app.emit('Idle', {symbols: slot.current});
+    app.on('MaybeBonus', showMaybeBonus);
 
     return scene;
 
-    async function onShowResult({scores}) {
-        fadeIn({targets: mask, alpha: 0.5});
-
-        showScores(scores);
-    }
-
-    function closeMask() {
-        fadeOut({targets: mask});
+    function onSpinStart() {
         fadeIn({targets: halo});
     }
 
-    function onIdle() {
+    function onSpinEnd() {
         fadeOut({targets: halo});
     }
 
@@ -95,7 +88,7 @@ export function create({normalTable, freeTable}) {
         await title.show();
     }
 
-    async function showRandomWild(positions) {
+    async function showRandomWild({randomWild}) {
         wild.visible = true;
 
         wild.transition['anim'].restart();
@@ -104,37 +97,52 @@ export function create({normalTable, freeTable}) {
 
         wild.visible = false;
 
-        app.emit('RandomWild', positions);
+        randomWild.forEach((row, rowIndex) => {
+            if (!row) return;
 
-        await wait(2250);
+            const wild = 0;
+
+            row.forEach(async (colIndex) => {
+                const symbol =
+                    slot.reels[rowIndex].displaySymbols[colIndex];
+
+                const {trans} = grid[rowIndex][colIndex];
+
+                trans.visible = true;
+
+                trans.transition['anim'].restart();
+
+                await wait(1000);
+
+                symbol.icon = wild;
+
+                await wait(1000);
+
+                trans.visible = false;
+            });
+        });
+
+        await wait(2000);
     }
 
     async function showBigWin(score) {
         await bigWin.show(score);
     }
 
-    async function showScores(score) {
-        let value = 0;
+    async function showMaybeBonus(reelIndex) {
+        const targets =
+            scene.getChildByName(`maybeBonus@${reelIndex}`);
 
-        const proxy = {
-            get value() {
-                return value;
-            },
-            set value(newValue) {
-                value = newValue;
-                scores.text = newValue;
-            },
-        };
+        if (!targets) return;
 
-        fadeIn({targets: scores});
+        targets.anim.gotoAndPlay(0);
 
-        await anime({
-            targets: proxy,
-            value: score,
-            easing: 'linear',
-            round: 1,
-        }).finished;
+        const duration = 250;
 
-        fadeOut({targets: scores});
+        await fadeIn({targets, duration}).finished;
+
+        await wait(750);
+
+        fadeOut({targets, duration});
     }
 }

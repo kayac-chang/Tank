@@ -1,19 +1,16 @@
-import {spin} from '../anim/spin';
-import {wait} from '@kayac/utils';
+import {spin, show} from '../anim';
 
-export async function NormalGame({result, reels, showRandomWild}) {
+export async function NormalGame({result, reels, grid, payLine, showRandomWild}) {
     const {hasLink, symbols, scores, randomWild} = result;
 
     await spin({reels, symbols});
 
     if (randomWild) {
-        await showRandomWild({reels, positions: randomWild});
+        await showRandomWild(result);
     }
 
     if (hasLink) {
-        app.emit('ShowResult', result);
-
-        await wait(2000);
+        await show({result, reels, grid, payLine});
     }
 
     return scores;

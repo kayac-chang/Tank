@@ -351,14 +351,6 @@ export function Service(prodKey) {
             if (!data || data.length === 0) return;
 
             return data;
-            // const wild = 0;
-            //
-            // return (
-            //     data.map((row, rowIndex) =>
-            //         row &&
-            //         row.filter((colIndex) =>
-            //             symbols[rowIndex][colIndex] !== wild))
-            // );
         }
     }
 
@@ -381,7 +373,12 @@ export function Service(prodKey) {
         const rate = data['LineWinRate'];
         const scores = data['Score'];
 
-        const line = matchLine(positions);
+        const freeSpin = 1;
+
+        let line = undefined;
+
+        if (symbols[0] === undefined || [freeSpin].includes(symbols[0])) line = -1;
+        else line = matchLine(positions);
 
         return {
             symbols,

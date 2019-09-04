@@ -36,32 +36,7 @@ export function Collect(it) {
 
     pauseAll(it);
 
-    app.on('Energy', showEnergy);
-    app.on('Multiple', showMultiple);
-
-    app.on('Count', updateCount);
-
-    return Object.assign(it, {show, hide});
-
-    async function showEnergy({hasMatch, newMatch}) {
-        const start = hasMatch.length;
-        const end = start + newMatch.length;
-
-        for (let level = start; level < end; level++) {
-            levels[level].show();
-            it.transition['light'].restart();
-
-            await wait(120);
-        }
-    }
-
-    function showMultiple(multiple) {
-        it.transition[multiple].restart();
-    }
-
-    function updateCount(value) {
-        count.text = value;
-    }
+    return Object.assign(it, {show, hide, levels});
 
     function Level(it) {
         const level = Number(it.name.split('@')[1]);
@@ -81,7 +56,9 @@ export function Collect(it) {
 
             it.transition['anim'].restart();
 
-            await wait(750);
+            await wait(500);
+
+            count.text = level;
         }
     }
 

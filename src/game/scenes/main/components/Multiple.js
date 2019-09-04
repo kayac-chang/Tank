@@ -1,7 +1,8 @@
 import {wait} from '@kayac/utils';
 
 export function Multiple(it) {
-    app.on('Multiple', show);
+    //
+    return Object.assign(it, {show});
 
     async function show(anim) {
         it.visible = true;

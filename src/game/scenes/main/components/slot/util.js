@@ -10,10 +10,6 @@ export function isSymbol({name}) {
     return name.includes('symbol');
 }
 
-export function isResult({name}) {
-    return name.includes('show.js');
-}
-
 export function TextureManager(symbolConfig) {
     let config = undefined;
 
@@ -43,9 +39,3 @@ export function TextureManager(symbolConfig) {
             .id;
     }
 }
-
-export function byPos(a, b) {
-    return a.pos - b.pos;
-}
-
-
