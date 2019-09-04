@@ -56,10 +56,29 @@ export function Collect(it) {
 
             it.transition['anim'].restart();
 
+            showLight();
+
             await wait(500);
 
             count.text = level;
+
+            showLevel(level);
         }
+    }
+
+    function showLight() {
+        it.transition['light'].restart();
+    }
+
+    function showLevel(level) {
+        const match = {
+            '8': 'x2',
+            '10': 'x3',
+            '12': 'x5',
+            '14': 'x8',
+        }[level];
+
+        if (match) it.transition[match].restart();
     }
 
     async function show() {

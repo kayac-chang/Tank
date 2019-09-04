@@ -2,7 +2,7 @@ import {addPackage} from 'pixi_fairygui';
 
 import {
     Slot, PayLines, Title, Collect,
-    FreeGame, Grid, BigWin, Multiple, Text,
+    FreeGame, Grid, BigWin, Multiple,
 } from './components';
 
 import {symbolConfig} from './data';
@@ -10,10 +10,6 @@ import {symbolConfig} from './data';
 import {logic} from './logic';
 import {fadeIn, fadeOut} from '../../effect';
 import {wait} from '@kayac/utils';
-
-import anime from 'animejs';
-
-import {spin} from './logic/anim';
 
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');

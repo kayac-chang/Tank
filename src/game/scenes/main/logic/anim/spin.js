@@ -81,19 +81,22 @@ async function stop(reels, symbols) {
 
         reel.pos -= offSet.pos;
 
-        await anime({
-            targets: reel,
-            pos: '+=' + symbols.length,
-            easing: 'easeOutBack',
-            duration: 360,
+        reel.anim =
+            anime({
+                targets: reel,
+                pos: '+=' + symbols.length,
+                easing: 'easeOutBack',
+                duration: 360,
 
-            complete() {
-                app.emit('ReelStop', reel);
-            },
-        })
-            .finished;
+                complete() {
+                    app.emit('ReelStop', reel);
+                },
+            });
+
+        await reel.anim.finished;
 
         reel.state = State.Stop;
+        reel.anim = undefined;
     }
 
     app.emit('SpinEnd');
