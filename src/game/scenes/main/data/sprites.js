@@ -24,6 +24,7 @@ import MAIN_ATLAS_19_URL from '../assets/sprite_sheets/main@atlas0_19.png';
 
 import MAIN_ATLAS_20_URL from '../assets/sprite_sheets/main@atlas0_20.png';
 import MAIN_ATLAS_21_URL from '../assets/sprite_sheets/main@atlas0_21.png';
+import MAIN_ATLAS_22_URL from '../assets/sprite_sheets/main@atlas0_22.png';
 
 export const sprites = [
     {name: 'main.fui', url: MAIN_URL, xhrType: 'arraybuffer'},
@@ -52,4 +53,5 @@ export const sprites = [
 
     {name: 'main@atlas0_20.png', url: MAIN_ATLAS_20_URL},
     {name: 'main@atlas0_21.png', url: MAIN_ATLAS_21_URL},
+    {name: 'main@atlas0_22.png', url: MAIN_ATLAS_22_URL},
 ];

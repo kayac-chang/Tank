@@ -1,4 +1,5 @@
 import {sprites} from './sprites';
+import {sounds} from './sound';
 import {symbols, symbolConfig} from './symbols';
 
 import ENERGY_URL from '../assets/images/energy.png';
@@ -10,6 +11,7 @@ export function reserve() {
     return [
         ...(sprites),
         ...(symbols),
+        ...(sounds),
 
         {name: 'energy', url: ENERGY_URL},
 

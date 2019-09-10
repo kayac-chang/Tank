@@ -22,18 +22,13 @@
     "checkout": "Are you sure to checkout?",
     "checkoutTitle": "Check Out",
     "receive": "Cash Received: {{cash}}",
-
     "exit": "Are you sure to exit?",
-
     "audio": "Enable game audio?",
-
     "wait": "Wait...",
-
     "insufficientBalance": "Insufficient Balance"
   },
   "exchange": {
     "title": "EXCHANGE",
-
     "cash": "Cash",
     "amount": "Amount",
     "currency": "Currency"
@@ -47,18 +42,20 @@
   },
   "setting": {
     "title": "SETTING",
-
     "audio": "Audio",
     "volume": "Volume",
     "effects": "Effects Sound",
     "ambience": "Ambience Sound",
-
     "spin": "Spin",
     "auto": "Auto",
     "speed": "Speed",
-
     "bet": "Bet",
-    "betLevel": "Bet Level"
+    "betLevel": "Bet Level",
+    "stop": "Stop",
+    "cond0": "On any win",
+    "cond1": "On single win of at least",
+    "cond2": "if cash increases by",
+    "cond3": "if cash decreases by"
   },
   "error": {
     "unspecific": "Something went wrong. Please call customer service for more details.",

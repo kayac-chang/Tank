@@ -24,6 +24,13 @@ export function User() {
     let payTable = [];
     let jackPot = {};
 
+    const autoStopCondition = {
+        'on_any_win': false,
+        'on_single_win_of_at_least': 0,
+        'if_cash_increases_by': 0,
+        'if_cash_decreases_by': 0,
+    };
+
     return seal({
         get id() {
             return id;
@@ -116,6 +123,8 @@ export function User() {
         },
         set speed(index) {
             speed = index;
+
+            app.emit('UserSpeedChange', speed);
         },
 
         get autoOptions() {
@@ -127,6 +136,10 @@ export function User() {
         set auto(index) {
             auto = index;
             app.emit('UserAutoChange', auto);
+        },
+
+        get autoStopCondition() {
+            return autoStopCondition;
         },
 
         get payTable() {

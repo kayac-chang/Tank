@@ -15,6 +15,8 @@ export function FreeGame(it) {
 
         anim.restart();
 
+        app.sound.play('Show_Free_Game');
+
         await wait(3000);
     }
 

@@ -9,11 +9,6 @@ export function Nav(it) {
             .filter(({name}) => ['back', 'exchange', 'setting', 'information', 'home'].includes(name))
             .map(NavButton);
 
-    buttons.forEach((btn) => {
-        btn.alpha = 0;
-        btn.interactive = false;
-    });
-
     const [
         backButton,
         exchangeButton,
@@ -28,12 +23,18 @@ export function Nav(it) {
     settingButton.on('click', () => it.emit('open', 'setting'));
     infoButton.on('click', () => it.emit('open', 'information'));
 
+    homeButton.on('click', () => app.alert.leave());
+
+    let isOpen = false;
+
     async function open() {
         await background.open();
 
         await Promise.all(
             buttons.map((btn) => btn.open())
         );
+
+        isOpen = true;
     }
 
     async function close() {
@@ -42,6 +43,8 @@ export function Nav(it) {
         );
 
         await background.close();
+
+        isOpen = false;
     }
 
     function Background(it) {
@@ -63,8 +66,9 @@ export function Nav(it) {
         async function open() {
             if (it.interactive) return;
 
-            it.interactive = true;
             await moveTo({x: `-= ${width}`});
+
+            it.interactive = true;
         }
 
         async function close() {
@@ -77,5 +81,5 @@ export function Nav(it) {
         return Object.assign(it, {open, close});
     }
 
-    return Object.assign(it, {open, close});
+    return Object.assign(it, {open, close, isOpen});
 }

@@ -1,6 +1,6 @@
 import {Sprite} from 'pixi.js';
 
-import {fadeOut, move, popIn} from '../../../effect';
+import {fadeOut, move, scaleUp} from '../../../effect';
 
 export function Grid(it) {
     const grid =
@@ -35,11 +35,16 @@ export function Grid(it) {
 
         it.addChild(energy);
 
-        await popIn({targets: energy});
+        await scaleUp({targets: energy});
 
         await Promise.all([
             move({targets: energy, x: target.x, y: target.y}).finished,
-            fadeOut({targets: energy}).finished,
+            fadeOut({
+                targets: energy,
+                complete() {
+                    app.sound.play('Count');
+                },
+            }).finished,
         ]);
 
         it.removeChild(energy);

@@ -22,18 +22,13 @@
     "checkout": "确定要进行结算吗?",
     "checkoutTitle": "結算",
     "receive": "兑得点数: {{cash}}",
-
     "exit": "确定要离开游戏吗?",
-
     "audio": "启用游戏音效?",
-
     "wait": "请稍候...",
-
     "insufficientBalance": "余额不足"
   },
   "exchange": {
     "title": "兑换",
-
     "currency": "币别",
     "amount": "数量",
     "cash": "点数"
@@ -47,18 +42,20 @@
   },
   "setting": {
     "title": "设定",
-
     "audio": "音讯",
     "volume": "音量",
     "effects": "音效",
     "ambience": "背景音乐",
-
     "spin": "转轮",
     "auto": "自动",
     "speed": "速度",
-
     "bet": "下注",
-    "betLevel": "下注阶级"
+    "betLevel": "下注阶级",
+    "stop": "停止",
+    "cond0": "当获得任何赢分时",
+    "cond1": "当单次赢分超过",
+    "cond2": "当馀额增加至",
+    "cond3": "当馀额减少至"
   },
   "error": {
     "unspecific": "有问题发生了, 详情请洽客服人员.",

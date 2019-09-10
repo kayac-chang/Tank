@@ -1,14 +1,28 @@
-import {currencyFormat} from '@kayac/utils';
+import {currencyFormat, isFunction, isString} from '@kayac/utils';
 import {observe} from '../observe';
 import {move} from '../../effect';
 
 
 export function Status(it) {
-    Cash(it.getChildByName('field@cash'));
-    Win(it.getChildByName('field@win'));
-    Bet(it.getChildByName('field@bet'));
+    Cash(select('field@cash'));
+    Win(select('field@win'));
+    Bet(select('field@bet'));
+
+    Label();
 
     return it;
+
+    function Label() {
+        select('label@cash').text = app.translate(`common:status.cash`);
+        select('label@win').text = app.translate(`common:status.win`);
+        select('label@bet').text = app.translate(`common:status.bet`);
+    }
+
+    function select(arg) {
+        if (isString(arg)) return it.getChildByName(arg);
+
+        else if (isFunction(arg)) return it.children.filter(arg);
+    }
 }
 
 function Cash(it) {

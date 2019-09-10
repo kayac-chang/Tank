@@ -1,4 +1,4 @@
-import {wait} from '@kayac/utils';
+import {waitByFrameTime} from '@kayac/utils';
 import {pauseAll} from './index';
 
 export function Title(it) {
@@ -13,7 +13,11 @@ export function Title(it) {
 
         anim.restart();
 
-        await wait(1750);
+        await waitByFrameTime(800);
+
+        app.sound.play('Show_Count_Bar');
+
+        await waitByFrameTime(950);
 
         it.visible = false;
     }
@@ -25,6 +29,6 @@ export function Title(it) {
 
         anim.restart();
 
-        await wait(1000);
+        await waitByFrameTime(1000);
     }
 }

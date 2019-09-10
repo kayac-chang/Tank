@@ -5,6 +5,7 @@ import {addPackage} from 'pixi_fairygui';
 import {LoadingBar} from './components/LoadingBar';
 
 import {log} from '@kayac/utils';
+import anime from 'animejs';
 
 export function reserve() {
     return [
@@ -22,6 +23,23 @@ export function create() {
         LoadingBar(scene.getChildByName('loading'));
 
     const process = scene.getChildByName('process');
+
+    const loadingText =
+        scene.children.filter(({name}) => name.includes('text'));
+
+
+    anime({
+        targets: loadingText,
+
+        alpha: [
+            {value: 0.5, duration: 500},
+            {value: 1, duration: 500},
+        ],
+
+        delay: anime.stagger(120, 'easeInOutSine'),
+        loop: true,
+        easing: 'easeInOutQuad',
+    });
 
     app.on('loading', ({progress}, {name}) => {
         log(`Progress: ${progress} %`);

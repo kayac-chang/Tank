@@ -9,6 +9,8 @@ export function NumberPad(it) {
     buttons
         .forEach((btn) => btn.on('pointerdown', click));
 
+    it.getChildByName('label@delete').text = app.translate(`common:button.delete`);
+
     return it;
 
     function click() {

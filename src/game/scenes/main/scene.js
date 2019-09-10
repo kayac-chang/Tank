@@ -58,7 +58,49 @@ export function create({normalTable, freeTable}) {
 
     app.on('MaybeBonus', showMaybeBonus);
 
+    app.once('Idle', firstIdle);
+
     return scene;
+
+    async function firstIdle() {
+        const loadScene =
+            app.stage.getChildByName('LoadScene');
+
+        await fadeOut({targets: loadScene, duration: 3000}).finished;
+
+        app.stage.removeChild(loadScene);
+
+        const featurePage = scene.getChildByName('feature');
+
+        featurePage.interactive = true;
+
+        featurePage.once('click', firstClick);
+
+        async function firstClick() {
+            featurePage.interactive = false;
+
+            app.sound.play('Show_Count_Bar');
+
+            await fadeOut({targets: featurePage}).finished;
+
+            scene.removeChild(featurePage);
+
+            app.control.visible = true;
+
+            wild.visible = true;
+            wild.transition['anim'].restart();
+
+            app.control.main.transition['close_option'].restart();
+
+            const bgm = app.sound.play('Normal_BGM');
+
+            bgm.fade(0, 1, 1000);
+
+            await fadeIn({targets: app.control, alpha: [0, 1]}).finished;
+
+            wild.visible = false;
+        }
+    }
 
     function onSpinStart() {
         fadeIn({targets: halo});
@@ -87,6 +129,8 @@ export function create({normalTable, freeTable}) {
     async function showRandomWild({randomWild}) {
         wild.visible = true;
 
+        app.sound.play('Show_Logo');
+
         wild.transition['anim'].restart();
 
         await wait(2250);
@@ -107,6 +151,7 @@ export function create({normalTable, freeTable}) {
                 trans.visible = true;
 
                 trans.transition['anim'].restart();
+                app.sound.play('Replace');
 
                 await wait(1000);
 
@@ -134,6 +179,8 @@ export function create({normalTable, freeTable}) {
         targets.anim.gotoAndPlay(0);
 
         const duration = 250;
+
+        app.sound.play('MaybeBonus');
 
         await fadeIn({targets, duration}).finished;
 

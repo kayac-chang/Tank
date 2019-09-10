@@ -16,6 +16,8 @@ export async function show({result, reels, grid, payLine}) {
     if (normal.length > 0) {
         normal.forEach(showOne);
 
+        app.sound.play('Symbol_Connect');
+
         await wait(2000);
 
         close();
@@ -25,6 +27,8 @@ export async function show({result, reels, grid, payLine}) {
 
     if (scatters.length > 0) {
         scatters.forEach(showOne);
+
+        app.sound.play('Scatter_Connect');
 
         await wait(2000);
 
@@ -68,9 +72,11 @@ export async function show({result, reels, grid, payLine}) {
             //
             if (col === undefined) return;
 
+            const id = symbols[row];
+
             const effect =
                 grid[row][col]['effect']
-                    .getChildByName(String(symbols[row]));
+                    .getChildByName(String(id));
 
             effect.alpha = 1;
 

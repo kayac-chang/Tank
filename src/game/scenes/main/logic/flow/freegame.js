@@ -14,6 +14,7 @@ export async function FreeGame({result, reels, grid, payLine}) {
     const match = matchWild(symbols);
 
     if (match) {
+        app.sound.play('Stick');
         await stick({match, grid});
     }
 

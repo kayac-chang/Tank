@@ -92,7 +92,7 @@ export function Service(prodKey) {
 
                     if (code === 18) {
                         msg.type = 'info';
-                        msg.text = translate('common:error.maintain');
+                        msg.text = app.translate('common:error.maintain');
                     }
 
                     return app.alert.error(msg);

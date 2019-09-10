@@ -1,4 +1,5 @@
 import {fadeIn, fadeOut} from '../../effect';
+import {isFunction, isString} from '@kayac/utils';
 
 export function Page(it) {
     const background = it.getChildByName('background');
@@ -31,5 +32,11 @@ export function Page(it) {
         background.interactive = false;
     }
 
-    return Object.assign(it, {open, close});
+    return Object.assign(it, {open, close, select});
+
+    function select(arg) {
+        if (isString(arg)) return it.getChildByName(arg);
+
+        else if (isFunction(arg)) return it.children.filter(arg);
+    }
 }

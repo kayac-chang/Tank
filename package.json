@@ -53,7 +53,7 @@
     "worker-plugin": "^3.1.0"
   },
   "dependencies": {
-    "@kayac/utils": "^1.0.4",
+    "@kayac/utils": "^1.0.14",
     "animejs": "^3.0.1",
     "axios": "^0.19.0",
     "core-js": "^3.1.4",

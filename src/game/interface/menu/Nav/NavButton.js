@@ -2,8 +2,8 @@ import {fadeIn, fadeOut} from '../../../effect';
 
 import {Button} from '../../components';
 
-export function NavButton(view) {
-    const it = Button(view);
+export function NavButton(it) {
+    it = Button(it);
 
     const config = {
         targets: it,
@@ -12,6 +12,11 @@ export function NavButton(view) {
     };
 
     const alpha = it.alpha;
+
+    it.alpha = 0;
+    it.interactive = false;
+
+    return Object.assign(it, {open, close});
 
     async function open() {
         await fadeIn({
@@ -24,10 +29,8 @@ export function NavButton(view) {
     }
 
     async function close() {
-        await fadeOut(config);
-
         it.interactive = false;
-    }
 
-    return Object.assign(it, {open, close});
+        await fadeOut(config).finished;
+    }
 }

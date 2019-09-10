@@ -29,7 +29,7 @@ async function main() {
             I18N_URL: res['i18nURL'],
         };
 
-        global.app = App();
+        global.app = await App();
 
         app.service = new Service(key);
 
@@ -62,18 +62,16 @@ async function main() {
 
         await app.resource.load(Interface, MainScene);
 
-        const scene = MainScene.create(initData);
+        const mainScene = MainScene.create(initData);
         const ui = Interface.create();
 
-        scene.addChild(ui);
+        mainScene.addChild(ui);
 
-        app.stage.addChildAt(scene, 0);
-
-        app.stage.removeChild(loadScene);
-
-        app.resize();
+        app.stage.addChildAt(mainScene, 0);
 
         select('script').forEach((el) => el.remove());
+
+        app.resize();
 
         app.emit('Idle');
         //

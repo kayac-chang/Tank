@@ -1,4 +1,4 @@
-import {log, table, divide} from '@kayac/utils';
+import {log, table, divide, waitByFrameTime} from '@kayac/utils';
 
 import {FreeGame, NormalGame} from './flow';
 
@@ -22,9 +22,13 @@ export function logic(args) {
         table(result);
 
         const {
+            cash,
             normalGame,
             freeGame,
         } = result;
+
+        const diff = app.user.cash - cash;
+        if (app.user.auto) app.user.totalWin += diff;
 
         if (normalGame.hasLink) {
             log('onNormalGame =============');
@@ -41,9 +45,11 @@ export function logic(args) {
                 showRandomWild,
             });
 
-        if (isBigWin(scores)) {
-            await showBigWin(scores);
-        }
+        if (isBigWin(scores)) await showBigWin(scores);
+
+        clear(normalGame);
+
+        if (scores > 0) await waitByFrameTime(60);
 
         if (freeGame) {
             await showFreeGame();
@@ -81,15 +87,75 @@ export function logic(args) {
                 }
             }
 
-            if (isBigWin(totalScores)) {
-                await showBigWin(totalScores);
-            }
+            if (isBigWin(totalScores)) await showBigWin(totalScores);
+
+            freeGame.forEach(clear);
 
             await closeFreeGame();
         }
 
         log('Round Complete...');
 
-        app.emit('Idle', {symbols: slot.current});
+        app.emit('Idle');
+    }
+
+    function clear(result) {
+        const {scores} = result;
+
+        app.user.lastWin = scores;
+        app.user.cash += scores;
+
+        if (check(result)) {
+            app.user.auto = 0;
+
+            app.user.totalWin = 0;
+        }
+    }
+
+    function check(result) {
+        const {scores, results} = result;
+
+        const condition = app.user.autoStopCondition;
+
+        return [
+            onAnyWin,
+            onSingleWinOfAtLeast,
+            ifCashIncreasesBy,
+            ifCashDecreasesBy,
+        ].some(isTrue);
+
+        function isTrue(func) {
+            return func() === true;
+        }
+
+        function onAnyWin() {
+            if (condition['on_any_win']) return scores > 0;
+        }
+
+        function onSingleWinOfAtLeast() {
+            const threshold = condition['on_single_win_of_at_least'];
+
+            if (threshold) return scores > threshold;
+        }
+
+        function ifCashIncreasesBy() {
+            const threshold = condition['if_cash_increases_by'];
+
+            if (threshold) return results.some(biggerThanThreshold);
+
+            function biggerThanThreshold() {
+                return app.user.totalWin >= threshold;
+            }
+        }
+
+        function ifCashDecreasesBy() {
+            const threshold = condition['if_cash_decreases_by'];
+
+            if (threshold) return results.some(smallerThanThreshold);
+
+            function smallerThanThreshold() {
+                return app.user.totalWin <= threshold;
+            }
+        }
     }
 }

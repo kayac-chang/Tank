@@ -5,7 +5,7 @@ import ALERT from './sounds/alert01.mp3';
 import SUCCESS from './sounds/success01.mp3';
 
 
-export default function() {
+export default function(translate) {
     const defaultStyle = {
         background: '#212121',
         confirmButtonText: translate(`common:button.confirm`),

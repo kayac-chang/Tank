@@ -1,48 +1,52 @@
-import {MenuButton} from './MenuButton';
 import {SpinButton} from './SpinButton';
 import {Status} from './Status';
+import {Option} from './Option';
 import {Button} from '../components';
+import {twink} from '../../effect';
+
+const {assign} = Object;
 
 export function Main(it) {
-    const view = it.getChildByName('main');
+    const menuButton = Button(it.getChildByName('menu'));
 
-    MenuButton({
-        normal: view.getChildByName('menu@normal'),
-        hover: view.getChildByName('menu@hover'),
+    menuButton.on('pointerdown', onPointerDown);
 
-        async onClick() {
-            await it.menu.open();
-        },
-    });
+    const optionButton = Button(it.getChildByName('option'));
 
-    SpinButton(view.getChildByName('spin'));
+    optionButton.on('click', openOption);
 
-    Status(view.getChildByName('status'));
+    const option = Option(it.getChildByName('optionMenu'), it);
 
-    const option = Option(view.getChildByName('option'));
+    option.on('OpenExchange', () => it.emit('OpenExchange'));
 
-    const optionBtn = Button(view.getChildByName('btn@option'));
+    SpinButton(it.getChildByName('spin'));
 
-    optionBtn.on('click', async () => {
-        view.transition['open_option'].play();
-    });
+    Status(it.getChildByName('status'));
 
-    option.on('close', async () => {
-        view.transition['close_option'].play();
-    });
+    return assign(it, {menuButton, whenClickOutsideClose});
 
-    view.transition['open_option'].pause();
+    async function onPointerDown() {
+        await twink({targets: menuButton, duration: 120, interval: 50, alpha: 0.5});
+        it.getChildByName('menu@normal').alpha = 0;
+    }
 
-    return it;
+    function whenClickOutsideClose(target) {
+        const block = it.getChildByName('block');
+
+        block.interactive = true;
+
+        block.once('click', async () => {
+            if (target.isOpen) await target.close();
+
+            block.interactive = false;
+        });
+    }
+
+    async function openOption() {
+        await option.open();
+
+        whenClickOutsideClose(option);
+    }
 }
 
-function Option(it) {
-    Object.values(it.transition)
-        .forEach((anim) => anim.pause());
 
-    const backBtn = Button(it.getChildByName('icon@back'));
-
-    backBtn.on('click', () => it.emit('close'));
-
-    return it;
-}

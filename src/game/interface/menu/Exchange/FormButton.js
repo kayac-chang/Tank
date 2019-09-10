@@ -22,6 +22,8 @@ export function FormButton({btn, label}) {
     }
 
     function onChange(enable) {
+        btn.interactive = enable;
+
         const alpha = enable ? 1 : 0.5;
 
         btn.alpha = alpha;
