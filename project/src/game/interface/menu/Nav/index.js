@@ -28,6 +28,8 @@ export function Nav(it) {
     let isOpen = false;
 
     async function open() {
+        app.sound.play('spin');
+
         await background.open();
 
         await Promise.all(
@@ -38,6 +40,8 @@ export function Nav(it) {
     }
 
     async function close() {
+        app.sound.play('spin');
+
         await Promise.all(
             buttons.map((btn) => btn.close())
         );

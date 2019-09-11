@@ -5,6 +5,7 @@ import {State} from '../../components';
 
 import {
     getSpinDuration,
+    getSpinStopInterval,
 } from '../../data';
 
 export async function spin({reels, symbols}) {
@@ -96,20 +97,18 @@ export async function spin({reels, symbols}) {
                     targets: reel,
                     pos: '+=' + symbols.length,
                     easing: 'easeOutBack',
-                    duration: skip && !isMaybeBonus ? 0 : 360,
-
-                    complete() {
-                        app.sound.play('Stop');
-
-                        app.emit('ReelStop', reel);
-
-                        reel.state = State.Stop;
-
-                        reel.anim = undefined;
-                    },
+                    duration: skip && !isMaybeBonus ? 0 : getSpinStopInterval(),
                 });
 
             await reel.anim.finished;
+
+            app.sound.play('Stop');
+
+            app.emit('ReelStop', reel);
+
+            reel.state = State.Stop;
+
+            reel.anim = undefined;
         }
 
         app.emit('SpinEnd');

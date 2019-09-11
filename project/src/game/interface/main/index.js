@@ -27,6 +27,7 @@ export function Main(it) {
 
     async function onPointerDown() {
         await twink({targets: menuButton, duration: 120, interval: 50, alpha: 0.5});
+
         it.getChildByName('menu@normal').alpha = 0;
     }
 

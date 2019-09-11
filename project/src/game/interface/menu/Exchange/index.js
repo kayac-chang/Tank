@@ -90,7 +90,7 @@ export function Exchange(it) {
                 await app.alert
                     .request({title: app.translate('common:message.checkout')});
 
-            if (!value) return;
+            if (!value) return it.emit('close');
 
             const data =
                 await app.service.checkout({key});
@@ -188,13 +188,7 @@ export function Exchange(it) {
 
         helper.text = '';
 
-        const isEmpty = (value === 0);
-
-        if (isEmpty) {
-            return false;
-        }
-
-        return true;
+        return (value !== 0);
     }
 
     function onSelect(index) {

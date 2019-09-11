@@ -95,13 +95,12 @@ export function Menu(it) {
 
     async function close() {
         if (currentPage) {
-            await Promise.all([
-                currentPage.close(),
-                background.close(),
-            ]);
+            await currentPage.close();
 
             currentPage = undefined;
         }
+
+        await background.close();
 
         await nav.close();
 

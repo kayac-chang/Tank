@@ -120,8 +120,8 @@ export function Option(it, main) {
         function update() {
             const state = app.sound.mute();
 
-            open.visible = state;
-            close.visible = !state;
+            open.visible = !state;
+            close.visible = state;
         }
 
         function onAudioClick() {
