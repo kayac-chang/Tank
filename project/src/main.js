@@ -74,6 +74,8 @@ async function main() {
         app.resize();
 
         app.emit('Idle');
+
+        document.title = app.translate('title');
         //
     } catch (error) {
         console.error(error);

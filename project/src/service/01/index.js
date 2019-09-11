@@ -113,7 +113,7 @@ export function Service(prodKey) {
 
         if (time.now - time.maintain > 0) {
             msg.type = 'info';
-            msg.text = translate('common:error.maintain');
+            msg.text = app.translate('common:error.maintain');
 
             clearInterval(time.timer);
 

@@ -8,7 +8,7 @@ import {
 import {symbolConfig} from './data';
 
 import {logic} from './logic';
-import {fadeIn, fadeOut} from '../../effect';
+import {fadeIn, fadeOut, twink} from '../../effect';
 import {wait} from '@kayac/utils';
 
 export function create({normalTable, freeTable}) {
@@ -81,7 +81,7 @@ export function create({normalTable, freeTable}) {
 
             app.sound.play('Show_Count_Bar');
 
-            await fadeOut({targets: featurePage}).finished;
+            await twink({targets: featurePage, duration: 120, interval: 50, alpha: 0.5});
 
             scene.removeChild(featurePage);
 
@@ -96,7 +96,9 @@ export function create({normalTable, freeTable}) {
 
             bgm.fade(0, 1, 1000);
 
-            await fadeIn({targets: app.control, alpha: [0, 1]}).finished;
+            await twink({targets: app.control, duration: 120, interval: 50, alpha: 0.5});
+
+            app.control.alpha = 1;
 
             wild.visible = false;
         }

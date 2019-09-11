@@ -102,22 +102,25 @@ export function Setting(it) {
     return it;
 
     function Label() {
-        it.select('title').text = app.translate(`common:setting.title`);
-        it.select('label@audio').text = app.translate(`common:setting.audio`);
-        it.select('label@volume').text = app.translate(`common:setting.volume`);
-        it.select('label@effects').text = app.translate(`common:setting.effects`);
-        it.select('label@ambience').text = app.translate(`common:setting.ambience`);
+        [
+            ['title', 'common:setting.title'],
+            ['label@audio', 'common:setting.audio'],
+            ['label@volume', 'common:setting.volume'],
+            ['label@effects', 'common:setting.effects'],
+            ['label@ambience', 'common:setting.ambience'],
 
-        it.select('label@spin').text = app.translate(`common:setting.spin`);
-        it.select('label@speed').text = app.translate(`common:setting.speed`);
-        it.select('label@bet').text = app.translate(`common:setting.bet`);
-        it.select('label@auto').text = app.translate(`common:setting.auto`);
+            ['label@spin', 'common:setting.spin'],
+            ['label@speed', 'common:setting.speed'],
+            ['label@bet', 'common:setting.bet'],
+            ['label@auto', 'common:setting.auto'],
 
-        it.select('label@stop').text = app.translate(`common:setting.stop`);
-        it.select('label@cond0').text = app.translate(`common:setting.cond0`);
-        it.select('label@cond1').text = app.translate(`common:setting.cond1`);
-        it.select('label@cond2').text = app.translate(`common:setting.cond2`);
-        it.select('label@cond3').text = app.translate(`common:setting.cond3`);
+            ['label@stop', 'common:setting.stop'],
+            ['label@cond0', 'common:setting.cond0'],
+            ['label@cond1', 'common:setting.cond1'],
+            ['label@cond2', 'common:setting.cond2'],
+            ['label@cond3', 'common:setting.cond3'],
+        ]
+            .forEach(([name, value]) => it.select(name).text = app.translate(value));
     }
 
     function child(name) {
@@ -274,18 +277,16 @@ function Cond({label, output, prev, next, key}) {
 
         value: condition[key],
 
-        onChange,
+        onChange(value) {
+            output.text = value;
+
+            condition[key] = value;
+
+            prev.enable = (value > 0);
+
+            return !prev.enable;
+        },
     });
-
-    function onChange(value) {
-        output.text = value;
-
-        condition[key] = value;
-
-        prev.enable = (value > 0);
-
-        return !prev.enable;
-    }
 }
 
 function Control({prev, next, value, onChange}) {
@@ -308,12 +309,16 @@ function Control({prev, next, value, onChange}) {
     };
 
     function onPrev() {
+        app.sound.play('click');
+
         value -= 1;
 
         return onChange(value);
     }
 
     function onNext() {
+        app.sound.play('click');
+
         value += 1;
 
         return onChange(value);
@@ -358,6 +363,8 @@ function Toggle({label, output, btn, value, onChange}) {
 
     async function trigger() {
         if (skip) return;
+
+        app.sound.play('click');
 
         value = !value;
 
