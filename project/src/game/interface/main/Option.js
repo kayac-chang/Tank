@@ -13,7 +13,7 @@ export function Option(it, main) {
     it.interactive = true;
 
     const backButton = Button(it.getChildByName('back'));
-    backButton.on('click', close);
+
 
     const inner = Inner(it.getChildByName('inner'));
 
@@ -49,6 +49,7 @@ export function Option(it, main) {
         await main.transition['open_option'].finished;
 
         backButton.interactive = true;
+        backButton.once('click', close);
 
         it.isOpen = true;
     }

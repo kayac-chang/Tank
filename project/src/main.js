@@ -79,10 +79,10 @@ async function main() {
         //
     } catch (error) {
         console.error(error);
-        //
-        // const msg = {title: error.message};
-        //
-        // app.alert.error(msg);
+
+        const msg = {title: error.message};
+
+        app.alert.error(msg);
     }
 }
 
