@@ -1,4 +1,4 @@
-import {nextFrame, waitByFrameTime} from '@kayac/utils';
+import {waitByFrameTime} from '@kayac/utils';
 
 export async function show({result, reels, grid, payLine}) {
     app.emit('ShowResult', result);

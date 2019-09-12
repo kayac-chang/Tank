@@ -54,7 +54,7 @@ export function create({normalTable, freeTable}) {
     });
 
     app.on('SpinStart', onSpinStart);
-    app.on('SpinEnd', onSpinEnd);
+    app.on('Idle', onSpinEnd);
 
     app.on('MaybeBonus', showMaybeBonus);
 
@@ -105,6 +105,8 @@ export function create({normalTable, freeTable}) {
 
     function onSpinStart() {
         fadeIn({targets: halo});
+
+        app.once('ShowResult', onSpinEnd);
     }
 
     function onSpinEnd() {
