@@ -83,7 +83,7 @@ export function Inner(it) {
             set activate(flag) {
                 activate = flag;
 
-                btn.tint = activate ? 0xFFB300 : 0x616161;
+                field.content.style.fill = activate ? '#176BFF' : '#FFF';
             },
         };
 

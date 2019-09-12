@@ -50,6 +50,7 @@ function Auto(parent) {
         fontSize: 48,
         align: 'center',
         fontWeight: 'bold',
+        fill: '#FFF',
     };
 
     const it = new Text('1234', style);

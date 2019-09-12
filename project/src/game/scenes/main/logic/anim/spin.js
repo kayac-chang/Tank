@@ -73,10 +73,10 @@ export async function spin({reels, symbols}) {
     async function stop(reels, symbols) {
         app.emit('SpinStop');
 
-        let isMaybeBonus = false;
+        let scatterCount = 0;
 
         for (const reel of reels) {
-            if (isMaybeBonus) await maybeBonus(reel.index);
+            if (isMaybeBonus(reel)) await maybeBonus(reel.index);
 
             reel.anim.pause();
 
@@ -88,7 +88,7 @@ export async function spin({reels, symbols}) {
 
             setDisplay(display, _symbols);
 
-            isMaybeBonus = isMaybeBonus || (reel.index === 0 && matchScatter(_symbols));
+            if (matchScatter(_symbols)) scatterCount += 1;
 
             reel.pos -= offSet.pos;
 
@@ -97,7 +97,7 @@ export async function spin({reels, symbols}) {
                     targets: reel,
                     pos: '+=' + symbols.length,
                     easing: 'easeOutBack',
-                    duration: skip && !isMaybeBonus ? 0 : getSpinStopInterval(),
+                    duration: skip && !isMaybeBonus(reel) ? 0 : getSpinStopInterval(),
                 });
 
             await reel.anim.finished;
@@ -112,6 +112,10 @@ export async function spin({reels, symbols}) {
         }
 
         app.emit('SpinEnd');
+
+        function isMaybeBonus(reel) {
+            return reel.index === 4 && scatterCount >= 2;
+        }
 
         async function maybeBonus(reelIndex) {
             app.emit('MaybeBonus', reelIndex);
