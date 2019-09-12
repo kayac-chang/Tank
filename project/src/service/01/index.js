@@ -122,7 +122,7 @@ export function Service(prodKey) {
 
         if (time.now - time.warning > 0) {
             msg.type = 'warning';
-            msg.title = translate('common:error.warning');
+            msg.title = app.translate('common:error.warning');
             msg.showCancelButton = false;
 
             time.warning.setMinutes(time.now.getMinutes() + 1);

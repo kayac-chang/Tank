@@ -20,9 +20,9 @@ export function create() {
 
     menu.on('Closed', onMenuClose);
 
-    it.visible = false;
-
     app.control = it;
+
+    it.alpha = 0;
 
     return assign(it, {main, menu});
 

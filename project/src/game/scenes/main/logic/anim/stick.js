@@ -1,4 +1,4 @@
-import {wait} from '@kayac/utils';
+import {waitByFrameTime} from '@kayac/utils';
 
 export async function stick({match, grid}) {
     //
@@ -15,16 +15,20 @@ export async function stick({match, grid}) {
                 return sticker;
             });
 
-    await wait(1000);
+    if (list.length > 0) {
+        app.sound.play('Stick');
 
-    for (const sticker of list) {
-        //
-        grid.showEnergy(sticker);
+        await waitByFrameTime(1000);
 
-        await wait(250);
+        for (const sticker of list) {
+            //
+            grid.showEnergy(sticker);
+
+            await waitByFrameTime(250);
+        }
+
+        app.once('Idle', () =>
+            list.forEach((sticker) => sticker.alpha = 0)
+        );
     }
-
-    app.once('Idle', () =>
-        list.forEach((sticker) => sticker.alpha = 0)
-    );
 }

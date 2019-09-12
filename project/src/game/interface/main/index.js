@@ -23,6 +23,15 @@ export function Main(it) {
 
     Status(it.getChildByName('status'));
 
+    app.on('SpinStart', () => {
+        optionButton.interactive = false;
+        menuButton.interactive = false;
+    });
+    app.on('Idle', () => {
+        optionButton.interactive = true;
+        menuButton.interactive = true;
+    });
+
     return assign(it, {menuButton, whenClickOutsideClose});
 
     async function onPointerDown() {

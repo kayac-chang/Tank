@@ -4,8 +4,6 @@ import {pauseAll} from './index';
 export function Title(it) {
     pauseAll(it);
 
-    show();
-
     return {hide, show};
 
     async function hide() {
@@ -19,11 +17,11 @@ export function Title(it) {
 
         await waitByFrameTime(950);
 
-        it.visible = false;
+        it.alpha = 0;
     }
 
     async function show() {
-        it.visible = true;
+        it.alpha = 1;
 
         const anim = it.transition['show'];
 

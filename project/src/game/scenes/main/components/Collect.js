@@ -3,6 +3,8 @@ import {pauseAll, Text} from './index';
 
 import {fadeIn, fadeOut} from '../../../effect';
 
+const {assign} = Object;
+
 export function Collect(it) {
     const colors = [
         {main: 0x5A00FF, sub: 0x2679E5},
@@ -36,7 +38,7 @@ export function Collect(it) {
 
     pauseAll(it);
 
-    return Object.assign(it, {show, hide, levels});
+    return assign(it, {show, hide, levels});
 
     function Level(it) {
         const level = Number(it.name.split('@')[1]);
@@ -49,7 +51,7 @@ export function Collect(it) {
                 child.tint = color.main;
         });
 
-        return Object.assign(it, {show});
+        return assign(it, {show});
 
         async function show() {
             it.alpha = 1;
@@ -82,7 +84,7 @@ export function Collect(it) {
     }
 
     async function show() {
-        it.visible = true;
+        it.alpha = 1;
 
         const show = it.transition['show'];
 
@@ -98,8 +100,6 @@ export function Collect(it) {
     async function hide() {
         await fadeOut({targets: it}).finished;
 
-        it.visible = false;
-
-        it.alpha = 1;
+        it.alpha = 0;
     }
 }

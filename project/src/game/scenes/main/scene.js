@@ -9,7 +9,7 @@ import {symbolConfig} from './data';
 
 import {logic} from './logic';
 import {fadeIn, fadeOut, twink} from '../../effect';
-import {wait} from '@kayac/utils';
+import {waitByFrameTime} from '@kayac/utils';
 
 export function create({normalTable, freeTable}) {
     const create = addPackage(app, 'main');
@@ -81,26 +81,25 @@ export function create({normalTable, freeTable}) {
 
             app.sound.play('Show_Count_Bar');
 
-            await twink({targets: featurePage, duration: 120, interval: 50, alpha: 0.5});
+            await twink({targets: featurePage, duration: 500, interval: 250});
 
-            scene.removeChild(featurePage);
+            app.control.alpha = 1;
+            app.control.main.transition['close_option'].restart();
 
-            app.control.visible = true;
+            await title.show();
 
-            wild.visible = true;
+            wild.alpha = 1;
             wild.transition['anim'].restart();
 
-            app.control.main.transition['close_option'].restart();
+            await waitByFrameTime(1500);
 
             const bgm = app.sound.play('Normal_BGM');
 
             bgm.fade(0, 1, 1000);
 
-            await twink({targets: app.control, duration: 120, interval: 50, alpha: 0.5});
+            wild.alpha = 0;
 
-            app.control.alpha = 1;
-
-            wild.visible = false;
+            scene.removeChild(featurePage);
         }
     }
 
@@ -129,15 +128,15 @@ export function create({normalTable, freeTable}) {
     }
 
     async function showRandomWild({randomWild}) {
-        wild.visible = true;
+        wild.alpha = 1;
 
         app.sound.play('Show_Logo');
 
         wild.transition['anim'].restart();
 
-        await wait(2250);
+        await waitByFrameTime(2250);
 
-        wild.visible = false;
+        wild.alpha = 0;
 
         randomWild.forEach((row, rowIndex) => {
             if (!row) return;
@@ -150,22 +149,22 @@ export function create({normalTable, freeTable}) {
 
                 const {trans} = grid[rowIndex][colIndex];
 
-                trans.visible = true;
+                trans.alpha = 1;
 
                 trans.transition['anim'].restart();
                 app.sound.play('Replace');
 
-                await wait(1000);
+                await waitByFrameTime(1000);
 
                 symbol.icon = wild;
 
-                await wait(1000);
+                await waitByFrameTime(1000);
 
-                trans.visible = false;
+                trans.alpha = 0;
             });
         });
 
-        await wait(2000);
+        await waitByFrameTime(2000);
     }
 
     async function showBigWin(score) {
@@ -186,7 +185,7 @@ export function create({normalTable, freeTable}) {
 
         await fadeIn({targets, duration}).finished;
 
-        await wait(750);
+        await waitByFrameTime(750);
 
         fadeOut({targets, duration});
     }

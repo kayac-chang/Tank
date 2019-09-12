@@ -88,7 +88,7 @@ export async function spin({reels, symbols}) {
 
             setDisplay(display, _symbols);
 
-            isMaybeBonus = isMaybeBonus || matchScatter(_symbols);
+            isMaybeBonus = isMaybeBonus || (reel.index === 0 && matchScatter(_symbols));
 
             reel.pos -= offSet.pos;
 

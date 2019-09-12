@@ -1,4 +1,4 @@
-import {wait} from '@kayac/utils';
+import {nextFrame, waitByFrameTime} from '@kayac/utils';
 
 export async function show({result, reels, grid, payLine}) {
     app.emit('ShowResult', result);
@@ -18,7 +18,7 @@ export async function show({result, reels, grid, payLine}) {
 
         app.sound.play('Symbol_Connect');
 
-        await wait(2000);
+        await waitByFrameTime(2000);
 
         close();
     }
@@ -30,7 +30,7 @@ export async function show({result, reels, grid, payLine}) {
 
         app.sound.play('Scatter_Connect');
 
-        await wait(2000);
+        await waitByFrameTime(2000);
 
         close();
     }
@@ -103,9 +103,9 @@ export async function show({result, reels, grid, payLine}) {
         hideSymbols.forEach((symbol) => symbol.visible = true);
 
         effects.forEach((effect) => {
-            effect.alpha = 0;
-
             effect.transition['anim'].pause();
+
+            effect.alpha = 0;
         });
     }
 }

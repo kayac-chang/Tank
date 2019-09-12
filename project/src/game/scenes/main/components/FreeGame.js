@@ -9,7 +9,7 @@ export function FreeGame(it) {
     return {show, close};
 
     async function show() {
-        it.visible = true;
+        it.alpha = 1;
 
         const anim = it.transition['open'];
 
@@ -27,6 +27,6 @@ export function FreeGame(it) {
 
         await wait(750);
 
-        it.visible = false;
+        it.alpha = 0;
     }
 }

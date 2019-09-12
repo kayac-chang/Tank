@@ -13,8 +13,8 @@ export async function FreeGame({result, reels, grid, payLine}) {
 
     const match = matchWild(symbols);
 
-    if (match) {
-        app.sound.play('Stick');
+    if (match.length > 0) {
+
         await stick({match, grid});
     }
 
