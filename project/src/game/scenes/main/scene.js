@@ -23,12 +23,10 @@ export function create({normalTable, freeTable}) {
 
     const title = Title(scene.getChildByName('title'));
 
-    //  TODO: Change Color
     const collect = Collect(scene.getChildByName('collect'));
 
     const payLine = PayLines(scene.getChildByName('line'));
 
-    //  TODO: Change Color
     const freeGame = FreeGame(scene.getChildByName('freegame'));
 
     const grid = Grid(scene.getChildByName('grid'));
@@ -133,7 +131,10 @@ export function create({normalTable, freeTable}) {
                 '#17fff7',
             ][id];
 
-            const targets = [...frames, ...halo.children, payLine];
+            const targets = [
+                ...frames, ...halo.children,
+                payLine, collect, freeGame,
+            ];
 
             changeColor({targets, color: to});
 

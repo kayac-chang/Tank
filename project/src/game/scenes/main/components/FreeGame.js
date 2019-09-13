@@ -1,12 +1,34 @@
 import {wait} from '@kayac/utils';
 import {pauseAll} from './index';
 
+const {assign, defineProperties} = Object;
+
 export function FreeGame(it) {
+    const frames =
+        it.children
+            .filter(({name}) => name.includes('outer'))
+            .flatMap(({children}) => children);
+
     pauseAll(it);
 
     close();
 
-    return {show, close};
+    let tint = '#176BFF';
+
+    defineProperties(it, {
+        tint: {
+            get() {
+                return tint;
+            },
+            set(value) {
+                tint = value;
+
+                frames.forEach((it) => it.tint = value);
+            },
+        },
+    });
+
+    return assign(it, {show, close});
 
     async function show() {
         it.alpha = 1;

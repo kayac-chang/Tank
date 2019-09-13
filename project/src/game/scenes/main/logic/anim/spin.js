@@ -88,7 +88,9 @@ export async function spin({reels, symbols}) {
 
             setDisplay(display, _symbols);
 
-            if (matchScatter(_symbols)) scatterCount += 1;
+            if (
+                [0, 2].includes(reel.index) && matchScatter(_symbols)
+            ) scatterCount += 1;
 
             reel.pos -= offSet.pos;
 

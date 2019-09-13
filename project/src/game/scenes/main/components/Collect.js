@@ -3,7 +3,7 @@ import {pauseAll, Text} from './index';
 
 import {fadeIn, fadeOut} from '../../../effect';
 
-const {assign} = Object;
+const {assign, defineProperties} = Object;
 
 export function Collect(it) {
     const colors = [
@@ -32,11 +32,28 @@ export function Collect(it) {
         {font: '36px number'}
     );
 
+    const frame = it.getChildByName('frame');
+
     count.alpha = 0;
 
     it.addChild(count);
 
     pauseAll(it);
+
+    let tint = '#176bff';
+
+    defineProperties(it, {
+        tint: {
+            get() {
+                return tint;
+            },
+            set(value) {
+                tint = value;
+
+                frame.tint = value;
+            },
+        },
+    });
 
     return assign(it, {show, hide, levels});
 
