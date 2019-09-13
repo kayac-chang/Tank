@@ -1,6 +1,7 @@
 import {Text} from './Text';
-import {fadeIn, fadeOut, twink} from "../../../effect";
+import {changeColor} from '../../../effect';
 
+const {assign, defineProperties, values} = Object;
 
 export function PayLines(it) {
     const lines = {};
@@ -33,7 +34,31 @@ export function PayLines(it) {
 
     it.addChild(...digits.map(({score}) => score));
 
-    return Object.assign(it, {show});
+    const _lines =
+        values(lines)
+            .flatMap(({children}) => children);
+
+    let tint = 0x176BFF;
+
+    defineProperties(it, {
+        tint: {
+            get() {
+                return tint;
+            },
+            set(value) {
+                tint = value;
+
+                change(value);
+            },
+        },
+    });
+
+    return assign(it, {show});
+
+    function change(color) {
+        [..._lines, ...digits]
+            .forEach((it) => it.tint = color);
+    }
 
     function show({line, scores}) {
         const payLine = lines[line];
@@ -82,6 +107,13 @@ function Field({frame, score}) {
             it.visible = Boolean(newValue);
 
             score.text = newValue;
+        },
+
+        get tint() {
+            return frame.tint;
+        },
+        set tint(value) {
+            frame.tint = value;
         },
 
         frame, score,

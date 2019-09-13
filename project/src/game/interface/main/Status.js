@@ -1,21 +1,59 @@
-import {currencyFormat, isFunction, isString} from '@kayac/utils';
+import {currencyFormat, isFunction, isString, string2RGBA, rgb2hex, hex2string} from '@kayac/utils';
 import {observe} from '../observe';
 import {move} from '../../effect';
+import anime from 'animejs';
 
 
 export function Status(it) {
-    Cash(select('field@cash'));
-    Win(select('field@win'));
-    Bet(select('field@bet'));
+    const cash = Cash(select('field@cash'));
+    const win = Win(select('field@win'));
+    const bet = Bet(select('field@bet'));
 
-    Label();
+    const labels = Label();
+
+    app.on('ChangeColor', (to) => {
+        const targets = [cash, win, bet, ...labels];
+
+        const fill = targets[0].content.style.fill;
+
+        const from = isString(fill) ? fill : fill[0];
+
+        const proxy = {background: from};
+
+        anime({
+            targets: proxy,
+
+            background: to,
+
+            easing: 'easeInOutQuad',
+
+            update() {
+                const {r, g, b} = string2RGBA(proxy.background);
+
+                targets.forEach((it) => {
+                    it.content.style.fill = hex2string(rgb2hex([r, g, b]));
+                });
+            },
+        });
+    });
 
     return it;
 
     function Label() {
-        select('label@cash').text = app.translate(`common:status.cash`);
-        select('label@win').text = app.translate(`common:status.win`);
-        select('label@bet').text = app.translate(`common:status.bet`);
+        return (
+            [
+                ['label@cash', 'common:status.cash'],
+                ['label@win', 'common:status.win'],
+                ['label@bet', 'common:status.bet'],
+            ]
+                .map(([name, value]) => {
+                    const it = select(name);
+
+                    it.text = app.translate(value);
+
+                    return it;
+                })
+        );
     }
 
     function select(arg) {

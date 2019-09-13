@@ -2,7 +2,7 @@ import {SpinButton} from './SpinButton';
 import {Status} from './Status';
 import {Option} from './Option';
 import {Button} from '../components';
-import {twink} from '../../effect';
+import {changeColor, twink} from '../../effect';
 
 const {assign} = Object;
 
@@ -27,12 +27,22 @@ export function Main(it) {
         optionButton.interactive = false;
         menuButton.interactive = false;
     });
+
     app.on('Idle', () => {
         optionButton.interactive = true;
         menuButton.interactive = true;
     });
 
-    return assign(it, {menuButton, whenClickOutsideClose});
+    app.on('ChangeColor', (color) => {
+        const menuBtn = it.getChildByName('menu@normal');
+
+        changeColor({targets: [menuBtn, optionButton], color});
+    });
+
+    return assign(it, {
+        menuButton,
+        whenClickOutsideClose,
+    });
 
     async function onPointerDown() {
         await twink({targets: menuButton, duration: 120, interval: 50, alpha: 0.5});

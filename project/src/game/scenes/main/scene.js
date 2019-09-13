@@ -8,7 +8,7 @@ import {
 import {symbolConfig} from './data';
 
 import {logic} from './logic';
-import {fadeIn, fadeOut, twink} from '../../effect';
+import {changeColor, fadeIn, fadeOut, twink} from '../../effect';
 import {waitByFrameTime} from '@kayac/utils';
 
 export function create({normalTable, freeTable}) {
@@ -23,10 +23,12 @@ export function create({normalTable, freeTable}) {
 
     const title = Title(scene.getChildByName('title'));
 
+    //  TODO: Change Color
     const collect = Collect(scene.getChildByName('collect'));
 
     const payLine = PayLines(scene.getChildByName('line'));
 
+    //  TODO: Change Color
     const freeGame = FreeGame(scene.getChildByName('freegame'));
 
     const grid = Grid(scene.getChildByName('grid'));
@@ -38,6 +40,12 @@ export function create({normalTable, freeTable}) {
     const bigWin = BigWin(scene.getChildByName('bigwin'));
 
     const halo = scene.getChildByName('halo');
+
+    const background =
+        scene.children.filter(({name}) => name.includes('bottom'));
+
+    const frames =
+        scene.children.filter(({name}) => name.includes('frame'));
 
     logic({
         slot,
@@ -60,7 +68,88 @@ export function create({normalTable, freeTable}) {
 
     app.once('Idle', firstIdle);
 
+    app.on('ShowResult', ({results}) => {
+        const {symbols} =
+            results
+                .slice()
+                .sort((a, b) => b.scores - a.scores)[0];
+
+        const icon = findCommon(symbols);
+
+        change(icon);
+    });
+
+    function findCommon(array) {
+        const match = {};
+
+        let max = 1;
+        let result = array[0];
+
+        array.forEach((item) => {
+            if (!match[item]) match[item] = 1;
+
+            match[item] += 1;
+
+            if (match[item] > max) {
+                max = match[item];
+                result = item;
+            }
+        });
+
+        return result;
+    }
+
     return scene;
+
+    function change(icon) {
+        const id = {
+            '0': 6,
+            '2': 8,
+            '3': 3,
+            '4': 0,
+            '5': 2,
+            '6': 4,
+            '7': 7,
+            '8': 5,
+            '9': 1,
+        }[icon];
+
+        if (!id) return;
+
+        changeBackground();
+
+        changeFrame();
+
+        function changeFrame() {
+            const to = [
+                '#176bff',
+                '#3717ff',
+                '#5a00ff',
+                '#d800ff',
+                '#ff0066',
+                '#ff7800',
+                '#f9ff01',
+                '#17ff37',
+                '#17fff7',
+            ][id];
+
+            const targets = [...frames, ...halo.children, payLine];
+
+            changeColor({targets, color: to});
+
+            app.emit('ChangeColor', to);
+        }
+
+        function changeBackground() {
+            const target = background[id];
+            const others = background.filter((it, index) => index !== id);
+
+            Promise.all([
+                fadeIn({targets: target}).finished,
+                fadeOut({targets: others}).finished,
+            ]);
+        }
+    }
 
     async function firstIdle() {
         const loadScene =

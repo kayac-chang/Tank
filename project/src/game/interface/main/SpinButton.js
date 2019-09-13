@@ -1,6 +1,6 @@
 import {Button} from '../components';
 
-import {scaleUp, twink} from '../../effect';
+import {changeColor, twink} from '../../effect';
 import {throttleBy} from '@kayac/utils';
 
 const {defineProperties} = Object;
@@ -19,6 +19,16 @@ export function SpinButton(it) {
     app.on('Idle', reset);
 
     app.on('QuickStop', () => app.user.auto = 0);
+
+    app.on('ChangeColor', (color) => {
+        const frame = it.getChildByName('frame');
+        const play = it.getChildByName('play');
+        const stop = it.getChildByName('stop');
+
+        changeColor({targets: [frame, play, stop], color});
+    });
+
+    return it;
 
     function reset() {
         state = State(it);
