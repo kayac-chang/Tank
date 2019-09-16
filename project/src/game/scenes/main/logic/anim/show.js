@@ -50,19 +50,21 @@ export async function show({result, reels, grid, payLine}) {
     async function onIdle() {
         const results = getResultGen();
 
-        let looping = undefined;
+        let skip = false;
 
         (
-            function loop() {
+            async function loop() {
                 close();
 
                 showOne(results.next().value);
 
-                looping = setTimeout(() => requestAnimationFrame(loop), 1750);
+                await waitByFrameTime(1750);
+
+                if (!skip) loop();
             }
         )();
 
-        app.once('SpinStart', () => clearTimeout(looping));
+        app.once('SpinStart', () => skip = true);
     }
 
     function showOne(result) {
