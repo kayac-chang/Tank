@@ -36,7 +36,7 @@ export function Nav(it) {
             const data =
                 await app.service.checkout({key});
 
-            app.alert.checkoutList(data);
+            await app.alert.checkoutList(data);
 
             app.user.hasExchanged = false;
         }
