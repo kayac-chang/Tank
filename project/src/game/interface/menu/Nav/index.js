@@ -23,7 +23,26 @@ export function Nav(it) {
     settingButton.on('click', () => it.emit('open', 'setting'));
     infoButton.on('click', () => it.emit('open', 'information'));
 
-    homeButton.on('click', () => app.alert.leave());
+    homeButton.on('click', async () => {
+        const key = process.env.KEY;
+
+        if (app.user.hasExchanged) {
+            const {value} =
+                await app.alert
+                    .request({title: app.translate('common:message.checkout')});
+
+            if (!value) return it.emit('close');
+
+            const data =
+                await app.service.checkout({key});
+
+            app.alert.checkoutList(data);
+
+            app.user.hasExchanged = false;
+        }
+
+        app.alert.leave();
+    });
 
     let isOpen = false;
 
