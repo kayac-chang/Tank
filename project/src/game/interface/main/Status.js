@@ -3,7 +3,6 @@ import {observe} from '../observe';
 import {move} from '../../effect';
 import anime from 'animejs';
 
-
 export function Status(it) {
     const cash = Cash(select('field@cash'));
     const win = Win(select('field@win'));

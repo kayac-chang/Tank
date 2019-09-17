@@ -47,7 +47,7 @@ export function logic(args) {
 
         if (isBigWin(scores)) await showBigWin(scores);
 
-        clear(normalGame);
+        clear(scores);
 
         if (scores > 0) await waitByFrameTime(60);
 
@@ -68,12 +68,13 @@ export function logic(args) {
 
                 totalScores += scores;
 
-                if (level) {
+                const diff = level - currentLevel;
+                if (diff > 0) {
                     //
-                    while (currentLevel < level) {
+                    for (let i = diff; i > 0; i -= 1) {
                         await levels[currentLevel].show();
 
-                        currentLevel++;
+                        currentLevel += 1;
                     }
 
                     const match = {
@@ -89,7 +90,7 @@ export function logic(args) {
 
             if (isBigWin(totalScores)) await showBigWin(totalScores);
 
-            freeGame.forEach(clear);
+            clear(totalScores);
 
             await closeFreeGame();
         }
@@ -99,22 +100,18 @@ export function logic(args) {
         app.emit('Idle');
     }
 
-    function clear(result) {
-        const {scores} = result;
-
+    function clear(scores) {
         app.user.lastWin = scores;
         app.user.cash += scores;
 
-        if (check(result)) {
+        if (check(scores)) {
             app.user.auto = 0;
 
             app.user.totalWin = 0;
         }
     }
 
-    function check(result) {
-        const {scores, results} = result;
-
+    function check(scores) {
         const condition = app.user.autoStopCondition;
 
         return [
@@ -141,21 +138,13 @@ export function logic(args) {
         function ifCashIncreasesBy() {
             const threshold = condition['if_cash_increases_by'];
 
-            if (threshold) return results.some(biggerThanThreshold);
-
-            function biggerThanThreshold() {
-                return app.user.totalWin >= threshold;
-            }
+            if (threshold) return app.user.totalWin >= threshold;
         }
 
         function ifCashDecreasesBy() {
             const threshold = condition['if_cash_decreases_by'];
 
-            if (threshold) return results.some(smallerThanThreshold);
-
-            function smallerThanThreshold() {
-                return app.user.totalWin <= threshold;
-            }
+            if (threshold) return app.user.totalWin <= threshold;
         }
     }
 }

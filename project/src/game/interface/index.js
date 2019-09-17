@@ -14,7 +14,7 @@ export function create() {
     const main = Main(it.getChildByName('main'));
     const menu = Menu(it.getChildByName('menu'));
 
-    main.menuButton.on('click', () => openMenu());
+    main.menuButton.on('pointerup', () => openMenu());
 
     main.on('OpenExchange', () => openMenu('exchange'));
 

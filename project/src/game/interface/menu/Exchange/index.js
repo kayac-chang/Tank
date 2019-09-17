@@ -68,16 +68,16 @@ export function Exchange(it) {
     function init() {
         Label();
 
-        it.on('click', () => dropdown.close());
+        it.on('pointerup', () => dropdown.close());
 
         amount.on('change', onAmountChange);
 
         pad.on('click', onNumberPadClick);
 
-        cancelBtn.on('click', clear);
-        refreshBtn.on('click', refresh);
+        cancelBtn.on('pointerup', clear);
+        refreshBtn.on('pointerup', refresh);
 
-        confirmBtn.on('click', confirm);
+        confirmBtn.on('pointerup', confirm);
 
         dropdown.on('select', onSelect);
 

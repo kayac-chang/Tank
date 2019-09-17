@@ -13,7 +13,7 @@ export function Main(it) {
 
     const optionButton = Button(it.getChildByName('option'));
 
-    optionButton.on('click', openOption);
+    optionButton.on('pointerup', openOption);
 
     const option = Option(it.getChildByName('optionMenu'), it);
 
@@ -55,7 +55,7 @@ export function Main(it) {
 
         block.interactive = true;
 
-        block.once('click', async () => {
+        block.once('pointerup', async () => {
             if (target.isOpen) await target.close();
 
             block.interactive = false;

@@ -9,7 +9,7 @@ export function DropDown({label, btn, list, items}) {
 
     list = List(list);
 
-    btn.on('click', onTrigger);
+    btn.on('pointerup', onTrigger);
 
     return Object.assign(it, {close, update});
 
@@ -23,7 +23,7 @@ export function DropDown({label, btn, list, items}) {
                 else if (name.includes('btn')) {
                     it = Button(it);
 
-                    it.on('click', onSelect);
+                    it.on('pointerup', onSelect);
                 }
             });
 

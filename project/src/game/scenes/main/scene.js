@@ -77,6 +77,8 @@ export function create({normalTable, freeTable}) {
         change(icon);
     });
 
+    return scene;
+
     function findCommon(array) {
         const match = {};
 
@@ -96,8 +98,6 @@ export function create({normalTable, freeTable}) {
 
         return result;
     }
-
-    return scene;
 
     function change(icon) {
         const id = {
@@ -164,7 +164,7 @@ export function create({normalTable, freeTable}) {
 
         featurePage.interactive = true;
 
-        featurePage.once('click', firstClick);
+        featurePage.once('pointerup', firstClick);
 
         async function firstClick() {
             featurePage.interactive = false;

@@ -12,7 +12,7 @@ export function SpinButton(it) {
 
     const auto = Auto(it);
 
-    it.on('click', throttleBy(play));
+    it.on('pointerup', throttleBy(play));
 
     let state = undefined;
 

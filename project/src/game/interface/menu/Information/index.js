@@ -13,16 +13,16 @@ export function Information(it) {
     const carousel = Carousel(it.select('carousel'));
 
     const prevButton = Button(it.select('arrow@prev'));
-    prevButton.on('click', throttleBy(onPrev));
+    prevButton.on('pointerup', throttleBy(onPrev));
 
     const nextButton = Button(it.select('arrow@next'));
-    nextButton.on('click', throttleBy(onNext));
+    nextButton.on('pointerup', throttleBy(onNext));
 
     const tabs =
         it.select(({name}) => name.includes('tab'))
             .map(Button)
             .map((it) => {
-                it.on('click', () => onTabClick(it));
+                it.on('pointerup', () => onTabClick(it));
                 return it;
             });
 

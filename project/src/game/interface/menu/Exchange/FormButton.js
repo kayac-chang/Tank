@@ -11,14 +11,14 @@ export function FormButton({btn, label}) {
 
     btn = Button(btn);
 
-    btn.on('click', onClick);
+    btn.on('pointerup', onClick);
 
     return it;
 
     function onClick() {
         if (!it.enable) return;
 
-        it.emit('click');
+        it.emit('pointerup');
     }
 
     function onChange(enable) {

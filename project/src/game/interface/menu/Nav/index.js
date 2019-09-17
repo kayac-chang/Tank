@@ -17,13 +17,13 @@ export function Nav(it) {
         homeButton,
     ] = buttons;
 
-    backButton.on('click', () => it.emit('close'));
+    backButton.on('pointerup', () => it.emit('close'));
 
-    exchangeButton.on('click', () => it.emit('open', 'exchange'));
-    settingButton.on('click', () => it.emit('open', 'setting'));
-    infoButton.on('click', () => it.emit('open', 'information'));
+    exchangeButton.on('pointerup', () => it.emit('open', 'exchange'));
+    settingButton.on('pointerup', () => it.emit('open', 'setting'));
+    infoButton.on('pointerup', () => it.emit('open', 'information'));
 
-    homeButton.on('click', async () => {
+    homeButton.on('pointerup', async () => {
         const key = process.env.KEY;
 
         if (app.user.hasExchanged) {

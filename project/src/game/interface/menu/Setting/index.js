@@ -328,7 +328,7 @@ function Control({prev, next, value, onChange}) {
 function Toggle({label, output, btn, value, onChange}) {
     //
     btn = Button(btn);
-    btn.on('click', trigger);
+    btn.on('pointerdown', trigger);
 
     const distance = output.width;
 

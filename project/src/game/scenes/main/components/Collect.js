@@ -1,4 +1,4 @@
-import {wait} from '@kayac/utils';
+import {waitByFrameTime} from '@kayac/utils';
 import {pauseAll, Text} from './index';
 
 import {fadeIn, fadeOut} from '../../../effect';
@@ -77,7 +77,7 @@ export function Collect(it) {
 
             showLight();
 
-            await wait(500);
+            await waitByFrameTime(500);
 
             count.text = level;
 
@@ -107,7 +107,7 @@ export function Collect(it) {
 
         show.restart();
 
-        await wait(1500);
+        await waitByFrameTime(1500);
 
         count.text = 0;
 
