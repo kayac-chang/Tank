@@ -17,8 +17,6 @@ export function Nav(it) {
         homeButton,
     ] = buttons;
 
-    backButton.on('pointerup', () => it.emit('close'));
-
     exchangeButton.on('pointerup', () => it.emit('open', 'exchange'));
     settingButton.on('pointerup', () => it.emit('open', 'setting'));
     infoButton.on('pointerup', () => it.emit('open', 'information'));
@@ -54,6 +52,8 @@ export function Nav(it) {
         await Promise.all(
             buttons.map((btn) => btn.open())
         );
+
+        backButton.once('pointerup', () => it.emit('close'));
 
         isOpen = true;
     }
