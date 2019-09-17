@@ -77,7 +77,7 @@ export function Exchange(it) {
         cancelBtn.on('pointerup', clear);
         refreshBtn.on('pointerup', refresh);
 
-        confirmBtn.on('pointerup', confirm);
+        confirmBtn.on('click', confirm);
 
         dropdown.on('select', onSelect);
 

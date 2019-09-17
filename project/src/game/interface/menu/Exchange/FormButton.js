@@ -18,7 +18,7 @@ export function FormButton({btn, label}) {
     function onClick() {
         if (!it.enable) return;
 
-        it.emit('pointerup');
+        it.emit('click');
     }
 
     function onChange(enable) {
