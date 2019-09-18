@@ -16,8 +16,6 @@ export function SpinButton(it) {
 
     let state = undefined;
 
-    app.on('Idle', reset);
-
     app.on('QuickStop', () => app.user.auto = 0);
 
     app.on('ChangeColor', (color) => {
@@ -28,13 +26,18 @@ export function SpinButton(it) {
         changeColor({targets: [frame, play, stop], color});
     });
 
+    app.on('Idle', onIdle);
+
     return it;
 
-    function reset() {
+    function onIdle() {
+        console.log(insufficientBalance);
         state = State(it);
 
         state.next();
+    }
 
+    function reset() {
         if (!auto.done) {
             auto.count -= 1;
 
@@ -42,6 +45,8 @@ export function SpinButton(it) {
             //
         } else {
             app.user.auto = 0;
+
+            app.off('Idle', reset);
         }
     }
 
@@ -49,6 +54,8 @@ export function SpinButton(it) {
         app.sound.play('spin');
 
         await state.next();
+
+        app.once('Idle', reset);
     }
 }
 

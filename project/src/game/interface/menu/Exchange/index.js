@@ -98,6 +98,8 @@ export function Exchange(it) {
             app.alert.checkoutList(data);
 
             app.user.hasExchanged = false;
+
+            app.emit('Idle');
         }
 
         await refresh();
