@@ -28,34 +28,26 @@ export function SpinButton(it) {
 
     app.on('Idle', onIdle);
 
+    app.on('GameResult', ({totalWin}) => {
+        if (check(totalWin)) app.user.auto = 0;
+    });
+
     return it;
 
     function onIdle() {
-        console.log(insufficientBalance);
         state = State(it);
 
         state.next();
     }
 
-    function reset() {
-        if (!auto.done) {
-            auto.count -= 1;
-
-            return play();
-            //
-        } else {
-            app.user.auto = 0;
-
-            app.off('Idle', reset);
-        }
-    }
-
     async function play() {
         app.sound.play('spin');
 
+        auto.count -= 1;
+
         await state.next();
 
-        app.once('Idle', reset);
+        app.once('Idle', () => (!auto.done) && play());
     }
 }
 
@@ -176,4 +168,41 @@ async function send() {
 
 function insufficientBalance() {
     return app.user.cash < app.user.currentBet;
+}
+
+function check(scores) {
+    const condition = app.user.autoStopCondition;
+
+    return [
+        onAnyWin,
+        onSingleWinOfAtLeast,
+        ifCashIncreasesBy,
+        ifCashDecreasesBy,
+    ].some(isTrue);
+
+    function isTrue(func) {
+        return func() === true;
+    }
+
+    function onAnyWin() {
+        if (condition['on_any_win']) return scores > 0;
+    }
+
+    function onSingleWinOfAtLeast() {
+        const threshold = condition['on_single_win_of_at_least'];
+
+        if (threshold) return scores > threshold;
+    }
+
+    function ifCashIncreasesBy() {
+        const threshold = condition['if_cash_increases_by'];
+
+        if (threshold) return app.user.cash >= threshold;
+    }
+
+    function ifCashDecreasesBy() {
+        const threshold = condition['if_cash_decreases_by'];
+
+        if (threshold) return app.user.cash <= threshold;
+    }
 }

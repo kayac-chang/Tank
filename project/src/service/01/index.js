@@ -1,7 +1,6 @@
 import {getSearchParam} from '../utils';
 import {clone, equals, err} from '@kayac/utils';
 import {User} from '../user';
-import payTable from './payTable';
 
 const {assign, entries, fromEntries} = Object;
 
@@ -373,12 +372,7 @@ export function Service(prodKey) {
         const rate = data['LineWinRate'];
         const scores = data['Score'];
 
-        const freeSpin = 1;
-
-        let line = undefined;
-
-        if (symbols[0] === undefined || [freeSpin].includes(symbols[0])) line = -1;
-        else line = matchLine(positions);
+        const line = data['LineWinIndex'];
 
         return {
             symbols,
@@ -390,13 +384,5 @@ export function Service(prodKey) {
             scores,
         };
     }
-}
-
-function matchLine(positions) {
-    return (
-        payTable
-            .map((line) => line.slice(0, positions.length))
-            .findIndex((line) => equals(line, positions))
-    );
 }
 

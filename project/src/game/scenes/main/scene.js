@@ -39,6 +39,8 @@ export function create({normalTable, freeTable}) {
 
     const halo = scene.getChildByName('halo');
 
+    const counter = Counter(scene.getChildByName('counter'));
+
     const background =
         scene.children.filter(({name}) => name.includes('bottom'));
 
@@ -52,6 +54,7 @@ export function create({normalTable, freeTable}) {
         payLine,
         multiple,
         levels: collect.levels,
+        counter,
 
         showFreeGame,
         closeFreeGame,
@@ -132,7 +135,7 @@ export function create({normalTable, freeTable}) {
             ][id];
 
             const targets = [
-                ...frames, ...halo.children,
+                ...frames, ...halo.children, ...counter.children,
                 payLine, collect, freeGame,
             ];
 
@@ -281,4 +284,45 @@ export function create({normalTable, freeTable}) {
 
         fadeOut({targets, duration});
     }
+}
+
+function Counter(it) {
+    //
+    const numbers =
+        it.children.filter(({name}) => !isNaN(name));
+
+    let value = 10;
+
+    Object.defineProperties(it, {
+        value: {
+            get() {
+                return value;
+            },
+            set(newVal) {
+                value = newVal;
+
+                update();
+            },
+        },
+    });
+
+    return Object.assign(it, {
+        show, hide,
+    });
+
+    async function show() {
+        await fadeIn({targets: it}).finished;
+    }
+
+    async function hide() {
+        await fadeOut({targets: it}).finished;
+    }
+
+    function update() {
+        numbers.forEach((it) => it.alpha = 0);
+
+        it.transition[value].restart();
+    }
+
+
 }

@@ -34,7 +34,7 @@ export function Setting(it) {
         next: child('next@auto'),
     });
 
-    Cond({
+    const cond1 = Cond({
         key: 'on_single_win_of_at_least',
 
         label: child('label@cond1'),
@@ -43,7 +43,7 @@ export function Setting(it) {
         next: child('next@cond1'),
     });
 
-    Cond({
+    const cond2 = Cond({
         key: 'if_cash_increases_by',
 
         label: child('label@cond2'),
@@ -52,13 +52,19 @@ export function Setting(it) {
         next: child('next@cond2'),
     });
 
-    Cond({
+    const cond3 = Cond({
         key: 'if_cash_decreases_by',
 
         label: child('label@cond3'),
         output: child('level@cond3'),
         prev: child('prev@cond3'),
         next: child('next@cond3'),
+    });
+
+    app.on('UserBetChange', () => {
+        cond1.unit = app.user.currentBet;
+        cond2.unit = app.user.currentBet;
+        cond3.unit = app.user.currentBet;
     });
 
     Toggle({
@@ -277,6 +283,8 @@ function Cond({label, output, prev, next, key}) {
 
         value: condition[key],
 
+        unit: app.user.currentBet,
+
         onChange(value) {
             output.text = value;
 
@@ -289,10 +297,9 @@ function Cond({label, output, prev, next, key}) {
     });
 }
 
-function Control({prev, next, value, onChange}) {
+function Control({prev, next, value, onChange, unit = 1}) {
     prev = Button(prev);
     prev.on('pointerdown', pressHold(onPrev, prev));
-
 
     next = Button(next);
     next.on('pointerdown', pressHold(onNext, next));
@@ -306,12 +313,21 @@ function Control({prev, next, value, onChange}) {
         set value(newValue) {
             value = newValue;
         },
+
+        get unit() {
+            return unit;
+        },
+        set unit(newUnit) {
+            unit = newUnit;
+        },
     };
 
     function onPrev() {
         app.sound.play('click');
 
-        value -= 1;
+        value -= unit;
+
+        if (value <= 0) value = 0;
 
         return onChange(value);
     }
@@ -319,7 +335,7 @@ function Control({prev, next, value, onChange}) {
     function onNext() {
         app.sound.play('click');
 
-        value += 1;
+        value += unit;
 
         return onChange(value);
     }

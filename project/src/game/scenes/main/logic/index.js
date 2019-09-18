@@ -11,7 +11,7 @@ function isBigWin(scores) {
 export function logic(args) {
     const {
         slot,
-        grid, payLine, levels, multiple,
+        grid, payLine, levels, multiple, counter,
         showFreeGame, closeFreeGame, showRandomWild, showBigWin,
     } = args;
 
@@ -26,9 +26,6 @@ export function logic(args) {
             normalGame,
             freeGame,
         } = result;
-
-        const diff = app.user.cash - cash;
-        if (app.user.auto) app.user.totalWin += diff;
 
         if (normalGame.hasLink) {
             log('onNormalGame =============');
@@ -54,10 +51,14 @@ export function logic(args) {
         if (freeGame) {
             await showFreeGame();
 
+            counter.show();
+
             let totalScores = 0;
             let currentLevel = 0;
 
             for (const result of freeGame) {
+                counter.value = (freeGame.length - freeGame.indexOf(result));
+
                 const {scores, level} = await FreeGame({
                     result: result,
                     reels: slot.reels,
@@ -88,9 +89,15 @@ export function logic(args) {
                 }
             }
 
-            if (isBigWin(totalScores)) await showBigWin(totalScores);
+            if (isBigWin(totalScores)) {
+                await waitByFrameTime(600);
+
+                await showBigWin(totalScores);
+            }
 
             clear(totalScores);
+
+            counter.hide();
 
             await closeFreeGame();
         }
@@ -103,48 +110,5 @@ export function logic(args) {
     function clear(scores) {
         app.user.lastWin = scores;
         app.user.cash += scores;
-
-        if (check(scores)) {
-            app.user.auto = 0;
-
-            app.user.totalWin = 0;
-        }
-    }
-
-    function check(scores) {
-        const condition = app.user.autoStopCondition;
-
-        return [
-            onAnyWin,
-            onSingleWinOfAtLeast,
-            ifCashIncreasesBy,
-            ifCashDecreasesBy,
-        ].some(isTrue);
-
-        function isTrue(func) {
-            return func() === true;
-        }
-
-        function onAnyWin() {
-            if (condition['on_any_win']) return scores > 0;
-        }
-
-        function onSingleWinOfAtLeast() {
-            const threshold = condition['on_single_win_of_at_least'];
-
-            if (threshold) return scores > threshold;
-        }
-
-        function ifCashIncreasesBy() {
-            const threshold = condition['if_cash_increases_by'];
-
-            if (threshold) return app.user.totalWin >= threshold;
-        }
-
-        function ifCashDecreasesBy() {
-            const threshold = condition['if_cash_decreases_by'];
-
-            if (threshold) return app.user.totalWin <= threshold;
-        }
     }
 }
