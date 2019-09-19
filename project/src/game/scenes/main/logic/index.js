@@ -56,7 +56,7 @@ export function logic(args) {
             let currentLevel = 0;
 
             for (const result of freeGame) {
-                counter.value = (freeGame.length - freeGame.indexOf(result));
+                counter.value -= 1;
 
                 const {scores, level} = await FreeGame({
                     result: result,

@@ -312,6 +312,8 @@ function Counter(it) {
 
     async function show() {
         await fadeIn({targets: it}).finished;
+
+        value = 10;
     }
 
     async function hide() {
@@ -323,6 +325,4 @@ function Counter(it) {
 
         it.transition[value].restart();
     }
-
-
 }
