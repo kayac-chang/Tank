@@ -36,6 +36,10 @@ export function SpinButton(it) {
         if (check(totalWin)) app.user.auto = 0;
     });
 
+    app.on('UserAutoChange', () => {
+        auto.count = app.user.autoOptions[app.user.auto];
+    });
+
     return it;
 
     function onIdle() {
@@ -78,10 +82,6 @@ function Auto(parent) {
 
     let count = 0;
 
-    app.on('UserAutoChange', () => {
-        it.count = getAuto();
-    });
-
     return defineProperties(it, {
 
         count: {
@@ -96,10 +96,6 @@ function Auto(parent) {
         },
 
     });
-
-    function getAuto() {
-        return app.user.autoOptions[app.user.auto];
-    }
 
     function update() {
         if (count === 0) return it.text = '';

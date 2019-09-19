@@ -54,18 +54,19 @@ export function Menu(it) {
 
             it.interactive = true;
 
-            await twink(config).finished;
-            await fadeIn(fade).finished;
-
             it.isOpen = true;
+
+            await twink(config).finished;
+
+            await fadeIn(fade).finished;
         }
 
         async function close() {
             await fadeOut(fade).finished;
 
-            it.interactive = false;
-
             it.isOpen = false;
+
+            it.interactive = false;
         }
 
         return assign(it, {

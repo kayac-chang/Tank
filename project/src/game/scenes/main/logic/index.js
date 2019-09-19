@@ -22,7 +22,6 @@ export function logic(args) {
         table(result);
 
         const {
-            cash,
             normalGame,
             freeGame,
         } = result;
