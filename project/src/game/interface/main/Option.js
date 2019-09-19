@@ -1,5 +1,5 @@
 import {Button} from '../components';
-import {scaleDown, scaleUp} from '../../effect';
+import {changeColor, scaleDown, scaleUp} from '../../effect';
 import {Inner} from './Inner';
 
 const {assign} = Object;
@@ -17,11 +17,15 @@ export function Option(it, main) {
 
     const inner = Inner(it.getChildByName('inner'));
 
+    const state = {};
+
     ['speed', 'auto', 'bet']
         .forEach((name) => {
             const button = Button(it.getChildByName(name));
 
             button.on('pointerup', onOptionClick);
+
+            state[name] = it.getChildByName(`state@${name}`);
         });
 
     const audio = Audio();
@@ -29,6 +33,14 @@ export function Option(it, main) {
     const exchangeButton = Button(it.getChildByName('exchange'));
 
     exchangeButton.on('pointerup', openExchange);
+
+    const frames =
+        it.children
+            .filter(({name}) => name.includes('frame') || name.includes('outline'));
+
+    app.on('ChangeColor', (color) => {
+        changeColor({targets: frames, color});
+    });
 
     let current = undefined;
 
@@ -40,13 +52,13 @@ export function Option(it, main) {
     async function open() {
         audio.update();
 
-        if (current) inner.update(current);
-
         app.sound.play('spin');
 
         main.transition['open_option'].restart();
 
         await main.transition['open_option'].finished;
+
+        if (current) await openInner();
 
         backButton.interactive = true;
 
@@ -62,7 +74,23 @@ export function Option(it, main) {
 
         main.transition['close_option'].restart();
 
+        if (current) await closeInner();
+
         await main.transition['close_option'].finished;
+    }
+
+    async function openInner() {
+        scaleUp({targets: state[current], easing: 'easeOutCirc', duration: 260});
+
+        inner.update(current);
+
+        await inner.open();
+    }
+
+    async function closeInner() {
+        scaleDown({targets: state[current], easing: 'easeInCirc', duration: 260});
+
+        await inner.close();
     }
 
     async function onOptionClick() {
@@ -72,16 +100,16 @@ export function Option(it, main) {
 
         current = this.name;
 
-        inner.update(current);
-
-        await inner.open();
+        await openInner();
 
         backButton.once('pointerup', prev);
 
         async function prev() {
-            await inner.close();
+            await closeInner();
 
             await reset();
+
+            current = undefined;
 
             backButton.on('pointerup', close);
         }

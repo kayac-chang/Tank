@@ -174,7 +174,7 @@ export function create({normalTable, freeTable}) {
 
             app.sound.play('Show_Count_Bar');
 
-            await twink({targets: featurePage, duration: 500, interval: 250});
+            await fadeOut({targets: featurePage, duration: 500}).finished;
 
             app.control.alpha = 1;
             app.control.main.transition['close_option'].restart();
