@@ -16,7 +16,11 @@ export function SpinButton(it) {
 
     let state = undefined;
 
-    app.on('QuickStop', () => app.user.auto = 0);
+    app.on('QuickStop', () => {
+        app.user.auto = 0;
+
+        app.off('Idle', play);
+    });
 
     app.on('ChangeColor', (color) => {
         const frame = it.getChildByName('frame');
@@ -46,7 +50,7 @@ export function SpinButton(it) {
         if (auto.count > 0) {
             auto.count -= 1;
 
-            app.once('Idle', () => play());
+            app.once('Idle', play);
         }
 
         await state.next();
