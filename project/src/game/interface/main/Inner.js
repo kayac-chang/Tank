@@ -1,5 +1,5 @@
 import {Button} from '../components';
-import {scaleDown, scaleUp} from '../../effect';
+import {changeColor, scaleDown, scaleUp} from '../../effect';
 
 const {assign} = Object;
 
@@ -15,6 +15,10 @@ export function Inner(it) {
         it.children
             .reduce(pre, [])
             .map(Select);
+
+    app.on('ChangeColor', (color) => {
+        changeColor({targets: selects, color});
+    });
 
     return assign(it, {open, close, update});
 
@@ -50,6 +54,8 @@ export function Inner(it) {
 
         let func = undefined;
 
+        let tint = '#176BFF';
+
         const it = {
             get index() {
                 return Number(btn.name);
@@ -69,6 +75,13 @@ export function Inner(it) {
                 field.text = value;
             },
 
+            get tint() {
+                return tint;
+            },
+            set tint(value) {
+                tint = value;
+            },
+
             get visible() {
                 return btn.visible;
             },
@@ -83,7 +96,7 @@ export function Inner(it) {
             set activate(flag) {
                 activate = flag;
 
-                field.content.style.fill = activate ? '#176BFF' : '#FFF';
+                field.content.style.fill = activate ? tint : '#FFF';
             },
         };
 

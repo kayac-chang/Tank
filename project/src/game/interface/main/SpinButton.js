@@ -43,11 +43,13 @@ export function SpinButton(it) {
     async function play() {
         app.sound.play('spin');
 
-        auto.count -= 1;
+        if (auto.count > 0) {
+            auto.count -= 1;
+
+            app.once('Idle', () => play());
+        }
 
         await state.next();
-
-        app.once('Idle', () => (!auto.done) && play());
     }
 }
 
@@ -78,18 +80,12 @@ function Auto(parent) {
 
     return defineProperties(it, {
 
-        done: {
-            get() {
-                return count === 0;
-            },
-        },
-
         count: {
             get() {
                 return count;
             },
             set(newCount) {
-                count = newCount;
+                count = newCount > 0 ? newCount : 0;
 
                 update();
             },

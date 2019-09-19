@@ -11,7 +11,7 @@ export async function show({result, reels, grid, payLine}) {
 
     const hideSymbols = [];
 
-    const normal = results.filter(({line}) => line);
+    const normal = results.filter(({line}) => line !== -1);
 
     if (normal.length > 0) {
         normal.forEach(showOne);
@@ -23,7 +23,7 @@ export async function show({result, reels, grid, payLine}) {
         close();
     }
 
-    const scatters = results.filter(({line}) => !line);
+    const scatters = results.filter(({line}) => line === -1);
 
     if (scatters.length > 0) {
         scatters.forEach(showOne);
@@ -94,7 +94,7 @@ export async function show({result, reels, grid, payLine}) {
             //
         });
 
-        if (line) lines.push(payLine.show(result));
+        if (line !== -1) lines.push(payLine.show(result));
     }
 
     function close() {
