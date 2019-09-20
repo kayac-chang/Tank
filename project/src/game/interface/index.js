@@ -29,9 +29,9 @@ export function create() {
     async function openMenu(page) {
         main.menuButton.interactive = false;
 
-        main.whenClickOutsideClose(menu);
-
         await menu.open(page);
+
+        main.whenClickOutsideClose(menu);
     }
 
     function onMenuClose() {

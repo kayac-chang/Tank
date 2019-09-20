@@ -78,9 +78,9 @@ export function Menu(it) {
     async function open(page) {
         it.visible = true;
 
-        it.isOpen = true;
-
         if (!nav.isOpen) await nav.open();
+
+        it.isOpen = true;
 
         if (!page) return;
 
@@ -94,6 +94,8 @@ export function Menu(it) {
     }
 
     async function close() {
+        it.isOpen = false;
+
         if (currentPage) {
             await currentPage.close();
 
@@ -103,8 +105,6 @@ export function Menu(it) {
         if (background.isOpen) await background.close();
 
         await nav.close();
-
-        it.isOpen = false;
 
         it.visible = false;
 

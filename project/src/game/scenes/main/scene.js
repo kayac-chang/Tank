@@ -8,7 +8,7 @@ import {
 import {symbolConfig} from './data';
 
 import {logic} from './logic';
-import {changeColor, fadeIn, fadeOut, twink} from '../../effect';
+import {changeColor, fadeIn, fadeOut} from '../../effect';
 import {waitByFrameTime} from '@kayac/utils';
 
 export function create({normalTable, freeTable}) {

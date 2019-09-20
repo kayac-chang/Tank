@@ -40,8 +40,7 @@ export function Main(it) {
     });
 
     return assign(it, {
-        menuButton,
-        whenClickOutsideClose,
+        menuButton, whenClickOutsideClose,
     });
 
     async function onPointerDown() {
@@ -56,9 +55,9 @@ export function Main(it) {
         block.interactive = true;
 
         block.once('pointerup', async () => {
-            if (target.isOpen) await target.close();
-
             block.interactive = false;
+
+            if (target.isOpen) await target.close();
         });
     }
 
