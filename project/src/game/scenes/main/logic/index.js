@@ -56,8 +56,6 @@ export function logic(args) {
             let currentLevel = 0;
 
             for (const result of freeGame) {
-                counter.value -= 1;
-
                 const {scores, level} = await FreeGame({
                     result: result,
                     reels: slot.reels,
@@ -65,6 +63,8 @@ export function logic(args) {
                     grid,
                     payLine,
                 });
+
+                counter.value -= 1;
 
                 totalScores += scores;
 

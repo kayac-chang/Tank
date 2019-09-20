@@ -291,7 +291,7 @@ function Counter(it) {
     const numbers =
         it.children.filter(({name}) => !isNaN(name));
 
-    let value = 10;
+    let value = 9;
 
     Object.defineProperties(it, {
         value: {
@@ -313,7 +313,7 @@ function Counter(it) {
     async function show() {
         await fadeIn({targets: it}).finished;
 
-        value = 10;
+        value = 9;
     }
 
     async function hide() {
