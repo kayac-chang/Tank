@@ -1,6 +1,7 @@
 import {Button} from '../components';
 import {changeColor, scaleDown, scaleUp} from '../../effect';
 import {Inner} from './Inner';
+import {waitByFrameTime} from '@kayac/utils';
 
 const {assign} = Object;
 
@@ -56,7 +57,7 @@ export function Option(it, main) {
 
         main.transition['open_option'].restart();
 
-        await main.transition['open_option'].finished;
+        await waitByFrameTime(2250);
 
         if (current) await openInner();
 
@@ -76,7 +77,9 @@ export function Option(it, main) {
 
         if (current) await closeInner();
 
-        await main.transition['close_option'].finished;
+        await waitByFrameTime(2250);
+
+        it.emit('Closed');
     }
 
     async function openInner() {

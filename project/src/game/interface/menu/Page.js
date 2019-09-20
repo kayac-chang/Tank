@@ -4,7 +4,7 @@ import {isFunction, isString} from '@kayac/utils';
 export function Page(it) {
     const background = it.getChildByName('background');
 
-    background.on('click', onClick);
+    background.on('pointerup', onClick);
 
     const fade = {
         targets: it,

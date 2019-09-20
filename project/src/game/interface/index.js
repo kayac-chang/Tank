@@ -18,8 +18,6 @@ export function create() {
 
     main.on('OpenExchange', () => openMenu('exchange'));
 
-    menu.on('Closed', onMenuClose);
-
     app.control = it;
 
     it.alpha = 0;
@@ -31,13 +29,17 @@ export function create() {
 
         await menu.open(page);
 
-        main.whenClickOutsideClose(menu);
-    }
+        const off = main.whenClickOutsideClose(menu);
 
-    function onMenuClose() {
-        main.menuButton.interactive = true;
+        menu.once('Closed', onMenuClose);
 
-        main.getChildByName('menu@normal').alpha = 1;
+        function onMenuClose() {
+            off();
+
+            main.menuButton.interactive = true;
+
+            main.getChildByName('menu@normal').alpha = 1;
+        }
     }
 }
 

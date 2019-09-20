@@ -88,9 +88,9 @@ export function Menu(it) {
 
         if (currentPage && currentPage.name !== page) await currentPage.close();
 
-        await it[page].open();
-
         currentPage = it[page];
+
+        await it[page].open();
     }
 
     async function close() {

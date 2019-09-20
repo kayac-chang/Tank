@@ -68,7 +68,7 @@ export function Exchange(it) {
     function init() {
         Label();
 
-        it.on('pointerup', () => dropdown.close());
+        it.on('click', () => dropdown.close());
 
         amount.on('change', onAmountChange);
 
