@@ -48,6 +48,8 @@ export function logic(args) {
         if (scores > 0) await waitByFrameTime(60);
 
         if (freeGame) {
+            app.user.lastWin = 0;
+
             await showFreeGame();
 
             counter.show();
@@ -64,7 +66,7 @@ export function logic(args) {
                     payLine,
                 });
 
-                counter.value -= 1;
+                if (counter.value > 0) counter.value -= 1;
 
                 totalScores += scores;
 

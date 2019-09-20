@@ -313,7 +313,7 @@ function Counter(it) {
     async function show() {
         await fadeIn({targets: it}).finished;
 
-        value = 9;
+        it.value = 9;
     }
 
     async function hide() {
