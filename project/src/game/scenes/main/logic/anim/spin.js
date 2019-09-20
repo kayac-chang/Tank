@@ -94,12 +94,16 @@ export async function spin({reels, symbols}) {
 
             reel.pos -= offSet.pos;
 
+            let duration = getSpinStopInterval();
+
+            if (skip && !isMaybeBonus(reel)) duration = 0;
+
             reel.anim =
                 anime({
                     targets: reel,
                     pos: '+=' + symbols.length,
                     easing: 'easeOutBack',
-                    duration: skip && !isMaybeBonus(reel) ? 0 : getSpinStopInterval(),
+                    duration,
                 });
 
             await reel.anim.finished;
@@ -122,7 +126,7 @@ export async function spin({reels, symbols}) {
         async function maybeBonus(reelIndex) {
             app.emit('MaybeBonus', reelIndex);
 
-            await waitByFrameTime(500);
+            await waitByFrameTime(1000);
         }
     }
 }

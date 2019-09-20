@@ -43,6 +43,8 @@ export function SpinButton(it) {
     return it;
 
     function onIdle() {
+        if (auto.count === 0) app.user.auto = 0;
+
         state = State(it);
 
         state.next();
@@ -51,11 +53,9 @@ export function SpinButton(it) {
     async function play() {
         app.sound.play('spin');
 
-        if (auto.count > 0) {
-            auto.count -= 1;
+        if (auto.count > 0) auto.count -= 1;
 
-            app.once('Idle', play);
-        }
+        if (auto.count > 0) app.once('Idle', play);
 
         await state.next();
     }
