@@ -16,6 +16,8 @@ export function SpinButton(it) {
 
     let state = undefined;
 
+    let originCash = app.user.cash;
+
     app.on('QuickStop', () => {
         app.user.auto = 0;
 
@@ -37,6 +39,8 @@ export function SpinButton(it) {
     });
 
     app.on('UserAutoChange', () => {
+        originCash = app.user.cash;
+
         auto.count = app.user.autoOptions[app.user.auto];
     });
 
@@ -58,6 +62,43 @@ export function SpinButton(it) {
         if (auto.count > 0) app.once('Idle', play);
 
         await state.next();
+    }
+
+    function check(scores) {
+        const condition = app.user.autoStopCondition;
+
+        return [
+            onAnyWin,
+            onSingleWinOfAtLeast,
+            ifCashIncreasesBy,
+            ifCashDecreasesBy,
+        ].some(isTrue);
+
+        function isTrue(func) {
+            return func() === true;
+        }
+
+        function onAnyWin() {
+            if (condition['on_any_win']) return scores > 0;
+        }
+
+        function onSingleWinOfAtLeast() {
+            const threshold = condition['on_single_win_of_at_least'];
+
+            if (threshold) return scores > threshold;
+        }
+
+        function ifCashIncreasesBy() {
+            const threshold = condition['if_cash_increases_by'];
+
+            if (threshold) return (app.user.cash - originCash) >= threshold;
+        }
+
+        function ifCashDecreasesBy() {
+            const threshold = condition['if_cash_decreases_by'];
+
+            if (threshold) return (originCash - app.user.cash) <= threshold;
+        }
     }
 }
 
@@ -166,39 +207,4 @@ function insufficientBalance() {
     return app.user.cash < app.user.currentBet;
 }
 
-function check(scores) {
-    const condition = app.user.autoStopCondition;
 
-    return [
-        onAnyWin,
-        onSingleWinOfAtLeast,
-        ifCashIncreasesBy,
-        ifCashDecreasesBy,
-    ].some(isTrue);
-
-    function isTrue(func) {
-        return func() === true;
-    }
-
-    function onAnyWin() {
-        if (condition['on_any_win']) return scores > 0;
-    }
-
-    function onSingleWinOfAtLeast() {
-        const threshold = condition['on_single_win_of_at_least'];
-
-        if (threshold) return scores > threshold;
-    }
-
-    function ifCashIncreasesBy() {
-        const threshold = condition['if_cash_increases_by'];
-
-        if (threshold) return app.user.cash >= threshold;
-    }
-
-    function ifCashDecreasesBy() {
-        const threshold = condition['if_cash_decreases_by'];
-
-        if (threshold) return app.user.cash <= threshold;
-    }
-}
