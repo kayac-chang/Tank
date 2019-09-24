@@ -97,7 +97,7 @@ export function SpinButton(it) {
         function ifCashDecreasesBy() {
             const threshold = condition['if_cash_decreases_by'];
 
-            if (threshold) return (originCash - app.user.cash) <= threshold;
+            if (threshold) return (originCash - app.user.cash) >= threshold;
         }
     }
 }
