@@ -68,6 +68,7 @@ export function SpinButton(it) {
         const condition = app.user.autoStopCondition;
 
         return [
+            insufficientBalance,
             onAnyWin,
             onSingleWinOfAtLeast,
             ifCashIncreasesBy,
