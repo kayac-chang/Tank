@@ -1,18 +1,13 @@
-import {Sprite} from 'pixi.js';
-import hotkeys from 'hotkeys-js';
+import {Tank} from './components/Tank';
 
 export function create() {
-    const {textures} = app.resource.get('tanks');
+    const tank = Tank();
 
-    const sp = new Sprite(textures['tank_blue.png']);
+    tank.position.set(500, 500);
 
-    sp.position.set(500, 500);
-
-    app.stage.addChild(sp);
-
-    hotkeys('*', function ({key}) {
-        if (key === 'w') {
-            sp.position.y -= 1;
-        }
-    });
+    app.stage.addChild(tank);
 }
+
+
+
+
