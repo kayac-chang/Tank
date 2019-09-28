@@ -50,8 +50,8 @@ function right() {
 
 function Shot() {
     const view = new AnimatedSprite(values(res('shot').textures));
-    const it =
-        assign(view, {fire, hide});
+
+    const it = assign(view, {fire, hide});
 
     it.animationSpeed = 0.33;
 
