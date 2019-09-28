@@ -1,6 +1,6 @@
 {"frames": {
 
-"0.png":
+"shot0.png":
 {
 	"frame": {"x":19,"y":1,"w":8,"h":26},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":8,"h":26},
 	"anchor": {"x":0.5,"y":0}
 },
-"1.png":
+"shot1.png":
 {
 	"frame": {"x":29,"y":1,"w":20,"h":25},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":20,"h":25},
 	"anchor": {"x":0.5,"y":0}
 },
-"2.png":
+"shot2.png":
 {
 	"frame": {"x":1,"y":1,"w":16,"h":28},
 	"rotated": false,
@@ -27,7 +27,7 @@
 	"sourceSize": {"w":16,"h":28},
 	"anchor": {"x":0.5,"y":0}
 },
-"3.png":
+"shot3.png":
 {
 	"frame": {"x":51,"y":1,"w":21,"h":38},
 	"rotated": true,
