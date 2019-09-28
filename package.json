@@ -1,7 +1,7 @@
 {
-  "name": "cyberpunk",
+  "name": "tank",
   "version": "1.0.0",
-  "description": "Slot Game CyberPunk made by Kayac",
+  "description": "Tank Game made by Kayac",
   "scripts": {
     "dos2unix": "find src -type f -exec sed -i 's/^M$//' {} +",
     "clean": "rm -rf dist",
@@ -57,22 +57,13 @@
     "animejs": "^3.0.1",
     "axios": "^0.19.0",
     "core-js": "^3.1.4",
-    "easing-functions": "^1.0.1",
     "eventemitter3": "^3.1.2",
     "howler": "^2.1.2",
-    "i18next": "^17.0.3",
-    "i18next-browser-languagedetector": "^3.0.1",
-    "i18next-fetch-backend": "^2.2.0",
     "pixi-filters": "^2.7.1",
-    "pixi-particles": "^4.1.2",
-    "pixi.js": "^4.8.7",
-    "pixi_fairygui": "^0.4.20",
+    "pixi.js": "^5.1.5",
     "ramda": "^0.26.1",
     "regenerator-runtime": "^0.13.2",
     "screenfull": "^4.2.0",
-    "sweetalert2": "^8.11.5",
-    "webfontloader": "^1.6.28",
-    "xml-js": "^1.6.11",
-    "zlibjs": "^0.3.1"
+    "webfontloader": "^1.6.28"
   }
 }

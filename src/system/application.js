@@ -6,13 +6,11 @@ import {Sound} from './modules/sound';
 import {Network} from './modules/network';
 import {Resource} from './modules/resource';
 import {resize} from './modules/screen';
-
-import Swal from './plugin/swal';
-import i18n from './plugin/i18n';
+import {select} from '@kayac/utils';
 
 const {defineProperties, assign, freeze} = Object;
 
-export async function App() {
+export function App() {
     const app =
         new Application({
             resolution: devicePixelRatio,
@@ -25,10 +23,6 @@ export async function App() {
     const sound = Sound(app);
     //  Network
     const network = Network();
-    //  Translate
-    const translate = await i18n.init();
-    //  Alert
-    const alert = Swal(translate);
 
     //  Service
     let service = undefined;
@@ -63,9 +57,6 @@ export async function App() {
             get: () => control,
             set: (newControl) => control = newControl,
         },
-        translate: {
-            get: () => translate,
-        },
     });
 
     //  EventCore
@@ -96,6 +87,11 @@ export async function App() {
     //  Event Binding
     global.addEventListener('resize', app.resize);
     global.addEventListener('orientationchange', app.resize);
+
+    //  Init Canvas
+    select('#preload').remove();
+    select('#app').prepend(app.view);
+    app.resize();
 
     return freeze(app);
 }

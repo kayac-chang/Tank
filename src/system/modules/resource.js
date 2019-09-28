@@ -1,4 +1,4 @@
-import {loaders} from 'pixi.js';
+import {resources} from 'pixi.js';
 
 import {Howl} from 'howler';
 
@@ -57,9 +57,9 @@ export function Resource({loader}) {
                     tasks
                         .filter(({type}) => type === 'sound')
                         .map((res) => {
-                            const task = new loaders.Resource(
+                            const task = new resources.Resource(
                                 res.name, '', {
-                                    loadType: loaders.Resource.LOAD_TYPE.AUDIO,
+                                    loadType: resources.Resource.LOAD_TYPE.AUDIO,
                                 });
 
                             task.metadata = res;
@@ -83,7 +83,7 @@ export function Resource({loader}) {
     function SoundHandler(resource, next) {
         if (check(resource)) return next();
 
-        const {LOADING} = loaders.Resource.STATUS_FLAGS;
+        const {LOADING} = resources.Resource.STATUS_FLAGS;
         resource._setFlag(LOADING, true);
 
         const task = resource.metadata;
@@ -97,7 +97,7 @@ export function Resource({loader}) {
         function check(resource) {
             return (
                 !resource ||
-                resource.loadType !== loaders.Resource.LOAD_TYPE.AUDIO
+                resource.loadType !== resources.Resource.LOAD_TYPE.AUDIO
             );
         }
 
@@ -138,7 +138,6 @@ function WebFontLoader(resource, next) {
 
     function inactive() {
         console.error(resource);
-        resource.abort(message);
         next();
     }
 }
