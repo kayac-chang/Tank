@@ -10,6 +10,12 @@ async function main() {
 
         global.app = App();
 
+        const main = await import('./game/scenes/main');
+
+        await app.resource.load(main);
+
+        main.create();
+
         //
     } catch (error) {
         console.error(error);

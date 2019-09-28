@@ -1,4 +1,4 @@
-import {resources} from 'pixi.js';
+import {LoaderResource} from 'pixi.js';
 
 import {Howl} from 'howler';
 
@@ -57,9 +57,9 @@ export function Resource({loader}) {
                     tasks
                         .filter(({type}) => type === 'sound')
                         .map((res) => {
-                            const task = new resources.Resource(
+                            const task = new LoaderResource(
                                 res.name, '', {
-                                    loadType: resources.Resource.LOAD_TYPE.AUDIO,
+                                    loadType: LoaderResource.LOAD_TYPE.AUDIO,
                                 });
 
                             task.metadata = res;
@@ -83,7 +83,7 @@ export function Resource({loader}) {
     function SoundHandler(resource, next) {
         if (check(resource)) return next();
 
-        const {LOADING} = resources.Resource.STATUS_FLAGS;
+        const {LOADING} = LoaderResource.STATUS_FLAGS;
         resource._setFlag(LOADING, true);
 
         const task = resource.metadata;
@@ -97,7 +97,7 @@ export function Resource({loader}) {
         function check(resource) {
             return (
                 !resource ||
-                resource.loadType !== resources.Resource.LOAD_TYPE.AUDIO
+                resource.loadType !== LoaderResource.LOAD_TYPE.AUDIO
             );
         }
 
