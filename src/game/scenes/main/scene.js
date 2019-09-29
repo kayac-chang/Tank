@@ -1,7 +1,9 @@
 import {Tank} from './components/Tank';
+import {Crate} from './components/Obstacle/Crate';
 
 import {Viewport} from 'pixi-viewport';
 import {Control} from './Control';
+import {Physic} from './components/Base/Physic';
 
 export function create() {
     const scene = new Viewport({
@@ -15,7 +17,11 @@ export function create() {
 
     tank.position.set(500, 500);
 
-    scene.addChild(tank);
+    const crate = Crate();
+
+    crate.position.set(1000, 500);
+
+    scene.addChild(tank, crate);
 
     app.stage.addChild(scene);
 
@@ -26,6 +32,8 @@ export function create() {
         'd': turnRight,
         ' ': attack,
     });
+
+    Physic();
 
     function forward() {
         const unit = 1;

@@ -19,10 +19,10 @@ export function Light() {
 }
 
 function execute() {
-    this.alpha = 1;
+    this.visible = true;
     this.gotoAndPlay(0);
 }
 
 function reset() {
-    this.alpha = 0;
+    this.visible = false;
 }

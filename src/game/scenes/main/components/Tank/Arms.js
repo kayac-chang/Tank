@@ -17,16 +17,14 @@ export function Arms(it) {
     function fire() {
         light.execute();
 
-        shot();
-    }
-
-    function shot() {
         const bullet = spawn(it);
 
         const pos = light.getGlobalPosition();
+
         bullet.position.set(pos.x, pos.y);
         bullet.angle = it.angle;
 
         bullet.speed = 2;
     }
 }
+

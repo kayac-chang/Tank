@@ -1,0 +1,48 @@
+{"frames": {
+
+"crateMetal.png":
+{
+	"frame": {"x":1,"y":1,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":28},
+	"sourceSize": {"w":28,"h":28},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crateMetal_side.png":
+{
+	"frame": {"x":31,"y":1,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":28},
+	"sourceSize": {"w":28,"h":28},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crateWood.png":
+{
+	"frame": {"x":61,"y":1,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":28},
+	"sourceSize": {"w":28,"h":28},
+	"anchor": {"x":0.5,"y":0.5}
+},
+"crateWood_side.png":
+{
+	"frame": {"x":91,"y":1,"w":28,"h":28},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":28,"h":28},
+	"sourceSize": {"w":28,"h":28},
+	"anchor": {"x":0.5,"y":0.5}
+}},
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "crates.png",
+	"format": "RGBA8888",
+	"size": {"w":120,"h":30},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:bf4651ad04f0616970c2606c5da7a6cf:60727111d82fd0df3f2722d2f2060b34:903d5a8c338301bcf02826ab4713e267$"
+}
+}
