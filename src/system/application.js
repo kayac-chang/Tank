@@ -31,6 +31,9 @@ export function App() {
     //  Control
     let control = undefined;
 
+    //  Layers
+    const layers = {};
+
     //  Modules
     defineProperties(app, {
         resource: {
@@ -56,6 +59,9 @@ export function App() {
         control: {
             get: () => control,
             set: (newControl) => control = newControl,
+        },
+        layers: {
+            get: () => layers,
         },
     });
 
