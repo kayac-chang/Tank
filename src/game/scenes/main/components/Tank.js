@@ -7,11 +7,7 @@ const res = app.resource.get;
 
 export function Tank() {
     const view = new Sprite(res('tanks').textures['tank_blue.png']);
-    const body = Rectangle(view);
+    const body = Rectangle(view, {density: 1});
 
-    const it = GameObject({view, body});
-
-    it.position = {x: 500, y: 500};
-
-    return it;
+    return GameObject({view, body});
 }

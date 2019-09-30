@@ -52,6 +52,6 @@ export function Scene() {
     function add(child) {
         render.addChild(child.view);
 
-        physic.addChild(child.body);
+        physic.addChild(child.body.content);
     }
 }

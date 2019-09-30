@@ -7,6 +7,16 @@ export default function constructor({view, body}) {
     const it = create(GameObject.prototype);
 
     defineProperties(it, {
+        //
+        body: {
+            get() {
+                return body;
+            },
+            set(value) {
+                body = value;
+            },
+        },
+        //
         position: {
             get() {
                 return body.position;
@@ -19,11 +29,15 @@ export default function constructor({view, body}) {
                 view.position.set(x, y);
             },
         },
+        //
     });
 
-    assign(it, {view, body});
+    assign(it, {view});
 
     app.on('Update', update.bind(it));
+
+    // Init
+    body.rotation = view.rotation;
 
     return it;
 }
@@ -32,4 +46,6 @@ function update() {
     const {x, y} = this.body.position;
 
     this.view.position.set(x, y);
+
+    this.view.rotation = this.body.rotation;
 }
