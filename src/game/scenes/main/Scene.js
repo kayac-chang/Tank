@@ -9,7 +9,11 @@ function Physic() {
 
     //  Init
     Engine.run(engine);
-    frameLoop(() => Engine.update(engine));
+    frameLoop(() => {
+        Engine.update(engine);
+
+        app.emit('Update');
+    });
 
     //  World
     const {world} = engine;
@@ -35,12 +39,19 @@ export function Scene() {
     });
     app.stage.addChild(render);
 
+    const children = [];
+
     return {
-        add,
+        addChild(...child) {
+            children.push(...child);
+
+            child.forEach(add);
+        },
     };
 
-    function add(...children) {
-        physic.addChild(...children);
-        render.addChild(...children);
+    function add(child) {
+        render.addChild(child.view);
+
+        physic.addChild(child.body);
     }
 }

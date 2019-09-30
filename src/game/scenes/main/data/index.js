@@ -5,8 +5,3 @@ export function reserve() {
         ...(sprites),
     ];
 }
-
-export {
-
-};
-
