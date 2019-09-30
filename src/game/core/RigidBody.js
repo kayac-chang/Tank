@@ -1,4 +1,6 @@
-import {Bodies, Body, Vector} from 'matter-js';
+import {Bodies, Body} from 'matter-js';
+
+import Vector from './Vector';
 
 export function Rectangle({x, y, width, height}, options) {
     const body = Bodies.rectangle(x, y, width, height, options);
@@ -10,12 +12,10 @@ export function Rectangle({x, y, width, height}, options) {
         },
         //
         get position() {
-            const {x, y} = body.position;
-
-            return {x, y};
+            return Vector(body.position);
         },
-        set position({x, y}) {
-            const vector = Vector.create(x, y);
+        set position(value) {
+            const vector = Vector(value);
 
             Body.setPosition(body, vector);
         },
@@ -27,11 +27,11 @@ export function Rectangle({x, y, width, height}, options) {
             Body.setAngle(body, value);
         },
         //
-        addForce({x = 0, y = 0}) {
-            let vector = Vector.create(x, y);
-            vector = Vector.rotate(vector, body.angle);
-
-            body.force = vector;
+        addForce(value) {
+            body.force =
+                Vector(body.force)
+                    .add(value)
+                    .rotate(body.angle);
 
             return body.force;
         },
