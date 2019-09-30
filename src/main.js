@@ -15,7 +15,6 @@ async function main() {
         await app.resource.load(main);
 
         main.create();
-
         //
     } catch (error) {
         console.error(error);

@@ -3,7 +3,6 @@ import './styles/App.scss';
 import {Application} from 'pixi.js';
 import EventEmitter from 'eventemitter3';
 import {Sound} from './modules/sound';
-import {Network} from './modules/network';
 import {Resource} from './modules/resource';
 import {resize} from './modules/screen';
 import {select} from '@kayac/utils';
@@ -21,18 +20,6 @@ export function App() {
     const resource = Resource(app);
     //  Sound
     const sound = Sound(app);
-    //  Network
-    const network = Network();
-
-    //  Service
-    let service = undefined;
-    //  User
-    let user = undefined;
-    //  Control
-    let control = undefined;
-
-    //  Layers
-    const layers = {};
 
     //  Modules
     defineProperties(app, {
@@ -41,27 +28,6 @@ export function App() {
         },
         sound: {
             get: () => sound,
-        },
-        network: {
-            get: () => network,
-        },
-        alert: {
-            get: () => alert,
-        },
-        service: {
-            get: () => service,
-            set: (newService) => service = newService,
-        },
-        user: {
-            get: () => user,
-            set: (newUser) => user = newUser,
-        },
-        control: {
-            get: () => control,
-            set: (newControl) => control = newControl,
-        },
-        layers: {
-            get: () => layers,
         },
     });
 
