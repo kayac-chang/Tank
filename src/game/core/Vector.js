@@ -11,9 +11,7 @@ function add(value) {
 }
 
 export default function Vector({x = 0, y = 0}) {
-    const it = _.create(x, y);
-
-    return assign(it, {
+    return assign(_.create(x, y), {
         rotate, add,
     });
 }

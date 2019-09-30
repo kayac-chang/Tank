@@ -21,10 +21,14 @@ function Physic() {
     //  Top-Down
     world.gravity.y = 0;
 
-    return {addChild};
+    return {addChild, removeChild};
 
     function addChild(...children) {
         return World.add(world, ...children);
+    }
+
+    function removeChild(...children) {
+        return World.remove(world, ...children);
     }
 }
 
@@ -43,9 +47,15 @@ export function Scene() {
 
     return {
         addChild(...child) {
-            children.push(...child);
-
             child.forEach(add);
+
+            children.push(...child);
+        },
+
+        removeChild(child) {
+            remove(child);
+
+            children.slice(children.indexOf(child), 1);
         },
     };
 
@@ -53,5 +63,11 @@ export function Scene() {
         render.addChild(child.view);
 
         physic.addChild(child.body.content);
+    }
+
+    function remove(child) {
+        render.removeChild(child.view);
+
+        physic.removeChild(child.body.content);
     }
 }
