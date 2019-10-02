@@ -21,6 +21,9 @@ export function App() {
     //  Sound
     const sound = Sound(app);
 
+    //  Scenes
+    const scenes = {};
+
     //  Modules
     defineProperties(app, {
         resource: {
@@ -28,6 +31,9 @@ export function App() {
         },
         sound: {
             get: () => sound,
+        },
+        scenes: {
+            get: () => scenes,
         },
     });
 

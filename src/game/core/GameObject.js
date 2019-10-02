@@ -37,6 +37,7 @@ export default function constructor({sprite, body}) {
         },
 
         addChild,
+        removeChild,
     };
 
     app.on('Update', update.bind(it));
@@ -57,4 +58,8 @@ function update() {
 
 function addChild(...children) {
     this.view.addChild(...children);
+}
+
+function removeChild(child) {
+    this.view.removeChild(child);
 }

@@ -1,7 +1,11 @@
 //  Imports
 const {resolve} = require('path');
 const {
-    ProgressPlugin, DefinePlugin, HashedModuleIdsPlugin, optimize,
+    ProgressPlugin,
+    DefinePlugin,
+    HashedModuleIdsPlugin,
+    optimize,
+    ProvidePlugin,
 } = require('webpack');
 const {ModuleConcatenationPlugin} = optimize;
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -45,12 +49,11 @@ module.exports = function(env) {
                     vendor: {
                         test: /[\\/]node_modules[\\/]/,
                         name(module) {
-                            const packageName =
-                                module.context.match(
-                                    /[\\/]node_modules[\\/](.*?)([\\/]|$)/,
-                                )[1];
-
-                            return `${packageName.replace('@', '')}`;
+                            return (
+                                module.context
+                                    .match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]
+                                    .replace('@', '')
+                            );
                         },
                     },
                 },
@@ -160,6 +163,11 @@ module.exports = function(env) {
         plugins: [
             //  Building Progress
             new ProgressPlugin(),
+
+            //  Global Alias
+            new ProvidePlugin({
+                PIXI: 'pixi.js',
+            }),
 
             //  Module Bundle like Roll up
             new ModuleConcatenationPlugin(),

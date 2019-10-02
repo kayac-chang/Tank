@@ -13,7 +13,35 @@ function Bullet() {
 
     const body = Rectangle(sprite, {density: 10, frictionAir: 0.05});
 
-    return GameObject({sprite, body});
+    const it = GameObject({sprite, body});
+
+    const explosion = new AnimatedSprite(values(res('explosion').textures));
+
+    explosion.animationSpeed = 0.33;
+
+    explosion.loop = false;
+
+    explosion.alpha = 0;
+
+    it.addChild(explosion);
+
+    return assign(it, {bomb});
+
+    function bomb() {
+        sprite.alpha = 0;
+
+        explosion.alpha = 1;
+
+        explosion.gotoAndPlay(0);
+
+        return new Promise((resolve) => {
+            explosion.onComplete = () => {
+                it.removeChild(explosion);
+
+                resolve();
+            };
+        });
+    }
 }
 
 function Arms(it) {
@@ -33,7 +61,7 @@ function Arms(it) {
 
     return assign(it, {fire});
 
-    function fire() {
+    async function fire() {
         shot.alpha = 1;
 
         shot.gotoAndPlay(0);
@@ -46,6 +74,14 @@ function Arms(it) {
 
         it.body.addForce({y: -8});
         bullet.body.addForce({y: -180});
+
+        app.scenes['main'].addChild(bullet);
+
+        await waitByFrameTime(360);
+
+        await bullet.bomb();
+
+        app.scenes['main'].removeChild(bullet);
 
         return bullet;
     }
