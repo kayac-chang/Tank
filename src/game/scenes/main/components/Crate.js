@@ -1,13 +1,15 @@
 import {Sprite} from 'pixi.js';
-import {Rectangle} from '../../../core/RigidBody';
+import {Rectangle} from '../../../core/physic/RigidBody';
 import GameObject from '../../../core/GameObject';
 
 const res = app.resource.get;
 
 export function Crate() {
-    const sprite = new Sprite(res('crates').textures['crateMetal.png']);
+    const it = GameObject();
 
-    const body = Rectangle(sprite, {density: 5, frictionAir: 0.05});
+    it.sprite = new Sprite(res('crates').textures['crateMetal.png']);
 
-    return GameObject({sprite, body});
+    it.rigidBody = Rectangle(it, {density: 0.1, frictionAir: 0.05});
+
+    return it;
 }

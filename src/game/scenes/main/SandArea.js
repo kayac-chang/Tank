@@ -1,4 +1,4 @@
-import {TileMap} from './TileMap';
+import {TileMap} from '../../core/TileMap';
 
 const res = app.resource.get;
 

@@ -1,104 +1,142 @@
 import {Sprite, AnimatedSprite} from 'pixi.js';
 
 import GameObject from '../../../core/GameObject';
-import {Rectangle} from '../../../core/RigidBody';
-import {degreeToRadian, waitByFrameTime} from '@kayac/utils';
+import {Rectangle} from '../../../core/physic';
+
+import {degreeToRadian} from '@kayac/utils';
+import {Body, Vector} from 'matter-js';
 
 const res = app.resource.get;
 
-const {values, assign} = Object;
+const {assign, values} = Object;
+
+function turn(it, degree) {
+    return Body.rotate(it.rigidBody, degreeToRadian(degree));
+}
+
+function bomb(it, {x, y}) {
+    const bomb = new AnimatedSprite(values(res('explosion').textures));
+
+    bomb.position.set(x, y);
+
+    bomb.animationSpeed = 0.33;
+
+    bomb.loop = false;
+
+    bomb.gotoAndPlay(0);
+
+    it.addChild(bomb);
+
+    return new Promise((resolve) => {
+        bomb.onComplete = () => {
+            it.removeChild(bomb);
+
+            resolve();
+        };
+    });
+}
 
 function Bullet() {
-    const sprite = new Sprite(res('bullets').textures['bullet_1.png']);
+    const it = GameObject();
 
-    const body = Rectangle(sprite, {density: 10, frictionAir: 0.05});
+    const texture = res('bullets').textures['bullet_1.png'];
 
-    const it = GameObject({sprite, body});
+    texture.rotate = 4;
 
-    const explosion = new AnimatedSprite(values(res('explosion').textures));
+    it.sprite = new Sprite(texture);
 
-    explosion.animationSpeed = 0.33;
+    it.rigidBody = Rectangle(it, {density: 0.05, frictionAir: 0.05});
 
-    explosion.loop = false;
+    it.on('collisionActive', clear);
 
-    explosion.alpha = 0;
+    return it;
 
-    it.addChild(explosion);
+    function clear() {
+        it.rigidBody = undefined;
+        app.scenes['main'].removeChild(it);
 
-    return assign(it, {bomb});
-
-    function bomb() {
-        sprite.alpha = 0;
-
-        explosion.alpha = 1;
-
-        explosion.gotoAndPlay(0);
-
-        return new Promise((resolve) => {
-            explosion.onComplete = () => {
-                it.removeChild(explosion);
-
-                resolve();
-            };
-        });
+        bomb(app.scenes['main'], it.transformer);
     }
 }
 
+function move(it, {x = 0, y = 0}) {
+    const vec = Vector.create(x, y);
+
+    const force = Vector.rotate(vec, it.rigidBody.angle);
+
+    return Body.applyForce(
+        it.rigidBody,
+        it.rigidBody.position,
+        force
+    );
+}
+
 function Arms(it) {
-    const shot = new AnimatedSprite(values(res('shot').textures));
+    const light = new AnimatedSprite(values(res('shot').textures));
 
-    shot.position.y = it.height / 2;
+    light.animationSpeed = 0.33;
 
-    shot.animationSpeed = 0.33;
+    light.loop = false;
 
-    shot.loop = false;
+    light.alpha = 0;
 
-    shot.onComplete = hide;
+    light.onComplete = () => light.alpha = 0;
 
-    hide();
+    light.position.y = it.height / 2;
 
-    it.addChild(shot);
+    it.addChild(light);
 
     return assign(it, {fire});
 
     async function fire() {
-        shot.alpha = 1;
+        light.alpha = 1;
 
-        shot.gotoAndPlay(0);
+        light.gotoAndPlay(0);
 
         const bullet = Bullet();
 
-        bullet.body.rotation = it.body.rotation + degreeToRadian(180);
+        const pos =
+            app.scenes['main']
+                .toLocal(light.getGlobalPosition());
 
-        bullet.position = shot.getGlobalPosition();
+        assign(bullet.transformer, {x: pos.x, y: pos.y});
 
-        it.body.addForce({y: -8});
-        bullet.body.addForce({y: -180});
+        Body.setAngle(bullet.rigidBody, it.rotation);
+
+        move(bullet, {y: 1});
 
         app.scenes['main'].addChild(bullet);
 
-        await waitByFrameTime(360);
-
-        await bullet.bomb();
-
-        app.scenes['main'].removeChild(bullet);
-
         return bullet;
-    }
-
-    function hide() {
-        shot.alpha = 0;
     }
 }
 
 export function Tank() {
-    const sprite = new Sprite(res('tanks').textures['tank_blue.png']);
+    const it = GameObject();
 
-    const body = Rectangle(sprite, {density: 5, frictionAir: 0.05});
+    it.sprite = new Sprite(res('tanks').textures['tank_blue.png']);
 
-    const it = GameObject({sprite, body});
+    it.rigidBody = Rectangle(it, {density: 0.1, frictionAir: 0.05});
 
     Arms(it);
 
-    return it;
+    return assign(it, {
+        forward, backward, turnLeft, turnRight,
+    });
+
+    function forward() {
+        move(it, {y: 1});
+    }
+
+    function backward() {
+        move(it, {y: -1});
+    }
+
+    function turnLeft() {
+        turn(it, -5);
+    }
+
+    function turnRight() {
+        turn(it, 5);
+    }
 }

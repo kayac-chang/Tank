@@ -68,7 +68,6 @@ module.exports = function(env) {
                     test: /\.js$/,
                     sideEffects: false,
                     exclude: /(node_modules|bower_components)/,
-                    include: /node_modules\/pixi_fairygui/,
                     use: [
                         //  PreCompile ===================================
                         {
@@ -163,11 +162,6 @@ module.exports = function(env) {
         plugins: [
             //  Building Progress
             new ProgressPlugin(),
-
-            //  Global Alias
-            new ProvidePlugin({
-                PIXI: 'pixi.js',
-            }),
 
             //  Module Bundle like Roll up
             new ModuleConcatenationPlugin(),

@@ -1,4 +1,4 @@
-import {Scene} from './Scene';
+import {Scene} from './components/Scene';
 import {Tank} from './components/Tank';
 
 import {Keymap} from '../../core/Keymap';

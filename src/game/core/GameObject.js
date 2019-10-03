@@ -1,65 +1,93 @@
+import {construct} from 'ramda';
+
 import {Container} from 'pixi.js';
 
+import {Body} from 'matter-js';
 
-export default function constructor({sprite, body}) {
-    const view = new Container();
+import {addSubject, removeSubject} from './physic';
 
-    view.addChild(sprite);
+class Transformer {
+    //
+    #gameObject;
 
-    const it = {
-        //
-        get body() {
-            return body;
-        },
-        //
-        get view() {
-            return view;
-        },
-        //
-        get position() {
-            return body.position;
-        },
-        set position({x, y}) {
-            x = x || body.position.x;
-            y = y || body.position.y;
+    constructor(gameObject) {
+        this.#gameObject = gameObject;
+    }
 
-            body.position = {x, y};
-            view.position.set(x, y);
-        },
-        //
-        get height() {
-            return view.height;
-        },
-        set height(value) {
-            view.height = value;
+    get x() {
+        return this.#gameObject.position.x;
+    }
 
-            body.scale = view.scale;
-        },
+    set x(value) {
+        this.#gameObject.position.x = value;
 
-        addChild,
-        removeChild,
-    };
+        sync(this.#gameObject);
+    }
 
-    app.on('Update', update.bind(it));
+    get y() {
+        return this.#gameObject.position.y;
+    }
 
-    // Init
-    body.rotation = view.rotation;
+    set y(value) {
+        this.#gameObject.position.y = value;
 
-    return it;
+        sync(this.#gameObject);
+    }
+
+    get rotation() {
+        return this.#gameObject.rotation;
+    }
+
+    set rotation(value) {
+        this.#gameObject.rotation = value;
+
+        sync(this.#gameObject);
+    }
 }
 
-function update() {
-    const {x, y} = this.body.position;
+function sync({rigidBody, position, rotation}) {
+    if (!rigidBody) return;
 
-    this.view.position.set(x, y);
+    rigidBody.angle = rotation;
 
-    this.view.rotation = this.body.rotation;
+    Body.setPosition(rigidBody, position);
 }
 
-function addChild(...children) {
-    this.view.addChild(...children);
+class GameObject extends Container {
+    //
+    transformer = new Transformer(this);
+
+    #sprite;
+
+    #rigidBody;
+
+    get sprite() {
+        return this.#sprite;
+    }
+
+    set sprite(sprite) {
+        this.removeChild(this.#sprite);
+
+        this.#sprite = sprite;
+
+        this.addChild(sprite);
+    }
+
+    get rigidBody() {
+        return this.#rigidBody;
+    }
+
+    set rigidBody(rigidBody) {
+        if (rigidBody) {
+            this.#rigidBody = rigidBody;
+
+            addSubject(this);
+        } else {
+            removeSubject(this);
+
+            this.#rigidBody = undefined;
+        }
+    }
 }
 
-function removeChild(child) {
-    this.view.removeChild(child);
-}
+export default construct(GameObject);
