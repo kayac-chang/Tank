@@ -26,11 +26,17 @@ const engine = (function main() {
     Events.on(engine, 'collisionActive', (event) => {
         for (const {bodyA, bodyB} of event.pairs) {
             //
+
+            let tarA = undefined;
+            let tarB = undefined;
+
             for (const it of subjects) {
-                if ([bodyA, bodyB].includes(it.rigidBody)) {
-                    it.emit('collisionActive');
-                }
+                if (bodyA === it.rigidBody) tarA = it;
+                if (bodyB === it.rigidBody) tarB = it;
             }
+
+            tarA.emit('CollisionActive', tarB);
+            tarB.emit('CollisionActive', tarA);
         }
     });
 

@@ -88,6 +88,14 @@ class GameObject extends Container {
             this.#rigidBody = undefined;
         }
     }
+
+    destroy(options) {
+        this.rigidBody = undefined;
+
+        this.removeAllListeners();
+
+        super.destroy(options);
+    }
 }
 
 export default construct(GameObject);

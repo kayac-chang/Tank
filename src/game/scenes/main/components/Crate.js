@@ -11,5 +11,13 @@ export function Crate() {
 
     it.rigidBody = Rectangle(it, {density: 0.1, frictionAir: 0.05});
 
+    let health = 3;
+
+    it.on('CollisionActive', () => {
+        health -= 1;
+
+        if (!health) it.destroy();
+    });
+
     return it;
 }

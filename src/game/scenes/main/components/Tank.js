@@ -47,15 +47,14 @@ function Bullet() {
 
     it.rigidBody = Rectangle(it, {density: 0.05, frictionAir: 0.05});
 
-    it.on('collisionActive', clear);
+    it.on('CollisionActive', clear);
 
     return it;
 
     function clear() {
-        it.rigidBody = undefined;
-        app.scenes['main'].removeChild(it);
-
         bomb(app.scenes['main'], it.transformer);
+
+        it.destroy();
     }
 }
 
@@ -106,8 +105,6 @@ function Arms(it) {
         move(bullet, {y: 1});
 
         app.scenes['main'].addChild(bullet);
-
-        return bullet;
     }
 }
 
