@@ -20,6 +20,8 @@ const engine = (function main() {
 
             subject.rotation = subject.rigidBody.angle;
         });
+
+        app.emit('Update');
     });
 
     //  on Collision Active
