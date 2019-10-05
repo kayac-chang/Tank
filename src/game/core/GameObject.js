@@ -43,14 +43,21 @@ class Transformer {
 
         sync(this.#gameObject);
     }
+
+    set(x, y) {
+        this.#gameObject.position.x = x;
+        this.#gameObject.position.y = y;
+
+        sync(this.#gameObject);
+    }
 }
 
-function sync({rigidBody, position, rotation}) {
-    if (!rigidBody) return;
+function sync(gameObject) {
+    if (!gameObject.rigidBody) return;
 
-    rigidBody.angle = rotation;
+    gameObject.rigidBody.angle = gameObject.rotation;
 
-    Body.setPosition(rigidBody, position);
+    Body.setPosition(gameObject.rigidBody, gameObject.position);
 }
 
 class GameObject extends Container {
@@ -80,6 +87,8 @@ class GameObject extends Container {
     set rigidBody(rigidBody) {
         if (rigidBody) {
             this.#rigidBody = rigidBody;
+
+            rigidBody.gameObject = this;
 
             addSubject(this);
         } else {

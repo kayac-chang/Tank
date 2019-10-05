@@ -20,6 +20,7 @@ const structure = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+
 export function SandArea() {
     return TileMap({
         textureMap: [

@@ -13,7 +13,7 @@ export function Crate() {
 
     let health = 3;
 
-    it.on('CollisionActive', () => {
+    it.on('CollisionStart', () => {
         health -= 1;
 
         if (!health) it.destroy();

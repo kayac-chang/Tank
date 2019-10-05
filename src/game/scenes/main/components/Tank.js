@@ -47,7 +47,7 @@ function Bullet() {
 
     it.rigidBody = Rectangle(it, {density: 0.05, frictionAir: 0.05});
 
-    it.on('CollisionActive', clear);
+    it.on('CollisionStart', clear);
 
     return it;
 
@@ -110,6 +110,8 @@ function Arms(it) {
 
 export function Tank() {
     const it = GameObject();
+
+    it.name = 'Tank';
 
     it.sprite = new Sprite(res('tanks').textures['tank_blue.png']);
 

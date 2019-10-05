@@ -10,6 +10,8 @@ export function TileMap({textureMap, structure}) {
         row.forEach((key, colIdx) => {
             const sprite = new Sprite(textureMap[key]);
 
+            sprite.coordinate = {x: colIdx, y: rowIdx};
+
             sprite.position.set(
                 sprite.width * colIdx,
                 sprite.height * rowIdx

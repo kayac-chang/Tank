@@ -1,18 +1,19 @@
-import {Scene, Tank, Crate} from './components';
+import {Crate, Scene, Tank} from './components';
 
 import {SandArea} from './SandArea';
 import {Keymap} from '../../core/Keymap';
 
 import {Container} from 'pixi.js';
 
+const table = [
+    [[-1, -1], [0, -1], [1, -1]],
+    [[-1, 0], [0, 0], [1, 0]],
+    [[-1, 1], [0, 1], [1, 1]],
+];
+
+
 function Background() {
     const it = new Container();
-
-    const table = [
-        [[-1, -1], [0, -1], [1, -1]],
-        [[-1, 0], [0, 0], [1, 0]],
-        [[-1, 1], [0, 1], [1, 1]],
-    ];
 
     const targets =
         table.flatMap((row) => {
@@ -35,6 +36,46 @@ function Background() {
     return it;
 }
 
+function setObject(area) {
+    const floorPlan = [
+        [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    ];
+
+    const result = [];
+
+    area.children.forEach((it) => {
+        const {x, y} = it.coordinate;
+
+        if (floorPlan[y][x] === 1) {
+            const crate = Crate();
+
+            const {x, y} = it.getGlobalPosition();
+
+            console.log(x, y);
+
+            crate.transformer.set(x, y);
+
+            result.push(crate);
+        }
+    });
+
+    return result;
+}
+
 export function create() {
     const scene = Scene();
 
@@ -42,21 +83,33 @@ export function create() {
 
     const tank = Tank();
 
-    tank.transformer.x = 0;
-    tank.transformer.y = 0;
+    tank.transformer.x = 500;
+    tank.transformer.y = 500;
 
     scene.follow(tank);
 
-    const crate = Crate();
-
-    crate.transformer.x = 50;
-    crate.transformer.y = 0;
-
     const background = Background();
 
-    const {width, height} = background.children[0];
+    const objects =
+        background.children.flatMap(setObject);
 
-    scene.addChild(background, tank, crate);
+    scene.addChild(background, tank, ...objects);
+
+    Keymap({
+        'w': () => {
+            tank.forward();
+            update();
+        },
+        's': () => {
+            tank.backward();
+            update();
+        },
+        'a': () => tank.turnLeft(),
+        'd': () => tank.turnRight(),
+        'space': () => tank.fire(),
+    });
+
+    const {width, height} = background.children[0];
 
     let origin =
         background.children
@@ -66,45 +119,60 @@ export function create() {
                 return x === 0 && y === 0;
             });
 
-    Keymap({
-        'w': () => {
-            tank.forward();
+    function update() {
+        const dis = {
+            x: tank.x - origin.x,
+            y: tank.y - origin.y,
+        };
 
-            const dis = {
-                x: tank.x - origin.x,
-                y: tank.y - origin.y,
+        const halfWidth = width / 2;
+        const halfHeight = height / 2;
+
+        if (
+            Math.abs(dis.x) >= halfWidth ||
+            Math.abs(dis.y) >= halfHeight
+        ) {
+            const tar = {
+                x: Math.trunc(dis.x / halfWidth),
+                y: Math.trunc(dis.y / halfHeight),
             };
 
-            const halfWidth = width / 2;
-            const halfHeight = height / 2;
+            origin =
+                background.children
+                    .find(({id}) => {
+                        const {x, y} = id;
 
-            if (
-                Math.abs(dis.x) >= halfWidth ||
-                Math.abs(dis.y) >= halfHeight
-            ) {
-                const tar = {
-                    x: Math.trunc(dis.x / halfWidth),
-                    y: Math.trunc(dis.y / halfHeight),
-                };
+                        return x === tar.x && y === tar.y;
+                    });
 
-                origin =
-                    background.children
-                        .find(({id}) => {
-                            const {x, y} = id;
+            background.children
+                .forEach((child) => {
+                    child.id.x -= tar.x;
+                    child.id.y -= tar.y;
+                });
 
-                            return x === tar.x && y === tar.y;
+            table.forEach((row) => {
+                //
+                row.forEach(([x, y]) => {
+                    //
+                    const tar =
+                        background.children.find(({id}) => {
+                            return x === id.x && y === id.y;
                         });
 
-                background.children
-                    .forEach((child) => {
-                        child.id.x -= tar.x;
-                        child.id.y -= tar.y;
-                    });
-            }
-        },
-        's': () => tank.backward(),
-        'a': () => tank.turnLeft(),
-        'd': () => tank.turnRight(),
-        'space': () => tank.fire(),
-    });
+                    if (!tar) {
+                        const area = SandArea();
+
+                        area.id = {x, y};
+
+                        area.x = area.width * x + origin.x;
+                        area.y = area.height * y + origin.y;
+                        area.pivot.set(area.width / 2, area.height / 2);
+
+                        background.addChild(area);
+                    }
+                });
+            });
+        }
+    }
 }
