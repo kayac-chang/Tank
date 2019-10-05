@@ -5,10 +5,6 @@ import {Keymap} from '../../core/Keymap';
 
 import {Container} from 'pixi.js';
 
-// import '@kayac/utils';
-
-import {equals} from 'ramda';
-
 function Background() {
     const it = new Container();
 
@@ -24,9 +20,11 @@ function Background() {
             return row.map(([x, y]) => {
                 const area = SandArea();
 
-                area.name = [x, y];
+                area.id = {x, y};
+
                 area.x = area.width * x;
                 area.y = area.height * y;
+                area.pivot.set(area.width / 2, area.height / 2);
 
                 return area;
             });
@@ -44,65 +42,69 @@ export function create() {
 
     const tank = Tank();
 
-    tank.transformer.x = 500;
-    tank.transformer.y = 500;
+    tank.transformer.x = 0;
+    tank.transformer.y = 0;
 
     scene.follow(tank);
 
     const crate = Crate();
 
-    crate.transformer.x = 1000;
-    crate.transformer.y = 500;
+    crate.transformer.x = 50;
+    crate.transformer.y = 0;
 
     const background = Background();
 
+    const {width, height} = background.children[0];
+
     scene.addChild(background, tank, crate);
 
+    let origin =
+        background.children
+            .find(({id}) => {
+                const {x, y} = id;
+
+                return x === 0 && y === 0;
+            });
+
     Keymap({
-        'w': () => tank.forward(),
+        'w': () => {
+            tank.forward();
+
+            const dis = {
+                x: tank.x - origin.x,
+                y: tank.y - origin.y,
+            };
+
+            const halfWidth = width / 2;
+            const halfHeight = height / 2;
+
+            if (
+                Math.abs(dis.x) >= halfWidth ||
+                Math.abs(dis.y) >= halfHeight
+            ) {
+                const tar = {
+                    x: Math.trunc(dis.x / halfWidth),
+                    y: Math.trunc(dis.y / halfHeight),
+                };
+
+                origin =
+                    background.children
+                        .find(({id}) => {
+                            const {x, y} = id;
+
+                            return x === tar.x && y === tar.y;
+                        });
+
+                background.children
+                    .forEach((child) => {
+                        child.id.x -= tar.x;
+                        child.id.y -= tar.y;
+                    });
+            }
+        },
         's': () => tank.backward(),
         'a': () => tank.turnLeft(),
         'd': () => tank.turnRight(),
         'space': () => tank.fire(),
     });
-
-    let lastArea = undefined;
-    tank.area = [0, 0];
-
-    app.on('Update', () => {
-        background.children.forEach((child) => {
-            if (hit(tank, child) && !equals(tank.area, child.name)) {
-                tank.area = child.name;
-
-                console.log(child.name);
-                // background.emit('Spawn', child.name);
-            }
-        });
-    });
 }
-
-function hit(tarA, tarB) {
-    [tarA, tarB] = [tarA, tarB].map(toDetail);
-
-    const vx = tarA.centerX - tarB.centerX;
-    const vy = tarA.centerY - tarB.centerY;
-
-    const combinedHalfWidths = tarA.halfWidth + tarB.halfWidth;
-    const combinedHalfHeights = tarA.halfHeight + tarB.halfHeight;
-
-    return Math.abs(vx) < combinedHalfWidths && Math.abs(vy) < combinedHalfHeights;
-
-    function toDetail(target) {
-        const halfWidth = target.width / 2;
-        const halfHeight = target.height / 2;
-        const centerX = target.x + halfWidth;
-        const centerY = target.y + halfHeight;
-
-        return {
-            halfWidth, halfHeight,
-            centerX, centerY,
-        };
-    }
-}
-
-
