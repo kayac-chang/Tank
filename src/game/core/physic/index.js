@@ -30,31 +30,26 @@ const engine = (function main() {
     });
 
     //  on Collision Start
-    Events.on(engine, 'collisionStart', (event) => {
-        for (const {bodyA, bodyB} of event.pairs) {
-            //
-            const tarA = bodyA.gameObject;
-            const tarB = bodyB.gameObject;
-
-            tarA.emit('CollisionStart', tarB);
-            tarB.emit('CollisionStart', tarA);
-        }
-    });
+    Events.on(engine, 'collisionStart', (event) =>
+        emitAll('CollisionStart', event.pairs));
 
     //  on Collision Active
-    Events.on(engine, 'collisionActive', (event) => {
-        for (const {bodyA, bodyB} of event.pairs) {
-            //
-            const tarA = bodyA.gameObject;
-            const tarB = bodyB.gameObject;
-
-            tarA.emit('CollisionActive', tarB);
-            tarB.emit('CollisionActive', tarA);
-        }
-    });
+    Events.on(engine, 'collisionActive', (event) =>
+        emitAll('CollisionActive', event.pairs));
 
     return engine;
 })();
+
+function emitAll(event, pairs) {
+    for (const {bodyA, bodyB} of pairs) {
+        //
+        const tarA = bodyA.gameObject;
+        const tarB = bodyB.gameObject;
+
+        tarA.emit(event, tarB);
+        tarB.emit(event, tarA);
+    }
+}
 
 export function addSubject(gameObject) {
     World.add(engine.world, gameObject.rigidBody);
