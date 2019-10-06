@@ -6,7 +6,7 @@ import {App} from './system/application';
 async function main() {
     //  Init App
     try {
-        document.title = 'For Every Gamer | 61 Studio';
+        document.title = 'Forever Game | Tank';
 
         global.app = App();
 

@@ -120,14 +120,14 @@ html, body {
   width: 100%;
   height: 100%;
   display: none;
-  background: url(assets/screen-rotation.png?86b3fc6cfe92218a21795ccbdca5517834452eae4aba688d62d4bc5353b9d0f8) no-repeat center;
+  background: url(assets/screen-rotation.png?a3a56443ab02b6aa87876aeac386addd8afecfe4a83a7f74382032a3b33deba2) no-repeat center;
   animation: rotation 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
 }
 #app #icon #screen-scroll {
   width: 100%;
   height: 100%;
   display: none;
-  background: url(assets/screen-scroll.png?86b3fc6cfe92218a21795ccbdca5517834452eae4aba688d62d4bc5353b9d0f8) no-repeat center;
+  background: url(assets/screen-scroll.png?a3a56443ab02b6aa87876aeac386addd8afecfe4a83a7f74382032a3b33deba2) no-repeat center;
   animation: move 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) infinite;
 }
 

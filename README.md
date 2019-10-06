@@ -24,3 +24,7 @@
 * Please documented your code
 
 > Note: please use the javascript game engine that you selected as plug in ONLY.
+
+### Solution
+
+* [Version 1](https://kayacchang.github.io/Tank/dist/)
