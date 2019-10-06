@@ -2,4 +2,3 @@ node_modules
 .idea/
 ignore/
 .DS_Store
-dist/
