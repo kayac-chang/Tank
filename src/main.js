@@ -10,11 +10,17 @@ async function main() {
 
         global.app = App();
 
-        const main = await import('./game/scenes/main');
+        const [main, control] = await Promise.all([
+            import('./game/scenes/main'),
+            import('./game/control'),
+        ]);
 
-        await app.resource.load(main);
+        await app.resource.load(main, control);
 
         main.create();
+        control.create();
+
+        app.resize();
         //
     } catch (error) {
         console.error(error);

@@ -65,6 +65,7 @@
     "pixi-filters": "^2.7.1",
     "pixi-viewport": "^4.2.3",
     "pixi.js": "^5.1.5",
+    "pixi_fairygui": "^0.4.21",
     "ramda": "^0.26.1",
     "random-js": "^2.1.0",
     "regenerator-runtime": "^0.13.2",

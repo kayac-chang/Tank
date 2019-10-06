@@ -36,7 +36,7 @@ function bomb(it, {x, y}) {
     });
 }
 
-function Bullet() {
+function Bullet(type) {
     const it = GameObject();
 
     const texture = res('bullets').textures['bullet_1.png'];
@@ -46,6 +46,12 @@ function Bullet() {
     it.sprite = new Sprite(texture);
 
     it.rigidBody = Rectangle(it, {density: 0.05, frictionAir: 0.05});
+
+    it.damage = {
+        'red': 10,
+        'blue': 20,
+        'green': 25,
+    }[type];
 
     it.on('CollisionStart', clear);
 
@@ -70,7 +76,7 @@ function move(it, {x = 0, y = 0}) {
     );
 }
 
-function Arms(it) {
+function Arms(it, type) {
     const light = new AnimatedSprite(values(res('shot').textures));
 
     light.animationSpeed = 0.33;
@@ -92,7 +98,7 @@ function Arms(it) {
 
         light.gotoAndPlay(0);
 
-        const bullet = Bullet();
+        const bullet = Bullet(type);
 
         const pos =
             app.scenes['main']
@@ -108,16 +114,16 @@ function Arms(it) {
     }
 }
 
-export function Tank() {
+export function Tank(type) {
     const it = GameObject();
 
     it.name = 'Tank';
 
-    it.sprite = new Sprite(res('tanks').textures['tank_blue.png']);
+    it.sprite = new Sprite(res('tanks').textures[`tank_${type}.png`]);
 
     it.rigidBody = Rectangle(it, {density: 0.1, frictionAir: 0.05});
 
-    Arms(it);
+    Arms(it, type);
 
     return assign(it, {
         forward, backward, turnLeft, turnRight,
